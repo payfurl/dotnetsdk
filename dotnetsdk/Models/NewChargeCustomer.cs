@@ -1,0 +1,9 @@
+﻿namespace evertech.sdk.Models
+{
+    public class NewChargeCustomer
+    {
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
+        public string CustomerId { get; set; }
+    }
+}
