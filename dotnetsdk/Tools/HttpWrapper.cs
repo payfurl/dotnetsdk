@@ -1,5 +1,6 @@
 ﻿using evertech.sdk.Models;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -89,7 +90,21 @@ namespace evertech.sdk.Tools
             using (var reader = new StreamReader(exception.Response.GetResponseStream()))
             {
                 var result = reader.ReadToEnd();
-                error = JsonConvert.DeserializeObject<Error>(result);
+                try
+                {
+                    error = JsonConvert.DeserializeObject<Error>(result);
+                }
+                catch (Exception)
+                {
+                    new Error()
+                    {
+                        HttpStatus = 0,
+                        Message = result,
+                        Details = new System.Collections.Generic.Dictionary<string, string>(),
+                        Resource = ""
+                    };
+                    throw new ApiException(error, result);
+                }
             }
             throw new ApiException(error, error.Message, exception);
         }
