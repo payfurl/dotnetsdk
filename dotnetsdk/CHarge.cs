@@ -3,7 +3,7 @@ using System;
 
 namespace evertech.sdk
 {
-    public class Charge
+    public class Charge : ICharge
     {
         public ChargeData CreateWithCard(NewChargeCard newCharge)
         {
