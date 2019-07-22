@@ -43,12 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Customer.cs" />
     <Compile Include="Charge.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ICharge.cs" />
     <Compile Include="Models\CardData.cs" />
     <Compile Include="Models\CardRequestInformation.cs" />
     <Compile Include="Models\ChargeData.cs" />
+    <Compile Include="Models\CustomerData.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\NewChargeCard.cs" />
     <Compile Include="Models\NewChargeCustomer.cs" />
