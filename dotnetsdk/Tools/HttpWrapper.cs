@@ -14,15 +14,19 @@ namespace evertech.sdk.Tools
 
     public static class HttpWrapper
     {
+
+        private static JsonSerializerSettings _jsonSettings;
+
         static HttpWrapper()
         {
             // enfore min TLS 1.2
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             ServicePointManager.DefaultConnectionLimit = 9999;
+            _jsonSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Utc };
         }
         
-        public static string Call(string endpoint, Method httpMethod, string jsonBody)
+        public static R Call<T, R>(string endpoint, Method httpMethod, T body)
         {
             var url = Config.BaseUrl + endpoint;
             var httpRequest = HttpWebRequest.Create((string)url);
@@ -38,6 +42,7 @@ namespace evertech.sdk.Tools
             // if we have a body
             if (httpMethod == Method.POST)
             {
+                var jsonBody = JsonConvert.SerializeObject(body, _jsonSettings);
                 using (var stream = httpRequest.GetRequestStream())
                 {
                     if (jsonBody == null)
@@ -64,7 +69,7 @@ namespace evertech.sdk.Tools
                 result = reader.ReadToEnd();
             }
 
-            return result;
+            return (R) JsonConvert.DeserializeObject(result, _jsonSettings);
         }
 
         private static void TranslateException(WebException exception)

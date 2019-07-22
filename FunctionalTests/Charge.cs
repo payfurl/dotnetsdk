@@ -1,4 +1,5 @@
 ﻿using evertech.sdk;
+using evertech.sdk.Models;
 using NUnit.Framework;
 
 namespace FunctionalTests
@@ -15,7 +16,6 @@ namespace FunctionalTests
         [Test]
         public void ChargeWithValidCard()
         {
-            // TODO: implement body
         }
     }
 }

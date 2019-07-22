@@ -9,13 +9,13 @@ namespace evertech.sdk
         [ConfigValidator]
         public ChargeData CreateWithCard(NewChargeCard newCharge)
         {
-            throw new NotImplementedException();
+            return HttpWrapper.Call<NewChargeCard, ChargeData>("/charge/card", Method.POST, newCharge);
         }
 
         [ConfigValidator]
-        public ChargeData CreateWithCustomer(NewChargeCard newCharge)
+        public ChargeData CreateWithCustomer(NewChargeCustomer newCharge)
         {
-            throw new NotImplementedException();
+            return HttpWrapper.Call<NewChargeCustomer, ChargeData>("/charge/customer", Method.POST, newCharge);
         }
     }
 }
