@@ -6,7 +6,6 @@ namespace evertech.sdk
 {
     public class Charge : ICharge
     {
-
         [ConfigValidator]
         public ChargeData CreateWithCard(NewChargeCard newCharge)
         {

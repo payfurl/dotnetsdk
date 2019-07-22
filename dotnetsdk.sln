@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetsdk", "dotnetsdk\dotnetsdk.csproj", "{8DA05473-B5EC-4F2D-BF7F-D9DBD43CDECB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{C744CFA5-959B-47F9-8F77-44C7870012E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8DA05473-B5EC-4F2D-BF7F-D9DBD43CDECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DA05473-B5EC-4F2D-BF7F-D9DBD43CDECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DA05473-B5EC-4F2D-BF7F-D9DBD43CDECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
