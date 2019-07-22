@@ -69,7 +69,7 @@ namespace evertech.sdk.Tools
                 result = reader.ReadToEnd();
             }
 
-            return (R) JsonConvert.DeserializeObject(result, _jsonSettings);
+            return JsonConvert.DeserializeObject<R>(result, _jsonSettings);
         }
 
         private static void TranslateException(WebException exception)

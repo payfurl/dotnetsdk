@@ -56,7 +56,6 @@
     <Compile Include="Models\PaymentData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ApiException.cs" />
-    <Compile Include="Tools\ConfigValidator.cs" />
     <Compile Include="Tools\HttpWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

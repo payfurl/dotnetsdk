@@ -10,7 +10,7 @@ namespace FunctionalTests
         [SetUp]
         public void SetConfig()
         {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", evertech.sdk.Environment.LOCAL);
+            Config.Setup("<secret_key>", Environment.LOCAL);
         }
 
         [Test]
