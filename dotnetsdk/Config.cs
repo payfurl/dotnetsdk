@@ -1,22 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace evertech.sdk
 {
+    public enum Environment
+    {
+        SANDBOX,
+        PROD
+    }
+
     public static class Config
     {
         public static string BaseUrl { get; private set; }
         public static string SecretKey { get; private set; }
         public static int TimeoutMilliseconds { get; private set; }
 
-        // TODO: add support for environments and setting the URL based on that
-        public static void Setup(string secretKey)
+        public static void Setup(string secretKey, Environment environment, int timeoutMilliseconds = 60000)
         {
-            BaseUrl = "https://api20190721083325.azurewebsites.net";
+            if (environment == Environment.SANDBOX)
+                BaseUrl = "https://api20190721083325.azurewebsites.net";
+            else if (environment == Environment.PROD)
+                throw new NotImplementedException("Not currently available");
+
             SecretKey = secretKey;
-            TimeoutMilliseconds = 30000;
+            TimeoutMilliseconds = timeoutMilliseconds;
         }
     }
 }
