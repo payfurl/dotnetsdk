@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using evertech.sdk.Models;
+using Newtonsoft.Json;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -20,41 +22,41 @@ namespace evertech.sdk.Tools
             ServicePointManager.DefaultConnectionLimit = 9999;
         }
         
-        public static string Call(string endpoint, Method method, string json)
+        public static string Call(string endpoint, Method httpMethod, string jsonBody)
         {
             var url = Config.BaseUrl + endpoint;
-            var request = HttpWebRequest.Create((string)url);
+            var httpRequest = HttpWebRequest.Create((string)url);
 
-            request.ContentType = "application/json";
-            request.Headers.Add("x-secretkey", Config.SecretKey);
+            httpRequest.ContentType = "application/json";
+            httpRequest.Headers.Add("x-secretkey", Config.SecretKey);
 
-            request.Method = method.ToString();
-            request.Timeout = Config.TimeoutMilliseconds;
+            httpRequest.Method = httpMethod.ToString();
+            httpRequest.Timeout = Config.TimeoutMilliseconds;
 
             string result = "";
 
             // if we have a body
-            if (method == Method.POST)
+            if (httpMethod == Method.POST)
             {
-                using (var stream = request.GetRequestStream())
+                using (var stream = httpRequest.GetRequestStream())
                 {
-                    if (json == null)
-                        json = "";
+                    if (jsonBody == null)
+                        jsonBody = "";
 
-                    var data = Encoding.UTF8.GetBytes(json);
-                    stream.Write(data, 0, json.Length);
+                    var data = Encoding.UTF8.GetBytes(jsonBody);
+                    stream.Write(data, 0, jsonBody.Length);
                 }
             }
 
             WebResponse response = null;
             try
             {
-                response = request.GetResponse();
+                response = httpRequest.GetResponse();
             }
 
-            catch (WebException)
+            catch (WebException ex)
             {
-                // TODO: handle this
+                TranslateException(ex);
             }
 
             using (var reader = new StreamReader(response.GetResponseStream()))
@@ -63,6 +65,28 @@ namespace evertech.sdk.Tools
             }
 
             return result;
+        }
+
+        private static void TranslateException(WebException exception)
+        {
+            Error error = null;
+            if (exception.Response == null)
+            {
+                new Error()
+                {
+                    HttpStatus = 408,
+                    Message = "Request Timeout",
+                    Details = new System.Collections.Generic.Dictionary<string, string>(),
+                    Resource = ""
+                };
+            }
+
+            using (var reader = new StreamReader(exception.Response.GetResponseStream()))
+            {
+                var result = reader.ReadToEnd();
+                error = JsonConvert.DeserializeObject<Error>(result);
+            }
+            throw new ApiException(error, error.Message, exception);
         }
     }
 }

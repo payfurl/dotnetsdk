@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,13 +49,17 @@
     <Compile Include="Models\CardData.cs" />
     <Compile Include="Models\CardRequestInformation.cs" />
     <Compile Include="Models\ChargeData.cs" />
+    <Compile Include="Models\Error.cs" />
     <Compile Include="Models\NewChargeCard.cs" />
     <Compile Include="Models\NewChargeCustomer.cs" />
     <Compile Include="Models\NewCustomerCard.cs" />
     <Compile Include="Models\PaymentData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\ApiException.cs" />
     <Compile Include="Tools\HttpWrapper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
