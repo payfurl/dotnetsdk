@@ -10,7 +10,7 @@ namespace FunctionalTests
         [SetUp]
         public void SetConfig()
         {
-            Config.Setup("<secret_key>", Environment.LOCAL);
+            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
         }
 
         [Test]
@@ -19,7 +19,7 @@ namespace FunctionalTests
             var chargeData = new NewChargeCard
             {
                 Amount = 20,
-                ProviderId = "5de3d6dc-2943-4163-a0b0-00b92a63fdeb",
+                ProviderId = "0ee907c8-abb1-4761-8eb7-aa765e60012a",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
@@ -32,6 +32,16 @@ namespace FunctionalTests
             var result = svc.CreateWithCard(chargeData);
 
             Assert.AreEqual("SUCCESS", result.Status);
+        }
+
+
+        [Test]
+        public void Search()
+        {
+            var svc = new evertech.sdk.Charge();
+            var result = svc.Search(new ChargeSearch());
+
+            Assert.AreEqual(0, result.Skip);
         }
     }
 }

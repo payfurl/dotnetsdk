@@ -1,5 +1,6 @@
 ﻿using evertech.sdk.Models;
 using evertech.sdk.Tools;
+using System.Web;
 
 namespace evertech.sdk
 {
@@ -8,6 +9,26 @@ namespace evertech.sdk
         public CustomerData CreateWithCard(NewCustomerCard newCustomer)
         {
             return HttpWrapper.Call<NewCustomerCard, CustomerData>("/customer/card", Method.POST, newCustomer);
+        }
+
+        public CustomerList Search(CustomerSearch searchData)
+        {
+            // TODO: move into a shared class
+            var queryString = "";
+
+            if (searchData.Skip.HasValue)
+                queryString = "Skip=" + searchData.Skip.Value;
+
+            if (searchData.Limit.HasValue)
+                queryString = "Limit=" + searchData.Limit.Value;
+
+            if (!string.IsNullOrWhiteSpace(searchData.Reference))
+                queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
+
+            if (!string.IsNullOrEmpty(queryString))
+                queryString = "?" + queryString;
+
+            return HttpWrapper.Call<string, CustomerList>("/customer" + queryString, Method.GET, null);
         }
     }
 }

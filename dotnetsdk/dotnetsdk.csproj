@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,11 +54,15 @@
     <Compile Include="Charge.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ICharge.cs" />
+    <Compile Include="Models\CustomerList.cs" />
+    <Compile Include="Models\ChargeList.cs" />
     <Compile Include="Models\CardData.cs" />
     <Compile Include="Models\CardRequestInformation.cs" />
     <Compile Include="Models\ChargeData.cs" />
+    <Compile Include="Models\CustomerSearch.cs" />
     <Compile Include="Models\CustomerData.cs" />
     <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\ChargeSearch.cs" />
     <Compile Include="Models\NewChargeCard.cs" />
     <Compile Include="Models\NewChargeCustomer.cs" />
     <Compile Include="Models\NewCustomerCard.cs" />
