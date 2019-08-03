@@ -22,6 +22,9 @@ namespace evertech.sdk
             if (searchData.Limit.HasValue)
                 queryString = "Limit=" + searchData.Limit.Value;
 
+            if (!string.IsNullOrWhiteSpace(searchData.PaymentMethodId))
+                queryString = "PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId);
+
             if (!string.IsNullOrWhiteSpace(searchData.Reference))
                 queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
 
