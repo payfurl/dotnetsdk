@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>EvertechSdk</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>Evertech</authors>
     <owners>Evertech</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Evertech .Net SDK</description>
-    <releaseNotes>1.0.6 Extended payment method data to include email</releaseNotes>
+    <releaseNotes>1.0.7 Extended payment method data</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags></tags>
     <dependencies>
