@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PaymentMethod.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Charge.cs" />
     <Compile Include="Config.cs" />
