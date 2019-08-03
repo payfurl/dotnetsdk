@@ -4,7 +4,7 @@ using System.Web;
 
 namespace evertech.sdk
 {
-    public class Customer
+    public class Customer : ICustomer
     {
         public CustomerData CreateWithCard(NewCustomerCard newCustomer)
         {

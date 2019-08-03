@@ -5,13 +5,13 @@ using System.Web;
 
 namespace evertech.sdk
 {
-    public class PaymentMethod
+    public class PaymentMethod : IPaymentMethod
     {
-        public List<PaymentMethod> GetForCustomer(string customerId)
+        public List<PaymentMethodData> GetForCustomer(string customerId)
         {
             customerId = HttpUtility.UrlEncode(customerId);
 
-            return HttpWrapper.Call<string, List<PaymentMethod>>("/payment_method/customer/" + customerId, Method.GET, null);
+            return HttpWrapper.Call<string, List<PaymentMethodData>>("/payment_method/customer/" + customerId, Method.GET, null);
         }
     }
 }
