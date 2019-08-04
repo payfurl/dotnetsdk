@@ -4,7 +4,7 @@ namespace evertech.sdk.Models
 {
     public class PaymentMethodData
     {
-        public string GatewayPaymentMethodId { get; set; }
+        public string PaymentMethodId { get; set; }
         public string UserId { get; set; }
         public string CustomerId { get; set; }
         public string Type { get; set; }

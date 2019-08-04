@@ -5,5 +5,6 @@
         public CardData Card { get; set; }
         public string Type { get; set; }
         public string ProviderType { get; set; }
+        public string Email { get; set; }
     }
 }
