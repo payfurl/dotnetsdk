@@ -9,5 +9,7 @@ namespace evertech.sdk.Models
         public string Message { get; set; }
         public Dictionary<string, string> Details { get; set; }
         public string Resource { get; set; }
+        public string GatewayMessage { get; set; }
+        public string GatewayCode { get; set; }
     }
 }
