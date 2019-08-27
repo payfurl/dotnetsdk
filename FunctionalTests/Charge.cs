@@ -43,5 +43,38 @@ namespace FunctionalTests
 
             Assert.AreEqual(0, result.Skip);
         }
+
+
+        [Test]
+        public void ChargePaymentMethod()
+        {
+            var custSvc = new evertech.sdk.Customer();
+
+            var newCustomer = new NewCustomerCard
+            {
+                ProviderId = "9c03b0f1-6849-42f8-8e83-c85219ae1575",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            var createdCustomer = custSvc.CreateWithCard(newCustomer);
+
+            var payMethodSvc = new evertech.sdk.PaymentMethod();
+
+            var createdPaymentMethod = payMethodSvc.GetForCustomer(createdCustomer.CustomerId);
+
+            var chargeSvc = new evertech.sdk.Charge();
+            var charge = new NewChargePaymentMethod
+            {
+                Amount = 5,
+                PaymentMethodId = createdPaymentMethod[0].PaymentMethodId
+            };
+            var result = chargeSvc.CreateWitPaymentMethod(charge);
+
+            Assert.AreEqual("SUCCESS", result.Status);
+        }
     }
 }

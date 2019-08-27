@@ -11,6 +11,11 @@ namespace evertech.sdk
             return HttpWrapper.Call<NewChargeCard, ChargeData>("/charge/card", Method.POST, newCharge);
         }
 
+        public ChargeData CreateWitPaymentMethod(NewChargePaymentMethod newCharge)
+        {
+            return HttpWrapper.Call<NewChargePaymentMethod, ChargeData>("/charge/payment_method", Method.POST, newCharge);
+        }
+
         public ChargeData CreateWithCustomer(NewChargeCustomer newCharge)
         {
             return HttpWrapper.Call<NewChargeCustomer, ChargeData>("/charge/customer", Method.POST, newCharge);
@@ -19,7 +24,7 @@ namespace evertech.sdk
         {
             // TODO: move into a shared class
             var queryString = "";
-
+                
             if (searchData.Skip.HasValue)
                 queryString = "Skip=" + searchData.Skip.Value;
 
