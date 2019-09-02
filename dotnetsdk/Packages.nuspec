@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>EvertechSdk</id>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <authors>Evertech</authors>
     <owners>Evertech</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Evertech .Net SDK</description>
-    <releaseNotes>1.0.14 Added pay with payment method</releaseNotes>
+    <releaseNotes>1.0.15 Added Production URL</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags></tags>
     <dependencies>

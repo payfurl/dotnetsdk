@@ -22,7 +22,7 @@ namespace evertech.sdk
             if (environment == Environment.SANDBOX)
                 BaseUrl = "https://api20190721083325.azurewebsites.net";
             else if (environment == Environment.PROD)
-                throw new NotImplementedException("Not currently available");
+                BaseUrl = "https://evertech-prod.azurewebsites.net";
 
             SecretKey = secretKey;
             TimeoutMilliseconds = timeoutMilliseconds;
