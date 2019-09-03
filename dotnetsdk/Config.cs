@@ -20,7 +20,7 @@ namespace evertech.sdk
             if (environment == Environment.LOCAL)
                 BaseUrl = "https://localhost:5001";
             if (environment == Environment.SANDBOX)
-                BaseUrl = "https://api20190721083325.azurewebsites.net";
+                BaseUrl = "https://evertech-stage.azurewebsites.net";
             else if (environment == Environment.PROD)
                 BaseUrl = "https://evertech-prod.azurewebsites.net";
 
