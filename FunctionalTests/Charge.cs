@@ -19,7 +19,7 @@ namespace FunctionalTests
             var chargeData = new NewChargeCard
             {
                 Amount = 20,
-                ProviderId = "0ee907c8-abb1-4761-8eb7-aa765e60012a",
+                ProviderId = "58bcedf43c541b5b87f73935",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
@@ -44,7 +44,6 @@ namespace FunctionalTests
             Assert.AreEqual(0, result.Skip);
         }
 
-
         [Test]
         public void ChargePaymentMethod()
         {
@@ -52,7 +51,7 @@ namespace FunctionalTests
 
             var newCustomer = new NewCustomerCard
             {
-                ProviderId = "9c03b0f1-6849-42f8-8e83-c85219ae1575",
+                ProviderId = "58bcedf43c541b5b87f73935",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
