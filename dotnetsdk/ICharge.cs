@@ -6,5 +6,6 @@ namespace evertech.sdk
     {
         ChargeData CreateWithCard(NewChargeCard newCharge);
         ChargeData CreateWithCustomer(NewChargeCustomer newCharge);
+        ChargeData Refund(NewRefund newCharge);
     }
 }

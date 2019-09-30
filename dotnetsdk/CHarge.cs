@@ -20,6 +20,7 @@ namespace evertech.sdk
         {
             return HttpWrapper.Call<NewChargeCustomer, ChargeData>("/charge/customer", Method.POST, newCharge);
         }
+
         public ChargeList Search(ChargeSearch searchData)
         {
             // TODO: move into a shared class
@@ -38,6 +39,15 @@ namespace evertech.sdk
                 queryString = "?" + queryString;
 
             return HttpWrapper.Call<string, ChargeList>("/charge" + queryString, Method.GET, null);
+        }
+
+        public ChargeData Refund(NewRefund newCharge)
+        {
+            var queryString = "";
+            if (newCharge.RefundAmount.HasValue)
+                queryString = "?amount=" + newCharge.RefundAmount.Value;
+
+            return HttpWrapper.Call<string, ChargeData>("/charge/" + newCharge.ChargeId + queryString, Method.DELETE, null);
         }
     }
 }

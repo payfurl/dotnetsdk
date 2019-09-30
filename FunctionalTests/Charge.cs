@@ -19,7 +19,7 @@ namespace FunctionalTests
             var chargeData = new NewChargeCard
             {
                 Amount = 20,
-                ProviderId = "58bcedf43c541b5b87f73935",
+                ProviderId = "5d9206538fb53f4ac4cda1da",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
@@ -74,6 +74,29 @@ namespace FunctionalTests
             var result = chargeSvc.CreateWitPaymentMethod(charge);
 
             Assert.AreEqual("SUCCESS", result.Status);
+        }
+
+        [Test]
+        public void Refund()
+        {
+            var chargeData = new NewChargeCard
+            {
+                Amount = 20,
+                ProviderId = "5d9206538fb53f4ac4cda1da",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+
+            var svc = new evertech.sdk.Charge();
+            var chargeResult = svc.CreateWithCard(chargeData);
+
+            var refundResult = svc.Refund(new NewRefund { ChargeId = chargeResult.ChargeId });
+
+            Assert.AreEqual(chargeData.Amount, refundResult.RefundedAmount);
         }
     }
 }

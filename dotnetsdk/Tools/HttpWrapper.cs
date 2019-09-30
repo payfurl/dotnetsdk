@@ -10,7 +10,8 @@ namespace evertech.sdk.Tools
     public enum Method
     {
         GET,
-        POST
+        POST,
+        DELETE
     }
 
     public static class HttpWrapper

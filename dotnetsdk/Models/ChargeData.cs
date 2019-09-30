@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace evertech.sdk.Models
 {
@@ -13,5 +14,14 @@ namespace evertech.sdk.Models
         public string CustomerId { get; set; }
         public string Status { get; set; }
         public DateTime DateAdded { get; set; }
+        public decimal? RefundedAmount { get; set; }
+
+        public List<Refund> Refunds { get; set; }
+
+        public class Refund
+        {
+            public decimal Amount { get; set; }
+            public DateTime DateAdded { get; set; }
+        }
     }
 }
