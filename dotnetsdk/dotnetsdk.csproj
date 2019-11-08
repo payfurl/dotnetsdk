@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="ICustomer.cs" />
     <Compile Include="IPaymentMethod.cs" />
+    <Compile Include="Models\NewChargeToken.cs" />
+    <Compile Include="Models\NewCustomerToken.cs" />
     <Compile Include="Models\NewRefund.cs" />
     <Compile Include="Models\NewChargePaymentMethod.cs" />
     <Compile Include="Models\PaymentMethodData.cs" />

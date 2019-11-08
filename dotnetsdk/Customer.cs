@@ -10,6 +10,10 @@ namespace evertech.sdk
         {
             return HttpWrapper.Call<NewCustomerCard, CustomerData>("/customer/card", Method.POST, newCustomer);
         }
+        public CustomerData CreateWithToken(NewCustomerToken newCustomer)
+        {
+            return HttpWrapper.Call<NewCustomerToken, CustomerData>("/customer/token", Method.POST, newCustomer);
+        }
 
         public CustomerList Search(CustomerSearch searchData)
         {

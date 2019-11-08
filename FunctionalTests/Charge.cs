@@ -98,5 +98,21 @@ namespace FunctionalTests
 
             Assert.AreEqual(chargeData.Amount, refundResult.RefundedAmount);
         }
+
+        [Test]
+        [Ignore("tokens expire, so this test needs to be adjusted each time it's run")]
+        public void ChargeWithValidToken()
+        {
+            var chargeData = new NewChargeToken
+            {
+                Amount = 20,
+                Token = "5dc5cfbaec7c4d057cb00482"
+            };
+
+            var svc = new evertech.sdk.Charge();
+            var result = svc.CreateWithToken(chargeData);
+
+            Assert.AreEqual("SUCCESS", result.Status);
+        }
     }
 }

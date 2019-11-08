@@ -41,5 +41,44 @@ namespace FunctionalTests
 
             Assert.Throws<ApiException>(() => svc.Search(search));
         }
+
+        [Test]
+        public void AddWithCard()
+        {
+            var customer = new NewCustomerCard
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "5d9206538fb53f4ac4cda1da",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+
+            var svc = new evertech.sdk.Customer();
+            var result = svc.CreateWithCard(customer);
+
+            Assert.IsNotNull(result.CustomerId);
+        }
+
+        [Test]
+        [Ignore("tokens expire, so this test needs to be adjusted each time it's run")]
+        public void AddWithToken()
+        {
+            var customer = new NewCustomerToken
+            {
+                FirstName = "test",
+                LastName = "test",
+                Token = "5dc5d0d4ec7c4d057cb00484"
+            };
+
+            var svc = new evertech.sdk.Customer();
+            var result = svc.CreateWithToken(customer);
+
+            Assert.IsNotNull(result.CustomerId);
+        }
     }
 }

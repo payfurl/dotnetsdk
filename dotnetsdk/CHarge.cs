@@ -21,6 +21,11 @@ namespace evertech.sdk
             return HttpWrapper.Call<NewChargeCustomer, ChargeData>("/charge/customer", Method.POST, newCharge);
         }
 
+        public ChargeData CreateWithToken(NewChargeToken newCharge)
+        {
+            return HttpWrapper.Call<NewChargeToken, ChargeData>("/charge/token", Method.POST, newCharge);
+        }
+
         public ChargeList Search(ChargeSearch searchData)
         {
             // TODO: move into a shared class
