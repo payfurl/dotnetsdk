@@ -20,9 +20,9 @@ namespace evertech.sdk
             if (environment == Environment.LOCAL)
                 BaseUrl = "https://localhost:5001";
             if (environment == Environment.SANDBOX)
-                BaseUrl = "https://evertech-stage.azurewebsites.net";
+                BaseUrl = "https://sandbox-api.payfurl.com";
             else if (environment == Environment.PROD)
-                BaseUrl = "https://evertech-prod.azurewebsites.net";
+                BaseUrl = "https://api.payfurl.com";
 
             SecretKey = secretKey;
             TimeoutMilliseconds = timeoutMilliseconds;

@@ -13,5 +13,11 @@ namespace evertech.sdk
 
             return HttpWrapper.Call<string, List<PaymentMethodData>>("/payment_method/customer/" + customerId, Method.GET, null);
         }
+        public string GenerateClientToken(string providerId)
+        {
+            providerId = HttpUtility.UrlEncode(providerId);
+
+            return HttpWrapper.Call<string, string>("/payment_method/client_token/" + providerId, Method.GET, null);
+        }
     }
 }
