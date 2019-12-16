@@ -26,9 +26,14 @@ namespace evertech.sdk
             return HttpWrapper.Call<NewChargeToken, ChargeData>("/charge/token", Method.POST, newCharge);
         }
 
+        public ChargeData Single(string chargeId)
+        {
+            return HttpWrapper.Call<string, ChargeData>("/charge/" + chargeId, Method.GET, null);
+        }
+
         public ChargeList Search(ChargeSearch searchData)
         {
-            // TODO: move into a shared class
+            // TODO: move into a shared class to handle formatting
             var queryString = "";
                 
             if (searchData.Skip.HasValue)
@@ -39,6 +44,27 @@ namespace evertech.sdk
 
             if (!string.IsNullOrWhiteSpace(searchData.Reference))
                 queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
+
+            if (!string.IsNullOrWhiteSpace(searchData.PaymentMethodId))
+                queryString = "PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId);
+
+            if (searchData.AmountGreaterThan.HasValue)
+                queryString = "AmountGreaterThan=" + HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString());
+
+            if (searchData.AmountLessThan.HasValue)
+                queryString = "AmountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString());
+
+            if (!string.IsNullOrWhiteSpace(searchData.CustomerId))
+                queryString = "CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId);
+
+            if (!string.IsNullOrWhiteSpace(searchData.Status))
+                queryString = "Status=" + HttpUtility.UrlEncode(searchData.Status);
+
+            if (searchData.AddedAfter.HasValue)
+                queryString = "AddedAfter=" + HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+
+            if (searchData.AddedBefore.HasValue)
+                queryString = "AddedBefore=" + HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
