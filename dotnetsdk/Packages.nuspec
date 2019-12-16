@@ -9,7 +9,7 @@
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Evertech .Net SDK</description>
-    <releaseNotes>1.0.23 Add Search and Single support to Customer & Charge</releaseNotes>
+    <releaseNotes>1.0.23 Add Search and Single support to Customer and Charge</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags></tags>
     <dependencies>
