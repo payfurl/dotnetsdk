@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>EvertechSdk</id>
-    <version>1.0.22</version>
+    <version>1.0.23</version>
     <authors>Evertech</authors>
     <owners>Evertech</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Evertech .Net SDK</description>
-    <releaseNotes>1.0.22 moved to permenant URLs for the API</releaseNotes>
+    <releaseNotes>1.0.23 Add Search and Single support to Customer & Charge</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags></tags>
     <dependencies>
