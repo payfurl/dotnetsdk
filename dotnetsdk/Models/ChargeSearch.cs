@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace evertech.sdk.Models
+namespace payfurl.sdk.Models
 {
     public class ChargeSearch
     {

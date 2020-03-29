@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace evertech.sdk.Models
+namespace payfurl.sdk.Models
 {
     public class ChargeData
     {

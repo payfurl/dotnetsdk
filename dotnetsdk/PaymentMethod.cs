@@ -1,9 +1,9 @@
-﻿using evertech.sdk.Models;
-using evertech.sdk.Tools;
+﻿using payfurl.sdk.Models;
+using payfurl.sdk.Tools;
 using System.Collections.Generic;
 using System.Web;
 
-namespace evertech.sdk
+namespace payfurl.sdk
 {
     public class PaymentMethod : IPaymentMethod
     {

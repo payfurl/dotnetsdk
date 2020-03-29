@@ -1,5 +1,5 @@
-﻿using evertech.sdk;
-using evertech.sdk.Models;
+﻿using payfurl.sdk;
+using payfurl.sdk.Models;
 using NUnit.Framework;
 
 namespace FunctionalTests
@@ -21,12 +21,12 @@ namespace FunctionalTests
                 Reference = "123123123"
             };
 
-            var svc = new evertech.sdk.Customer();
+            var svc = new payfurl.sdk.Customer();
             var result = svc.Search(search);
 
             var customerId = result.Customers[0].CustomerId;
 
-            var payMethodSvc = new evertech.sdk.PaymentMethod();
+            var payMethodSvc = new payfurl.sdk.PaymentMethod();
             var paymentMethods = payMethodSvc.GetForCustomer(customerId);
 
             Assert.AreEqual(1, paymentMethods.Count);

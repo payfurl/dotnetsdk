@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>EvertechSdk</id>
-    <version>1.0.23</version>
-    <authors>Evertech</authors>
-    <owners>Evertech</owners>
+    <id>PayfurlSdk</id>
+    <version>1.1.1</version>
+    <authors>Payfurl</authors>
+    <owners>Payfurl</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Evertech .Net SDK</description>
-    <releaseNotes>1.0.23 Add Search and Single support to Customer and Charge</releaseNotes>
+    <description>Payfurl .Net SDK</description>
+    <releaseNotes>1.1.1 corrected internal names</releaseNotes>
     <copyright>Copyright 2019</copyright>
     <tags></tags>
     <dependencies>
@@ -17,7 +17,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\release\evertech.sdk.dll" target="lib\net40\evertech.sdk.dll" />
+    <file src="bin\release\payfurl.sdk.dll" target="lib\net40\payfurl.sdk.dll" />
     <file src="../LICENSE" target="LICENSE" />
   </files>
 </package>

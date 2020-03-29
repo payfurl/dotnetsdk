@@ -1,5 +1,5 @@
-﻿using evertech.sdk;
-using evertech.sdk.Models;
+﻿using payfurl.sdk;
+using payfurl.sdk.Models;
 using NUnit.Framework;
 
 namespace FunctionalTests
@@ -28,7 +28,7 @@ namespace FunctionalTests
                 }
             };
 
-            var svc = new evertech.sdk.Charge();
+            var svc = new payfurl.sdk.Charge();
             var result = svc.CreateWithCard(chargeData);
 
             Assert.AreEqual("SUCCESS", result.Status);
@@ -38,7 +38,7 @@ namespace FunctionalTests
         [Test]
         public void Search()
         {
-            var svc = new evertech.sdk.Charge();
+            var svc = new payfurl.sdk.Charge();
             var result = svc.Search(new ChargeSearch());
 
             Assert.AreEqual(0, result.Skip);
@@ -47,7 +47,7 @@ namespace FunctionalTests
         [Test]
         public void ChargePaymentMethod()
         {
-            var custSvc = new evertech.sdk.Customer();
+            var custSvc = new payfurl.sdk.Customer();
 
             var newCustomer = new NewCustomerCard
             {
@@ -61,11 +61,11 @@ namespace FunctionalTests
             };
             var createdCustomer = custSvc.CreateWithCard(newCustomer);
 
-            var payMethodSvc = new evertech.sdk.PaymentMethod();
+            var payMethodSvc = new payfurl.sdk.PaymentMethod();
 
             var createdPaymentMethod = payMethodSvc.GetForCustomer(createdCustomer.CustomerId);
 
-            var chargeSvc = new evertech.sdk.Charge();
+            var chargeSvc = new payfurl.sdk.Charge();
             var charge = new NewChargePaymentMethod
             {
                 Amount = 5,
@@ -91,7 +91,7 @@ namespace FunctionalTests
                 }
             };
 
-            var svc = new evertech.sdk.Charge();
+            var svc = new payfurl.sdk.Charge();
             var chargeResult = svc.CreateWithCard(chargeData);
 
             var refundResult = svc.Refund(new NewRefund { ChargeId = chargeResult.ChargeId });
@@ -109,7 +109,7 @@ namespace FunctionalTests
                 Token = "5dc5cfbaec7c4d057cb00482"
             };
 
-            var svc = new evertech.sdk.Charge();
+            var svc = new payfurl.sdk.Charge();
             var result = svc.CreateWithToken(chargeData);
 
             Assert.AreEqual("SUCCESS", result.Status);

@@ -1,6 +1,6 @@
-﻿using evertech.sdk.Models;
+﻿using payfurl.sdk.Models;
 
-namespace evertech.sdk
+namespace payfurl.sdk
 {
     public interface ICharge
     {

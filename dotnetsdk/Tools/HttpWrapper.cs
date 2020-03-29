@@ -1,11 +1,11 @@
-﻿using evertech.sdk.Models;
+﻿using payfurl.sdk.Models;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
 
-namespace evertech.sdk.Tools
+namespace payfurl.sdk.Tools
 {
     public enum Method
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace evertech.sdk
+namespace payfurl.sdk
 {
     public enum Environment
     {

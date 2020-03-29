@@ -1,8 +1,8 @@
-﻿using evertech.sdk.Models;
-using evertech.sdk.Tools;
+﻿using payfurl.sdk.Models;
+using payfurl.sdk.Tools;
 using System.Web;
 
-namespace evertech.sdk
+namespace payfurl.sdk
 {
     public class Customer : ICustomer
     {

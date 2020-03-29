@@ -1,5 +1,5 @@
-﻿using evertech.sdk;
-using evertech.sdk.Models;
+﻿using payfurl.sdk;
+using payfurl.sdk.Models;
 using NUnit.Framework;
 
 namespace FunctionalTests
@@ -21,7 +21,7 @@ namespace FunctionalTests
                 Reference = "123123123"
             };
 
-            var svc = new evertech.sdk.Customer();
+            var svc = new payfurl.sdk.Customer();
             var result = svc.Search(search);
 
             Assert.AreEqual(1, result.Count);
@@ -37,7 +37,7 @@ namespace FunctionalTests
                 Reference = "123123123"
             };
 
-            var svc = new evertech.sdk.Customer();
+            var svc = new payfurl.sdk.Customer();
 
             Assert.Throws<ApiException>(() => svc.Search(search));
         }
@@ -58,7 +58,7 @@ namespace FunctionalTests
                 }
             };
 
-            var svc = new evertech.sdk.Customer();
+            var svc = new payfurl.sdk.Customer();
             var result = svc.CreateWithCard(customer);
 
             Assert.IsNotNull(result.CustomerId);
@@ -75,7 +75,7 @@ namespace FunctionalTests
                 Token = "5dc5d0d4ec7c4d057cb00484"
             };
 
-            var svc = new evertech.sdk.Customer();
+            var svc = new payfurl.sdk.Customer();
             var result = svc.CreateWithToken(customer);
 
             Assert.IsNotNull(result.CustomerId);
