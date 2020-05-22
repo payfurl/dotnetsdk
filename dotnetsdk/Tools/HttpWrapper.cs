@@ -21,7 +21,7 @@ namespace payfurl.sdk.Tools
 
         static HttpWrapper()
         {
-            // enfore min TLS 1.2
+            // enforce min TLS 1.2
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             ServicePointManager.DefaultConnectionLimit = 9999;
