@@ -31,5 +31,23 @@ namespace FunctionalTests
 
             Assert.AreEqual(1, paymentMethods.Count);
         }
+
+        [Test]
+        public void Checkout()
+        {
+            var checkout = new NewCheckout
+            {
+                ProviderId = "5f6339bfbbfb3c0c3c72b884",
+                Amount = 123,
+                Currency = "AUD",
+                Reference = "123123123"
+            };
+
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = svc.Checkout(checkout);
+
+            Assert.IsNotNull(1, result.CheckoutId);
+            Assert.IsNotNull(1, result.TransactionId);
+        }
     }
 }

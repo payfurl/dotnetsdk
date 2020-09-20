@@ -7,5 +7,6 @@ namespace payfurl.sdk
     {
         List<PaymentMethodData> GetForCustomer(string customerId);
         string GenerateClientToken(string providerId);
+        Checkout Checkout(NewCheckout newCheckout);
     }
 }
