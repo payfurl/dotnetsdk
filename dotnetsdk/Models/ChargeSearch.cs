@@ -14,5 +14,6 @@ namespace payfurl.sdk.Models
         public DateTime? AddedBefore { get; set; }
         public int? Limit { get; set; }
         public int? Skip { get; set; }
+        public string SortBy { get; set; }
     }
 }

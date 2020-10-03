@@ -66,6 +66,9 @@ namespace payfurl.sdk
             if (searchData.AddedBefore.HasValue)
                 queryString = "AddedBefore=" + HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
+            if (!string.IsNullOrWhiteSpace(searchData.SortBy))
+                queryString = "SortBy=" + searchData.SortBy;
+
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
 
