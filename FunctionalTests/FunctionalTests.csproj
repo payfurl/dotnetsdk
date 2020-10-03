@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Transfer.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Charge.cs" />

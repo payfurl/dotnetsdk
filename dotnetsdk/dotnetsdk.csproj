@@ -50,15 +50,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITransfer.cs" />
+    <Compile Include="Models\TransferSearch.cs" />
+    <Compile Include="Transfer.cs" />
     <Compile Include="ICustomer.cs" />
     <Compile Include="IPaymentMethod.cs" />
     <Compile Include="Models\Checkout.cs" />
+    <Compile Include="Models\NewTransfer.cs" />
+    <Compile Include="Models\PlatformFee.cs" />
     <Compile Include="Models\NewCheckout.cs" />
     <Compile Include="Models\NewChargeToken.cs" />
     <Compile Include="Models\NewCustomerToken.cs" />
     <Compile Include="Models\NewRefund.cs" />
     <Compile Include="Models\NewChargePaymentMethod.cs" />
     <Compile Include="Models\PaymentMethodData.cs" />
+    <Compile Include="Models\TransferData.cs" />
+    <Compile Include="Models\TransferItem.cs" />
+    <Compile Include="Models\TransferList.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Charge.cs" />
