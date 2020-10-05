@@ -14,6 +14,7 @@ namespace payfurl.sdk
         public static string BaseUrl { get; private set; }
         public static string SecretKey { get; private set; }
         public static int TimeoutMilliseconds { get; private set; }
+        public static Environment Environment { get; private set; }
 
         public static void Setup(string secretKey, Environment environment, int timeoutMilliseconds = 60000)
         {

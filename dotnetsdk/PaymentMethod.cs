@@ -1,5 +1,6 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
+using System;
 using System.Collections.Generic;
 using System.Web;
 
@@ -23,6 +24,9 @@ namespace payfurl.sdk
 
         public Checkout Checkout(NewCheckout newCheckout)
         {
+            if (Config.Environment == Environment.PROD)
+                throw new NotImplementedException("Feature unavailable for this environment");
+
             return HttpWrapper.Call<NewCheckout, Checkout>("/payment_method/checkout", Method.POST, newCheckout);
         }
     }

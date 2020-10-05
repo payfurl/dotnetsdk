@@ -1,5 +1,6 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
+using System;
 using System.Web;
 
 namespace payfurl.sdk
@@ -8,16 +9,25 @@ namespace payfurl.sdk
     {
         public TransferData Create(NewTransfer newTransfer)
         {
+            if (Config.Environment == Environment.PROD)
+                throw new NotImplementedException("Feature unavailable for this environment");
+
             return HttpWrapper.Call<NewTransfer, TransferData>("/transfer", Method.POST, newTransfer);
         }
 
         public TransferData Single(string transferId)
         {
+            if (Config.Environment == Environment.PROD)
+                throw new NotImplementedException("Feature unavailable for this environment");
+
             return HttpWrapper.Call<string, TransferData>("/transfer/" + transferId, Method.GET, null);
         }
 
         public TransferList Search(TransferSearch searchData)
         {
+            if (Config.Environment == Environment.PROD)
+                throw new NotImplementedException("Feature unavailable for this environment");
+
             // TODO: move into a shared class to handle formatting
             var queryString = "";
 
