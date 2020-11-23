@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace payfurl.sdk.Models
 {
@@ -9,14 +6,13 @@ namespace payfurl.sdk.Models
     {
         public string TransferId { get; set; }
         public string Status { get; set; }
+        public string Reference { get; set; }
+        public string GroupReference { get; set; }
         public DateTime DateAdded { get; set; }
-        public List<TransferItem> TransferItems { get; set; }
-
-        public class TransferItem
-        {
-            public decimal Amount { get; set; }
-            public string Currency { get; set; }
-            public string Account { get; set; }
-        }
+        public decimal TotalAmount { get; set; }
+        public string ProviderId { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
+        public string Account { get; set; }
     }
 }

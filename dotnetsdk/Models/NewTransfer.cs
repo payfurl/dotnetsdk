@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-
-namespace payfurl.sdk.Models
+﻿namespace payfurl.sdk.Models
 {
     public class NewTransfer
     {
-        public string ProviderId { get; set; }
+        public string Account { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
+        public string Message { get; set; }
         public string Reference { get; set; }
-        public List<TransferItem> Transfers { get; set; }
     }
 }

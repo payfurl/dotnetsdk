@@ -1,18 +1,19 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace payfurl.sdk
 {
     public class Transfer : ITransfer
     {
-        public TransferData Create(NewTransfer newTransfer)
+        public List<TransferData> Create(NewTransferGroup newTransfer)
         {
             if (Config.Environment == Environment.PROD)
                 throw new NotImplementedException("Feature unavailable for this environment");
 
-            return HttpWrapper.Call<NewTransfer, TransferData>("/transfer", Method.POST, newTransfer);
+            return HttpWrapper.Call<NewTransferGroup, List<TransferData>>("/transfer", Method.POST, newTransfer);
         }
 
         public TransferData Single(string transferId)
