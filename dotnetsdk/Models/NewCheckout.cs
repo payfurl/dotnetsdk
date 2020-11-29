@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace payfurl.sdk.Models
 {
     public class NewCheckout
@@ -8,5 +10,6 @@ namespace payfurl.sdk.Models
         public string Currency { get; set; }
         public string Reference { get; set; }
         public PlatformFee Transfer { get; set; }
+        public Dictionary<string, string> Options { get; set; }
     }
 }
