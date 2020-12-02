@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>PayfurlSdk</id>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <authors>Payfurl</authors>
     <owners>Payfurl</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Payfurl .Net SDK</description>
-    <releaseNotes>1.2.2 added options parameters to checkout</releaseNotes>
+    <releaseNotes>1.2.3 added charge id parameter to transfer</releaseNotes>
     <copyright>Copyright 2020</copyright>
     <tags></tags>
     <dependencies>
