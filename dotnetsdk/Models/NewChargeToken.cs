@@ -6,5 +6,6 @@
         public string Currency { get; set; }
         public string Reference { get; set; }
         public string Token { get; set; }
+        public CheckoutTransfer Transfer { get; set; }
     }
 }

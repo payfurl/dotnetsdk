@@ -1,6 +1,7 @@
 ﻿using payfurl.sdk;
 using payfurl.sdk.Models;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace FunctionalTests
 {
@@ -40,7 +41,9 @@ namespace FunctionalTests
                 ProviderId = "5f6339bfbbfb3c0c3c72b884",
                 Amount = 123,
                 Currency = "AUD",
-                Reference = "123123123"
+                Reference = "123123123",
+                Options = new Dictionary<string, string>
+                { { "HideShipping", "true"} }
             };
 
             var svc = new payfurl.sdk.PaymentMethod();

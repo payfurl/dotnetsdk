@@ -57,7 +57,7 @@
     <Compile Include="IPaymentMethod.cs" />
     <Compile Include="Models\Checkout.cs" />
     <Compile Include="Models\NewTransferGroup.cs" />
-    <Compile Include="Models\PlatformFee.cs" />
+    <Compile Include="Models\CheckoutTransfer.cs" />
     <Compile Include="Models\NewCheckout.cs" />
     <Compile Include="Models\NewChargeToken.cs" />
     <Compile Include="Models\NewCustomerToken.cs" />

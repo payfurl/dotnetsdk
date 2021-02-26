@@ -9,7 +9,7 @@ namespace payfurl.sdk.Models
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string Reference { get; set; }
-        public PlatformFee Transfer { get; set; }
+        public CheckoutTransfer Transfer { get; set; }
         public Dictionary<string, string> Options { get; set; }
     }
 }
