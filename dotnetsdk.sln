@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetsdk", "dotnetsdk\dotn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{C744CFA5-959B-47F9-8F77-44C7870012E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetcoresdk", "dotnetcoresdk\dotnetcoresdk.csproj", "{1B673201-9EA7-45C0-8687-9A04699329CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B673201-9EA7-45C0-8687-9A04699329CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B673201-9EA7-45C0-8687-9A04699329CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B673201-9EA7-45C0-8687-9A04699329CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B673201-9EA7-45C0-8687-9A04699329CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

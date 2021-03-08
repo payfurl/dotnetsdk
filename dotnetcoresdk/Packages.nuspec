@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>PayfurlNetCoreSdk</id>
+    <version>1.0</version>
+    <authors>Payfurl</authors>
+    <owners>Payfurl</owners>
+    <license type="file">LICENSE</license>
+    <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Payfurl .Net core SDK</description>
+    <releaseNotes>1.0 First .Net core version</releaseNotes>
+    <copyright>Copyright 2021</copyright>
+    <tags></tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="10.0.3" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netcoreapp3.1\payfurl.sdk.dll" target="lib\netcoreapp3.1\payfurl.sdk.dll" />
+    <file src="../LICENSE" target="LICENSE" />
+  </files>
+</package>
