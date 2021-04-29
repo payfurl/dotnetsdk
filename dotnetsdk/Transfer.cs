@@ -10,25 +10,16 @@ namespace payfurl.sdk
     {
         public List<TransferData> Create(NewTransferGroup newTransfer)
         {
-            if (Config.Environment == Environment.PROD)
-                throw new NotImplementedException("Feature unavailable for this environment");
-
             return HttpWrapper.Call<NewTransferGroup, List<TransferData>>("/transfer", Method.POST, newTransfer);
         }
 
         public TransferData Single(string transferId)
         {
-            if (Config.Environment == Environment.PROD)
-                throw new NotImplementedException("Feature unavailable for this environment");
-
             return HttpWrapper.Call<string, TransferData>("/transfer/" + transferId, Method.GET, null);
         }
 
         public TransferList Search(TransferSearch searchData)
         {
-            if (Config.Environment == Environment.PROD)
-                throw new NotImplementedException("Feature unavailable for this environment");
-
             // TODO: move into a shared class to handle formatting
             var queryString = "";
 
