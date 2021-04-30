@@ -1,20 +1,18 @@
 ﻿using payfurl.sdk;
 using payfurl.sdk.Models;
-using NUnit.Framework;
 using System.Collections.Generic;
+using Xunit;
 
 namespace FunctionalTests
 {
-    [TestFixture]
     public class PaymentMethod
     {
-        [SetUp]
-        public void SetConfig()
+        public PaymentMethod()
         {
             Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
         }
 
-        [Test]
+        [Fact]
         public void GetForCustomer()
         {
             var search = new CustomerSearch
@@ -30,10 +28,10 @@ namespace FunctionalTests
             var payMethodSvc = new payfurl.sdk.PaymentMethod();
             var paymentMethods = payMethodSvc.GetForCustomer(customerId);
 
-            Assert.AreEqual(1, paymentMethods.Count);
+            Assert.Single(paymentMethods);
         }
 
-        [Test]
+        [Fact]
         public void Checkout()
         {
             var checkout = new NewCheckout
@@ -49,8 +47,8 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.PaymentMethod();
             var result = svc.Checkout(checkout);
 
-            Assert.IsNotNull(1, result.CheckoutId);
-            Assert.IsNotNull(1, result.TransactionId);
+            Assert.NotNull(result.CheckoutId);
+            Assert.NotNull( result.TransactionId);
         }
     }
 }

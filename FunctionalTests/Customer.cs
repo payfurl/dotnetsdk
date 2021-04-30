@@ -1,19 +1,17 @@
 ﻿using payfurl.sdk;
 using payfurl.sdk.Models;
-using NUnit.Framework;
+using Xunit;
 
 namespace FunctionalTests
 {
-    [TestFixture]
     public class Customer
     {
-        [SetUp]
-        public void SetConfig()
+        public Customer()
         {
             Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
         }
 
-        [Test]
+        [Fact]
         public void SearchWithValidReference()
         {
             var search = new CustomerSearch
@@ -24,10 +22,10 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Customer();
             var result = svc.Search(search);
 
-            Assert.AreEqual(1, result.Count);
+            Assert.Equal(1, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void SearchWithInvalidKey()
         {
             Config.Setup("invalidkey", Environment.LOCAL);
@@ -41,8 +39,8 @@ namespace FunctionalTests
 
             Assert.Throws<ApiException>(() => svc.Search(search));
         }
-
-        [Test]
+        
+        [Fact]
         public void AddWithCard()
         {
             var customer = new NewCustomerCard
@@ -61,11 +59,10 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Customer();
             var result = svc.CreateWithCard(customer);
 
-            Assert.IsNotNull(result.CustomerId);
+            Assert.NotNull(result.CustomerId);
         }
 
-        [Test]
-        [Ignore("tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void AddWithToken()
         {
             var customer = new NewCustomerToken
@@ -78,7 +75,7 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Customer();
             var result = svc.CreateWithToken(customer);
 
-            Assert.IsNotNull(result.CustomerId);
+            Assert.NotNull(result.CustomerId);
         }
     }
 }

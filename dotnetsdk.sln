@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{C744CFA5-959B-47F9-8F77-44C7870012E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetstd", "dotnetstd\dotnetstd.csproj", "{4EE8BF16-5CD2-4EED-B581-422C8E530C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetsdk", "dotnetsdk\dotnetsdk.csproj", "{484EE776-2EE9-457E-BC52-F42DFD5BA701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C744CFA5-959B-47F9-8F77-44C7870012E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EE8BF16-5CD2-4EED-B581-422C8E530C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EE8BF16-5CD2-4EED-B581-422C8E530C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EE8BF16-5CD2-4EED-B581-422C8E530C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EE8BF16-5CD2-4EED-B581-422C8E530C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484EE776-2EE9-457E-BC52-F42DFD5BA701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484EE776-2EE9-457E-BC52-F42DFD5BA701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484EE776-2EE9-457E-BC52-F42DFD5BA701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484EE776-2EE9-457E-BC52-F42DFD5BA701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

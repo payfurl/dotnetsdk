@@ -2,18 +2,18 @@
 <package>
   <metadata>
     <id>PayfurlSdk</id>
-    <version>1.2.5</version>
+    <version>2.0</version>
     <authors>Payfurl</authors>
     <owners>Payfurl</owners>
     <license type="file">LICENSE</license>
     <projectUrl>https://bitbucket.org/dcamdupe/dotnetsdk</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Payfurl .Net SDK</description>
-    <releaseNotes>1.2.5 Added support to update transfer for charge with token</releaseNotes>
-    <copyright>Copyright 2020</copyright>
+    <releaseNotes>2.0 Converted to .Net Standard Library</releaseNotes>
+    <copyright>Copyright 2021</copyright>
     <tags></tags>
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="10.0.3" />
+      <dependency id="Newtonsoft.Json" version="13.0.1" />
     </dependencies>
   </metadata>
   <files>

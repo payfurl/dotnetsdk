@@ -1,19 +1,17 @@
 ﻿using payfurl.sdk;
 using payfurl.sdk.Models;
-using NUnit.Framework;
+using Xunit;
 
 namespace FunctionalTests
 {
-    [TestFixture]
     public class Charge
     {
-        [SetUp]
-        public void SetConfig()
+        public Charge()
         {
             Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
         }
 
-        [Test]
+        [Fact]
         public void ChargeWithValidCard()
         {
             var chargeData = new NewChargeCard
@@ -31,20 +29,20 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Charge();
             var result = svc.CreateWithCard(chargeData);
 
-            Assert.AreEqual("SUCCESS", result.Status);
+            Assert.Equal("SUCCESS", result.Status);
         }
 
 
-        [Test]
+        [Fact]
         public void Search()
         {
             var svc = new payfurl.sdk.Charge();
             var result = svc.Search(new ChargeSearch());
 
-            Assert.AreEqual(0, result.Skip);
+            Assert.Equal(0, result.Skip);
         }
 
-        [Test]
+        [Fact]
         public void ChargePaymentMethod()
         {
             var custSvc = new payfurl.sdk.Customer();
@@ -73,10 +71,10 @@ namespace FunctionalTests
             };
             var result = chargeSvc.CreateWitPaymentMethod(charge);
 
-            Assert.AreEqual("SUCCESS", result.Status);
+            Assert.Equal("SUCCESS", result.Status);
         }
 
-        [Test]
+        [Fact]
         public void Refund()
         {
             var chargeData = new NewChargeCard
@@ -96,11 +94,10 @@ namespace FunctionalTests
 
             var refundResult = svc.Refund(new NewRefund { ChargeId = chargeResult.ChargeId });
 
-            Assert.AreEqual(chargeData.Amount, refundResult.RefundedAmount);
+            Assert.Equal(chargeData.Amount, refundResult.RefundedAmount);
         }
 
-        [Test]
-        [Ignore("tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void ChargeWithValidToken()
         {
             var chargeData = new NewChargeToken
@@ -112,7 +109,7 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Charge();
             var result = svc.CreateWithToken(chargeData);
 
-            Assert.AreEqual("SUCCESS", result.Status);
+            Assert.Equal("SUCCESS", result.Status);
         }
     }
 }
