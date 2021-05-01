@@ -1,20 +1,18 @@
 ﻿using payfurl.sdk;
 using payfurl.sdk.Models;
-using NUnit.Framework;
 using System.Linq;
+using Xunit;
 
 namespace FunctionalTests
 {
-    [TestFixture]
     public class Transfer
     {
-        [SetUp]
-        public void SetConfig()
+        public Transfer()
         {
             Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
         }
 
-        [Test]
+        [Fact]
         public void Create()
         {
             var transferData = new NewTransferGroup
@@ -30,10 +28,10 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Transfer();
             var result = svc.Create(transferData);
 
-            Assert.AreEqual("PENDING", result.First().Status);
+            Assert.Equal("PENDING", result.First().Status);
         }
 
-        [Test]
+        [Fact]
         public void Single()
         {
             var transferData = new NewTransferGroup
@@ -51,10 +49,10 @@ namespace FunctionalTests
 
             var result = svc.Single(transfer.First().TransferId);
 
-            Assert.AreEqual(result.TransferId, transfer.First().TransferId);
+            Assert.Equal(result.TransferId, transfer.First().TransferId);
         }
 
-        [Test]
+        [Fact]
         public void Search()
         {
             var transferData = new NewTransferGroup
@@ -72,7 +70,7 @@ namespace FunctionalTests
 
             var result = svc.Search(new TransferSearch { ProviderId = transferData.ProviderId } );
 
-            Assert.AreEqual(0, result.Skip);
+            Assert.Equal(0, result.Skip);
         }
     }
 }
