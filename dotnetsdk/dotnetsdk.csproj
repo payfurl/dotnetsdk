@@ -12,6 +12,7 @@
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;net451;net48</TargetFrameworks>
+    <PackageProjectUrl>https://github.com/payfurl/dotnetsdk</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
