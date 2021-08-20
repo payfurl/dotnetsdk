@@ -79,13 +79,14 @@ namespace payfurl.sdk.Tools
             Error error = null;
             if (exception.Response == null)
             {
-                new Error()
+                error = new Error()
                 {
                     HttpStatus = 408,
                     Message = "Request Timeout",
                     Details = new System.Collections.Generic.Dictionary<string, string>(),
                     Resource = ""
                 };
+                throw new ApiException(error, error.Message);
             }
 
             using (var reader = new StreamReader(exception.Response.GetResponseStream()))
@@ -97,7 +98,7 @@ namespace payfurl.sdk.Tools
                 }
                 catch (Exception)
                 {
-                    new Error()
+                    error = new Error()
                     {
                         HttpStatus = 0,
                         Message = result,
