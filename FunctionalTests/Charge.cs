@@ -32,6 +32,26 @@ namespace FunctionalTests
             Assert.Equal("SUCCESS", result.Status);
         }
 
+        [Fact]
+        public void ChargeWithValidCardLeastCost()
+        {
+            var chargeData = new NewChargeCardLeastCost
+            {
+                Amount = 20,
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+		            ExpiryDate = "12/22",
+		            Ccv = "123"
+                }
+            };
+
+            var svc = new payfurl.sdk.Charge();
+            var result = svc.CreateWithCardLeastCost(chargeData);
+
+            Assert.Equal("SUCCESS", result.Status);
+        }
+
 
         [Fact]
         public void Search()
