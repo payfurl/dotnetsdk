@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.2 resolved issue handling errors</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.3 added least cost routing support</PackageReleaseNotes>
     <Copyright>Copyright 2021</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
