@@ -17,7 +17,7 @@ namespace FunctionalTests
         {
             var transferData = new NewTransferGroup
             {
-                ProviderId = "5f6339bfbbfb3c0c3c72b884",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 Transfers = new System.Collections.Generic.List<NewTransfer>
                 {
                     new NewTransfer { Amount = 1.25M, Currency = "AUD", Account = "david@uberconcept.com"},
@@ -36,7 +36,7 @@ namespace FunctionalTests
         {
             var transferData = new NewTransferGroup
             {
-                ProviderId = "5f6339bfbbfb3c0c3c72b884",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 Transfers = new System.Collections.Generic.List<NewTransfer>
                 {
                     new NewTransfer { Amount = 1.25M, Currency = "AUD", Account = "david@uberconcept.com"},
@@ -57,7 +57,7 @@ namespace FunctionalTests
         {
             var transferData = new NewTransferGroup
             {
-                ProviderId = "5f6339bfbbfb3c0c3c72b884",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 Transfers = new System.Collections.Generic.List<NewTransfer>
                 {
                     new NewTransfer { Amount = 1.25M, Currency = "AUD", Account = "david@uberconcept.com"},

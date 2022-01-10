@@ -17,7 +17,7 @@ namespace FunctionalTests
             var chargeData = new NewChargeCard
             {
                 Amount = 20,
-                ProviderId = "5deae6c2d560623e10966b91",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
@@ -69,7 +69,7 @@ namespace FunctionalTests
 
             var newCustomer = new NewCustomerCard
             {
-                ProviderId = "5deae6c2d560623e10966b92",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",
@@ -100,7 +100,7 @@ namespace FunctionalTests
             var chargeData = new NewChargeCard
             {
                 Amount = 20,
-                ProviderId = "5deae6c2d560623e10966b91",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
                 PaymentInformation = new CardRequestInformation
                 {
                     CardNumber = "4111111111111111",

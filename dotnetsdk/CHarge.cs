@@ -10,6 +10,7 @@ namespace payfurl.sdk
         {
             return HttpWrapper.Call<NewChargeCard, ChargeData>("/charge/card", Method.POST, newCharge);
         }
+        
         public ChargeData CreateWithCardLeastCost(NewChargeCardLeastCost newCharge)
         {
             return HttpWrapper.Call<NewChargeCardLeastCost, ChargeData>("/charge/card/least_cost", Method.POST, newCharge);

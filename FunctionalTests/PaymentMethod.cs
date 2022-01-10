@@ -36,7 +36,7 @@ namespace FunctionalTests
         {
             var checkout = new NewCheckout
             {
-                ProviderId = "5f6339bfbbfb3c0c3c72b884",
+                ProviderId = "1cf5deda-28cc-4214-adb5-1e597a37228c",
                 Amount = 123,
                 Currency = "AUD",
                 Reference = "123123123",
