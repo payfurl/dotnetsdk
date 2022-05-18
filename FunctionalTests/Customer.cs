@@ -61,6 +61,69 @@ namespace FunctionalTests
 
             Assert.NotNull(result.CustomerId);
         }
+        
+        [Fact]
+        public void AddPaymentMethodWithCard()
+        {
+            var customer = new NewCustomerCard
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var paymentMethod = new NewPaymentMethodCard
+            {
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            
+            var result = svc.CreatePaymentMethodWithCard(newCustomer.CustomerId, paymentMethod);
+            Assert.NotNull(result.PaymentMethodId);
+        }
+        
+        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        public void AddPaymentMethodWithToken()
+        {
+            var customer = new NewCustomerCard
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var paymentMethod = new NewPaymentMethodToken()
+            {
+                Token = "4f0fb10355224034a1df949852de34e1"
+            };
+            
+            var result = svc.CreatePaymentMethodWithToken(newCustomer.CustomerId, paymentMethod);
+            Assert.NotNull(result.PaymentMethodId);
+        }
+        
 
         [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void AddWithToken()

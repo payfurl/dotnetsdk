@@ -7,6 +7,8 @@ namespace payfurl.sdk
     {
         CustomerData CreateWithCard(NewCustomerCard newCustomer);
         CustomerData CreateWithToken(NewCustomerToken newCustomer);
+        PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod);
+        PaymentMethodData CreatePaymentMethodWithToken(string customerId, NewPaymentMethodToken newPaymentMethod);
         CustomerList Search(CustomerSearch searchData);
         CustomerData Single(string customerId);
         List<PaymentMethodData> GetPaymentMethods(string customerId);

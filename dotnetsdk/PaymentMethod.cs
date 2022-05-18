@@ -8,7 +8,6 @@ namespace payfurl.sdk
 {
     public class PaymentMethod : IPaymentMethod
     {
-
         public string GenerateClientToken(string providerId)
         {
             providerId = HttpUtility.UrlEncode(providerId);

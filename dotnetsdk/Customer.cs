@@ -11,9 +11,20 @@ namespace payfurl.sdk
         {
             return HttpWrapper.Call<NewCustomerCard, CustomerData>("/customer/card", Method.POST, newCustomer);
         }
+
         public CustomerData CreateWithToken(NewCustomerToken newCustomer)
         {
             return HttpWrapper.Call<NewCustomerToken, CustomerData>("/customer/token", Method.POST, newCustomer);
+        }
+
+        public PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod)
+        {
+            return HttpWrapper.Call<NewPaymentMethodCard, PaymentMethodData>("/customer/"+ customerId + "/payment_method/card", Method.POST, newPaymentMethod);
+        }
+
+        public PaymentMethodData CreatePaymentMethodWithToken(string customerId, NewPaymentMethodToken newPaymentMethod)
+        {
+            return HttpWrapper.Call<NewPaymentMethodToken, PaymentMethodData>("/customer/"+ customerId + "/payment_method/token", Method.POST, newPaymentMethod);
         }
 
         public CustomerData Single(string customerId)
