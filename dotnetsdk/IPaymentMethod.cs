@@ -5,7 +5,6 @@ namespace payfurl.sdk
 {
     public interface IPaymentMethod
     {
-        List<PaymentMethodData> GetForCustomer(string customerId);
         string GenerateClientToken(string providerId);
         Checkout Checkout(NewCheckout newCheckout);
     }

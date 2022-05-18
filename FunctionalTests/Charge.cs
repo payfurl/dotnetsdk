@@ -79,9 +79,7 @@ namespace FunctionalTests
             };
             var createdCustomer = custSvc.CreateWithCard(newCustomer);
 
-            var payMethodSvc = new payfurl.sdk.PaymentMethod();
-
-            var createdPaymentMethod = payMethodSvc.GetForCustomer(createdCustomer.CustomerId);
+            var createdPaymentMethod = custSvc.GetPaymentMethods(createdCustomer.CustomerId);
 
             var chargeSvc = new payfurl.sdk.Charge();
             var charge = new NewChargePaymentMethod

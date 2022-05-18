@@ -77,5 +77,23 @@ namespace FunctionalTests
 
             Assert.NotNull(result.CustomerId);
         }
+
+        [Fact]
+        public void GetPaymentMethods()
+        {
+            var search = new CustomerSearch
+            {
+                Reference = "123123123"
+            };
+
+            var svc = new payfurl.sdk.Customer();
+            var result = svc.Search(search);
+
+            var customerId = result.Customers[0].CustomerId;
+
+            var paymentMethods = svc.GetPaymentMethods(customerId);
+
+            Assert.Single(paymentMethods);
+        }
     }
 }

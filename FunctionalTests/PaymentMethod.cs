@@ -13,25 +13,6 @@ namespace FunctionalTests
         }
 
         [Fact]
-        public void GetForCustomer()
-        {
-            var search = new CustomerSearch
-            {
-                Reference = "123123123"
-            };
-
-            var svc = new payfurl.sdk.Customer();
-            var result = svc.Search(search);
-
-            var customerId = result.Customers[0].CustomerId;
-
-            var payMethodSvc = new payfurl.sdk.PaymentMethod();
-            var paymentMethods = payMethodSvc.GetForCustomer(customerId);
-
-            Assert.Single(paymentMethods);
-        }
-
-        [Fact]
         public void Checkout()
         {
             var checkout = new NewCheckout

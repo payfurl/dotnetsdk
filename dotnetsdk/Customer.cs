@@ -1,5 +1,6 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
+using System.Collections.Generic;
 using System.Web;
 
 namespace payfurl.sdk
@@ -56,6 +57,13 @@ namespace payfurl.sdk
                 queryString = "?" + queryString;
 
             return HttpWrapper.Call<string, CustomerList>("/customer" + queryString, Method.GET, null);
+        }
+
+        public List<PaymentMethodData> GetPaymentMethods(string customerId)
+        {
+            customerId = HttpUtility.UrlEncode(customerId);
+
+            return HttpWrapper.Call<string, List<PaymentMethodData>>("/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null);
         }
     }
 }
