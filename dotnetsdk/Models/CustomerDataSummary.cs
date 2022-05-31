@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace payfurl.sdk.Models
 {
-    public class CustomerData
+    public class CustomerDataSummary
     {
         public string CustomerId { get; set; }
         public string Reference { get; set; }
@@ -11,6 +11,5 @@ namespace payfurl.sdk.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime DateAdded { get; set; }
-        public PaymentMethodSummary DefaultPaymentMethod { get; set; }
     }
 }

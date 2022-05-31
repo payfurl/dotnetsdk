@@ -6,7 +6,7 @@ namespace payfurl.sdk.Models
     public class ChargeData
     {
         public string ChargeId { get; set; }
-        public string ProviderChangeId { get; set; }
+        public string ProviderChargeId { get; set; }
         public decimal Amount { get; set; }
         public string ProviderId { get; set; }
         public string Reference { get; set; }
@@ -15,8 +15,11 @@ namespace payfurl.sdk.Models
         public string Status { get; set; }
         public DateTime DateAdded { get; set; }
         public decimal? RefundedAmount { get; set; }
-
+        public decimal? EstimatedCost { get; set; }
+        public string Currency { get; set; }
         public List<Refund> Refunds { get; set; }
+        public CustomerDataSummary Customer { get; set; }
+        public ProviderSummary Provider { get; set; }
 
         public class Refund
         {
