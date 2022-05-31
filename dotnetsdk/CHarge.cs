@@ -16,7 +16,7 @@ namespace payfurl.sdk
             return HttpWrapper.Call<NewChargeCardLeastCost, ChargeData>("/charge/card/least_cost", Method.POST, newCharge);
         }
 
-        public ChargeData CreateWitPaymentMethod(NewChargePaymentMethod newCharge)
+        public ChargeData CreateWithPaymentMethod(NewChargePaymentMethod newCharge)
         {
             return HttpWrapper.Call<NewChargePaymentMethod, ChargeData>("/charge/payment_method", Method.POST, newCharge);
         }

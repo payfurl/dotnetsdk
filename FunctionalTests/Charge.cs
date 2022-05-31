@@ -87,7 +87,35 @@ namespace FunctionalTests
                 Amount = 5,
                 PaymentMethodId = createdPaymentMethod[0].PaymentMethodId
             };
-            var result = chargeSvc.CreateWitPaymentMethod(charge);
+            var result = chargeSvc.CreateWithPaymentMethod(charge);
+
+            Assert.Equal("SUCCESS", result.Status);
+        }
+
+        [Fact]
+        public void ChargeCustomer()
+        {
+            var custSvc = new payfurl.sdk.Customer();
+
+            var newCustomer = new NewCustomerCard
+            {
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            var createdCustomer = custSvc.CreateWithCard(newCustomer);
+
+            var chargeSvc = new payfurl.sdk.Charge();
+            var charge = new NewChargeCustomer
+            {
+                Amount = 5,
+                CustomerId = createdCustomer.CustomerId
+            };
+            var result = chargeSvc.CreateWithCustomer(charge);
 
             Assert.Equal("SUCCESS", result.Status);
         }
