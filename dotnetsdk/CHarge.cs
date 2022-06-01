@@ -40,18 +40,12 @@ namespace payfurl.sdk
         {
             // TODO: move into a shared class to handle formatting
             var queryString = "";
-                
-            if (searchData.Skip.HasValue)
-                queryString = "Skip=" + searchData.Skip.Value;
-
-            if (searchData.Limit.HasValue)
-                queryString = "Limit=" + searchData.Limit.Value;
 
             if (!string.IsNullOrWhiteSpace(searchData.Reference))
                 queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
 
-            if (!string.IsNullOrWhiteSpace(searchData.PaymentMethodId))
-                queryString = "PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId);
+            if (!string.IsNullOrWhiteSpace(searchData.ProviderId))
+                queryString = "ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId);
 
             if (searchData.AmountGreaterThan.HasValue)
                 queryString = "AmountGreaterThan=" + HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString());
@@ -71,8 +65,20 @@ namespace payfurl.sdk
             if (searchData.AddedBefore.HasValue)
                 queryString = "AddedBefore=" + HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
+            if (!string.IsNullOrWhiteSpace(searchData.PaymentMethodId))
+                queryString = "PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId);
+
+            if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
+                queryString = "PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType);
+
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString = "SortBy=" + searchData.SortBy;
+                
+            if (searchData.Skip.HasValue)
+                queryString = "Skip=" + searchData.Skip.Value;
+
+            if (searchData.Limit.HasValue)
+                queryString = "Limit=" + searchData.Limit.Value;
 
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
