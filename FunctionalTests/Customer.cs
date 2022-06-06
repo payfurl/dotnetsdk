@@ -158,5 +158,31 @@ namespace FunctionalTests
 
             Assert.Single(paymentMethods);
         }
+        
+        [Fact]
+        public void Single()
+        {
+            var customer = new NewCustomerCard
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+
+            var svc = new payfurl.sdk.Customer();
+            var result = svc.CreateWithCard(customer);
+
+            var newCustomer = svc.Single(result.CustomerId);
+            
+            Assert.Equal(newCustomer.CustomerId, result.CustomerId);
+            Assert.Equal(newCustomer.FirstName, result.FirstName);
+            Assert.Equal(newCustomer.LastName, result.LastName);
+        }
     }
 }
