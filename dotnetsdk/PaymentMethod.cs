@@ -1,23 +1,23 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
-using System;
-using System.Collections.Generic;
-using System.Web;
 
 namespace payfurl.sdk
 {
     public class PaymentMethod : IPaymentMethod
     {
-        public string GenerateClientToken(string providerId)
-        {
-            providerId = HttpUtility.UrlEncode(providerId);
-
-            return HttpWrapper.Call<string, string>("/payment_method/client_token/" + providerId, Method.GET, null);
-        }
-
         public Checkout Checkout(NewCheckout newCheckout)
         {
             return HttpWrapper.Call<NewCheckout, Checkout>("/payment_method/checkout", Method.POST, newCheckout);
+        }
+
+        public PaymentMethodData CreatePaymentMethodWithVault(NewPaymentMethodVault newPaymentMethodVault)
+        {
+            return HttpWrapper.Call<NewPaymentMethodVault, PaymentMethodData>("payment_method/vault", Method.POST, newPaymentMethodVault);
+        }
+
+        public PaymentMethodData CreatePaymentMethodWithCard(NewPaymentMethodCard newPaymentMethodCard)
+        {
+            return HttpWrapper.Call<NewPaymentMethodCard, PaymentMethodData>("payment_method/card", Method.POST, newPaymentMethodCard);
         }
     }
 }

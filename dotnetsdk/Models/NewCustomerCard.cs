@@ -1,4 +1,6 @@
-﻿namespace payfurl.sdk.Models
+﻿using System;
+
+namespace payfurl.sdk.Models
 {
     public class NewCustomerCard
     {
@@ -8,6 +10,9 @@
         public string Email { get; set; }
         public string Phone { get; set; }
         public string ProviderId { get; set; }
-        public CardRequestInformation PaymentInformation { get; set;}
+        public CardRequestInformation PaymentInformation { get; set; }
+        public bool VaultCard { get; set; }
+        public DateTime? VaultExpireDate { get; set; }
+        public int? VaultExpireSeconds { get; set; }
     }
 }
