@@ -6,6 +6,6 @@ namespace payfurl.sdk
     {
         VaultData Create(NewVault newVault);
         VaultData Delete(string vaultId);
-        VaultData Single(string vaultId);
+        VaultDataWithPCI Single(string vaultId);
     }
 }

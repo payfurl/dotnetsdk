@@ -16,9 +16,9 @@ namespace payfurl.sdk
             return HttpWrapper.Call<string, VaultData>("/vault/" + vaultId, Method.DELETE, null);
         }
 
-        public VaultData Single(string vaultId)
+        public VaultDataWithPCI Single(string vaultId)
         {
-            return HttpWrapper.Call<string, VaultData>("/vault/" + vaultId, Method.GET, null);
+            return HttpWrapper.Call<string, VaultDataWithPCI>("/vault/" + vaultId, Method.GET, null);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using payfurl.sdk;
+﻿using System;
+using payfurl.sdk;
 using payfurl.sdk.Models;
 using Xunit;
+using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
@@ -14,12 +16,29 @@ namespace FunctionalTests
         [Fact]
         public void SearchWithValidReference()
         {
+            var reference = Guid.NewGuid().ToString();
+                
+            var customer = new NewCustomerCard
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                Reference = reference,
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            var svc = new payfurl.sdk.Customer();
+            svc.CreateWithCard(customer);
+            
             var search = new CustomerSearch
             {
-                Reference = "123123123"
+                Reference = reference
             };
 
-            var svc = new payfurl.sdk.Customer();
             var result = svc.Search(search);
 
             Assert.Equal(1, result.Count);
@@ -144,12 +163,29 @@ namespace FunctionalTests
         [Fact]
         public void GetPaymentMethods()
         {
-            var search = new CustomerSearch
+            var reference = Guid.NewGuid().ToString();
+            var customer = new NewCustomerCard
             {
-                Reference = "123123123"
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                Reference = reference,
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
             };
 
             var svc = new payfurl.sdk.Customer();
+            svc.CreateWithCard(customer);
+            
+            var search = new CustomerSearch
+            {
+                Reference = reference
+            };
+
             var result = svc.Search(search);
 
             var customerId = result.Customers[0].CustomerId;

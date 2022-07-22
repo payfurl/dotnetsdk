@@ -54,6 +54,27 @@ namespace FunctionalTests
         }
 
         [Fact]
+        public void Single()
+        {
+            var newPaymentMethod = new NewPaymentMethodCard
+            {
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+            
+            var result = svc.Single(paymentMethodWithCard.PaymentMethodId);
+
+            Assert.Equal(paymentMethodWithCard.PaymentMethodId, result.PaymentMethodId);
+        }
+
+        [Fact]
         public void CreatePaymentMethodWithVault()
         {
             var newCustomer = new NewCustomerCard
@@ -80,6 +101,27 @@ namespace FunctionalTests
             var result = svc.CreatePaymentMethodWithVault(newPaymentMethod);
 
             Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
+        public void Search()
+        {
+            var newPaymentMethod = new NewPaymentMethodCard
+            {
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                PaymentInformation = new CardRequestInformation
+                {
+                    CardNumber = "4111111111111111",
+                    ExpiryDate = "12/22",
+                    Ccv = "123"
+                }
+            };
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+            
+            var result = svc.Search(new PaymentMethodSearch { ProviderId = newPaymentMethod.ProviderId});
+
+            Assert.False(result.Count == 0);
         }
     }
 }
