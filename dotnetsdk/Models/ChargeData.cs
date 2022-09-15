@@ -15,6 +15,7 @@ namespace payfurl.sdk.Models
         public string Status { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime? SuccessDate { get; set; }
+        public DateTime? VoidDate { get; set; }
         public decimal? RefundedAmount { get; set; }
         public decimal? EstimatedCost { get; set; }
         public string EstimatedCostCurrency { get; set; }
@@ -25,6 +26,7 @@ namespace payfurl.sdk.Models
         public ProviderSummary Provider { get; set; }
         public string ThreeDSServerTransID { get; set; }
         public bool ThreeDsVerified { get; set; }
+        public decimal? AuthorisationAmount { get; set; }
 
         public class Refund
         {
