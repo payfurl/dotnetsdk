@@ -3,14 +3,14 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.5</Version>
+    <Version>2.0.6</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.3 added least cost routing support</PackageReleaseNotes>
-    <Copyright>Copyright 2021</Copyright>
+    <PackageReleaseNotes>2.0.6 added support for authorise and capture</PackageReleaseNotes>
+    <Copyright>Copyright 2022</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
-    <TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;net451;net48</TargetFrameworks>
     <PackageProjectUrl>https://github.com/payfurl/dotnetsdk</PackageProjectUrl>
   </PropertyGroup>
 
