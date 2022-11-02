@@ -5,6 +5,7 @@ namespace payfurl.sdk
     public enum Environment
     {
         LOCAL,
+        DEVELOPMENT,
         SANDBOX,
         PROD
     }
@@ -20,6 +21,8 @@ namespace payfurl.sdk
         {
             if (environment == Environment.LOCAL)
                 BaseUrl = "https://localhost:5001";
+            if (environment == Environment.DEVELOPMENT)
+                BaseUrl = "https://develop-api.payfurl.com";
             if (environment == Environment.SANDBOX)
                 BaseUrl = "https://sandbox-api.payfurl.com";
             else if (environment == Environment.PROD)
