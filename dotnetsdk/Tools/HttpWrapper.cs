@@ -24,7 +24,7 @@ namespace payfurl.sdk.Tools
             DateTimeZoneHandling = DateTimeZoneHandling.Utc
         };
 
-        // PooledConnectionLifetime prevent DNS caching but not supported with current .NET versions
+        // PooledConnectionLifetime prevents DNS caching but is not supported with current .NET versions
         private static readonly HttpClient HttpClient = new HttpClient(/*new SocketsHttpHandler
         {
             PooledConnectionLifetime = TimeSpan.FromMinutes(1)
