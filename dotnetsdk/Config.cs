@@ -3,6 +3,7 @@
     public enum Environment
     {
         LOCAL,
+        DEVELOPMENT,
         SANDBOX,
         PROD
     }
@@ -28,7 +29,7 @@
                     BaseUrl = "https://api.payfurl.com";
                     break;
             }
-
+            
             SecretKey = secretKey;
             TimeoutMilliseconds = timeoutMilliseconds;
         }
