@@ -88,5 +88,15 @@ namespace payfurl.sdk
 
             return HttpWrapper.Call<string, ChargeData>("/charge/" + newCharge.ChargeId + queryString, Method.DELETE, null);
         }
+        
+        public ChargeData Capture(string chargeId, NewChargeCapture chargeCaptureData)
+        {
+            return HttpWrapper.Call<NewChargeCapture, ChargeData>($"/charge/{chargeId}", Method.POST, chargeCaptureData);
+        }
+
+        public ChargeData Void(string chargeId)
+        {
+            return HttpWrapper.Call<string, ChargeData>($"/charge/{chargeId}", Method.DELETE, null);
+        }
     }
 }

@@ -7,5 +7,6 @@
         public string ProviderId { get; set; }
         public string Reference { get; set; }
         public CardRequestInformation PaymentInformation { get; set;}
+        public bool Capture { get; set; } = true;
     }
 }

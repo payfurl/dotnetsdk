@@ -12,5 +12,7 @@ namespace payfurl.sdk
         ChargeData Refund(NewRefund newCharge);
         ChargeData Single(string chargeId);
         ChargeList Search(ChargeSearch searchData);
+        ChargeData Capture(string chargeId, NewChargeCapture chargeCaptureData);
+        ChargeData Void(string chargeId);
     }
 }
