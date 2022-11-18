@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace payfurl.sdk
+﻿namespace payfurl.sdk
 {
     public enum Environment
     {
@@ -18,12 +16,18 @@ namespace payfurl.sdk
 
         public static void Setup(string secretKey, Environment environment, int timeoutMilliseconds = 60000)
         {
-            if (environment == Environment.LOCAL)
-                BaseUrl = "https://localhost:5001";
-            if (environment == Environment.SANDBOX)
-                BaseUrl = "https://sandbox-api.payfurl.com";
-            else if (environment == Environment.PROD)
-                BaseUrl = "https://api.payfurl.com";
+            switch (environment)
+            {
+                case Environment.LOCAL:
+                    BaseUrl = "https://localhost:5001";
+                    break;
+                case Environment.SANDBOX:
+                    BaseUrl = "https://sandbox-api.payfurl.com";
+                    break;
+                case Environment.PROD:
+                    BaseUrl = "https://api.payfurl.com";
+                    break;
+            }
 
             SecretKey = secretKey;
             TimeoutMilliseconds = timeoutMilliseconds;

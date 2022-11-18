@@ -1,9 +1,11 @@
 ﻿using payfurl.sdk.Models;
-using Newtonsoft.Json;
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using Newtonsoft.Json;
+using payfurl.sdk.Helpers;
 
 namespace payfurl.sdk.Tools
 {
@@ -16,8 +18,22 @@ namespace payfurl.sdk.Tools
 
     public static class HttpWrapper
     {
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc
+        };
 
-        private static JsonSerializerSettings _jsonSettings;
+        // PooledConnectionLifetime prevent DNS caching but not supported with current .NET versions
+        private static readonly HttpClient HttpClient = new HttpClient(/*new SocketsHttpHandler
+        {
+            PooledConnectionLifetime = TimeSpan.FromMinutes(1)
+        }*/)
+        {
+            Timeout = TimeSpan.FromMilliseconds(Config.TimeoutMilliseconds)
+        };
+
+        private const string MediaType = "application/json";
 
         static HttpWrapper()
         {
@@ -25,90 +41,103 @@ namespace payfurl.sdk.Tools
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             ServicePointManager.DefaultConnectionLimit = 9999;
-            _jsonSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DateTimeZoneHandling = DateTimeZoneHandling.Utc };
         }
-        
-        public static R Call<T, R>(string endpoint, Method httpMethod, T body)
+
+        public static TResult Call<TInput, TResult>(string endpoint, Method httpMethod, TInput body)
         {
-            var url = Config.BaseUrl + endpoint;
-            var httpRequest = HttpWebRequest.Create((string)url);
+            var httpRequest = PrepareHttpRequestMessage<TInput>(endpoint, httpMethod, body);
 
-            httpRequest.ContentType = "application/json";
-            httpRequest.Headers.Add("x-secretkey", Config.SecretKey);
+            var responseString = string.Empty;
+            var response = new HttpResponseMessage();
 
-            httpRequest.Method = httpMethod.ToString();
-            httpRequest.Timeout = Config.TimeoutMilliseconds;
-
-            string result = "";
-
-            // if we have a body
-            if (httpMethod == Method.POST)
-            {
-                var jsonBody = JsonConvert.SerializeObject(body, _jsonSettings);
-                using (var stream = httpRequest.GetRequestStream())
-                {
-                    if (jsonBody == null)
-                        jsonBody = "";
-
-                    var data = Encoding.UTF8.GetBytes(jsonBody);
-                    stream.Write(data, 0, jsonBody.Length);
-                }
-            }
-
-            WebResponse response = null;
             try
             {
-                response = httpRequest.GetResponse();
+                response = AsyncHelper.RunSync(() => HttpClient.SendAsync(httpRequest));
+                responseString = AsyncHelper.RunSync(() => response.Content.ReadAsStringAsync());
             }
-
-            catch (WebException ex)
+            catch (Exception ex)
             {
                 TranslateException(ex);
             }
 
-            using (var reader = new StreamReader(response.GetResponseStream()))
+            if (!response.IsSuccessStatusCode)
             {
-                result = reader.ReadToEnd();
+                TranslateException(response.StatusCode, responseString);
             }
 
-            return JsonConvert.DeserializeObject<R>(result, _jsonSettings);
+            return JsonConvert.DeserializeObject<TResult>(responseString, JsonSettings);
         }
 
-        private static void TranslateException(WebException exception)
+        private static HttpRequestMessage PrepareHttpRequestMessage<T>(string endpoint, Method httpMethod, T body)
+        {
+            var url = Config.BaseUrl + endpoint;
+            var method = new HttpMethod(httpMethod.ToString());
+
+            var httpRequest = new HttpRequestMessage
+            {
+                RequestUri = new Uri(url),
+                Method = method,
+                Content = new StringContent(string.Empty, Encoding.UTF8, MediaType)
+            };
+
+            httpRequest.Headers.Add("x-secretkey", Config.SecretKey);
+
+            if (body != null)
+            {
+                var jsonBody = JsonConvert.SerializeObject(body, JsonSettings);
+                httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaType);
+            }
+
+            return httpRequest;
+        }
+
+        private static void TranslateException(HttpStatusCode statusCode, string responseString)
         {
             Error error = null;
-            if (exception.Response == null)
+            if (statusCode == HttpStatusCode.RequestTimeout)
             {
-                error = new Error()
+                error = new Error
                 {
                     HttpStatus = 408,
                     Message = "Request Timeout",
-                    Details = new System.Collections.Generic.Dictionary<string, string>(),
+                    Details = new Dictionary<string, string>(),
                     Resource = ""
                 };
+
                 throw new ApiException(error, error.Message);
             }
 
-            using (var reader = new StreamReader(exception.Response.GetResponseStream()))
+            try
             {
-                var result = reader.ReadToEnd();
-                try
-                {
-                    error = JsonConvert.DeserializeObject<Error>(result);
-                }
-                catch (Exception)
-                {
-                    error = new Error()
-                    {
-                        HttpStatus = 0,
-                        Message = result,
-                        Details = new System.Collections.Generic.Dictionary<string, string>(),
-                        Resource = ""
-                    };
-                    throw new ApiException(error, result);
-                }
+                error = JsonConvert.DeserializeObject<Error>(responseString);
             }
-            throw new ApiException(error, error.Message, exception);
+            catch (Exception)
+            {
+                error = new Error
+                {
+                    HttpStatus = 0,
+                    Message = responseString,
+                    Details = new Dictionary<string, string>(),
+                    Resource = ""
+                };
+
+                throw new ApiException(error, responseString);
+            }
+
+            throw new ApiException(error, error.Message);
+        }
+
+        private static void TranslateException(Exception exception)
+        {
+            var error = new Error
+            {
+                HttpStatus = 0,
+                Message = exception.Message,
+                Details = new Dictionary<string, string>(),
+                Resource = ""
+            };
+
+            throw new ApiException(error, error.Message);
         }
     }
 }
