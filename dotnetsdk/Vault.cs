@@ -3,7 +3,6 @@ using payfurl.sdk.Tools;
 
 namespace payfurl.sdk
 {
-
     public class Vault : IVault
     {
         public VaultData Create(NewVault newVault)
