@@ -12,7 +12,7 @@ Library for integrating with PayFURL payments in your app. It includes the follo
 
 Use of the PayFURL .NET SDK requires:
 
-* .NET 6.0 or .NET Standard 2.1
+* .NET Standard 2.0/2.1 or .NET Core 2.1 or .NET 4.5/4.8
 
 ## 🧰 Installation
 
