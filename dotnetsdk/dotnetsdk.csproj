@@ -3,18 +3,22 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.7</Version>
+    <Version>2.0.8</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.7 added support for Development environent</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.8 Refactor internal HTTP calls approach</PackageReleaseNotes>
     <Copyright>Copyright 2022</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;net451;net48</TargetFrameworks>
     <PackageProjectUrl>https://github.com/payfurl/dotnetsdk</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/payfurl/dotnetsdk</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   
@@ -28,6 +32,13 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
