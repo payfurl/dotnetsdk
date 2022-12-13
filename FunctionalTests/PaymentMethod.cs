@@ -1,7 +1,7 @@
-﻿using System;
-using payfurl.sdk;
+﻿using payfurl.sdk;
 using payfurl.sdk.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using Environment = payfurl.sdk.Environment;
 
@@ -9,6 +9,44 @@ namespace FunctionalTests
 {
     public class PaymentMethod
     {
+        private const string ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed";
+
+        private static readonly CardRequestInformation CardRequestInformation = new()
+        {
+            CardNumber = "4111111111111111",
+            ExpiryDate = "12/35",
+            Ccv = "123"
+        };
+
+        private readonly NewCheckout _checkout = new()
+        {
+            ProviderId = "1cf5deda-28cc-4214-adb5-1e597a37228c",
+            Amount = 123,
+            Currency = "AUD",
+            Reference = "123123123",
+            Options = new Dictionary<string, string>
+                { { "HideShipping", "true"} }
+        };
+
+        private readonly NewPaymentMethodCard _newPaymentMethod = new() 
+        {
+            ProviderId = ProviderId,
+            PaymentInformation = CardRequestInformation
+        };
+
+        private readonly NewCustomerCard _newCustomer = new()
+        {
+            ProviderId = ProviderId,
+            PaymentInformation = CardRequestInformation,
+            VaultCard = true
+        };
+
+        private readonly NewPaymentMethodCard _newPaymentMethodCard = new()
+        {
+            ProviderId = ProviderId,
+            PaymentInformation = CardRequestInformation
+        };
+
         public PaymentMethod()
         {
             Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
@@ -16,6 +54,16 @@ namespace FunctionalTests
 
         [Fact]
         public void Checkout()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = svc.Checkout(_checkout);
+
+            Assert.NotNull(result.CheckoutId);
+            Assert.NotNull(result.TransactionId);
+        }
+
+        [Fact]
+        public async Task CheckoutAsync()
         {
             var checkout = new NewCheckout
             {
@@ -28,27 +76,27 @@ namespace FunctionalTests
             };
 
             var svc = new payfurl.sdk.PaymentMethod();
-            var result = svc.Checkout(checkout);
-
+            var result = await svc.CheckoutAsync(checkout);
+            
             Assert.NotNull(result.CheckoutId);
-            Assert.NotNull( result.TransactionId);
+            Assert.NotNull(result.TransactionId);
         }
 
         [Fact]
         public void CreatePaymentMethodWithCard()
         {
-            var newPaymentMethod = new NewPaymentMethodCard
-            {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
-                PaymentInformation = new CardRequestInformation
-                {
-                    CardNumber = "4111111111111111",
-                    ExpiryDate = "12/22",
-                    Ccv = "123"
-                }
-            };
+
             var svc = new payfurl.sdk.PaymentMethod();
-            var result = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+            var result = svc.CreatePaymentMethodWithCard(_newPaymentMethod);
+
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task CreatePaymentMethodWithCardAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = await svc.CreatePaymentMethodWithCardAsync(_newPaymentMethod);
 
             Assert.NotNull(result.PaymentMethodId);
         }
@@ -56,18 +104,8 @@ namespace FunctionalTests
         [Fact]
         public void Single()
         {
-            var newPaymentMethod = new NewPaymentMethodCard
-            {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
-                PaymentInformation = new CardRequestInformation
-                {
-                    CardNumber = "4111111111111111",
-                    ExpiryDate = "12/22",
-                    Ccv = "123"
-                }
-            };
             var svc = new payfurl.sdk.PaymentMethod();
-            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(_newPaymentMethodCard);
             
             var result = svc.Single(paymentMethodWithCard.PaymentMethodId);
 
@@ -75,28 +113,29 @@ namespace FunctionalTests
         }
 
         [Fact]
+        public async Task SingleAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethodWithCard = await svc.CreatePaymentMethodWithCardAsync(_newPaymentMethodCard);
+
+            var result = await svc.SingleAsync(paymentMethodWithCard.PaymentMethodId);
+
+            Assert.Equal(paymentMethodWithCard.PaymentMethodId, result.PaymentMethodId);
+        }
+
+        [Fact]
         public void CreatePaymentMethodWithVault()
         {
-            var newCustomer = new NewCustomerCard
-            {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
-                PaymentInformation = new CardRequestInformation
-                {
-                    CardNumber = "4111111111111111",
-                    ExpiryDate = "12/22",
-                    Ccv = "123"
-                },
-                VaultCard = true
-            };
             var custSvc = new payfurl.sdk.Customer();
-            var customer = custSvc.CreateWithCard(newCustomer);
+            var customer = custSvc.CreateWithCard(_newCustomer);
             
             var newPaymentMethod = new NewPaymentMethodVault
             {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                ProviderId = ProviderId,
                 PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId,
                 VaultId = customer.DefaultPaymentMethod.VaultId
             };
+
             var svc = new payfurl.sdk.PaymentMethod();
             var result = svc.CreatePaymentMethodWithVault(newPaymentMethod);
 
@@ -104,22 +143,42 @@ namespace FunctionalTests
         }
 
         [Fact]
+        public async Task CreatePaymentMethodWithVaultAsync()
+        {
+            var custSvc = new payfurl.sdk.Customer();
+            var customer = await custSvc.CreateWithCardAsync(_newCustomer);
+            
+            var newPaymentMethod = new NewPaymentMethodVault
+            {
+                ProviderId = ProviderId,
+                PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId,
+                VaultId = customer.DefaultPaymentMethod.VaultId
+            };
+
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = await svc.CreatePaymentMethodWithVaultAsync(newPaymentMethod);
+
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
         public void Search()
         {
-            var newPaymentMethod = new NewPaymentMethodCard
-            {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
-                PaymentInformation = new CardRequestInformation
-                {
-                    CardNumber = "4111111111111111",
-                    ExpiryDate = "12/22",
-                    Ccv = "123"
-                }
-            };
             var svc = new payfurl.sdk.PaymentMethod();
-            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(_newPaymentMethod);
             
-            var result = svc.Search(new PaymentMethodSearch { ProviderId = newPaymentMethod.ProviderId});
+            var result = svc.Search(new PaymentMethodSearch { ProviderId = _newPaymentMethod.ProviderId});
+
+            Assert.False(result.Count == 0);
+        }
+
+        [Fact]
+        public async Task SearchAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethodWithCard = await svc.CreatePaymentMethodWithCardAsync(_newPaymentMethod);
+
+            var result = svc.Search(new PaymentMethodSearch { ProviderId = _newPaymentMethod.ProviderId });
 
             Assert.False(result.Count == 0);
         }
