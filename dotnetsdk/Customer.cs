@@ -1,7 +1,9 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
+using payfurl.sdk.Helpers;
 
 namespace payfurl.sdk
 {
@@ -9,30 +11,100 @@ namespace payfurl.sdk
     {
         public CustomerData CreateWithCard(NewCustomerCard newCustomer)
         {
-            return HttpWrapper.Call<NewCustomerCard, CustomerData>("/customer/card", Method.POST, newCustomer);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewCustomerCard, CustomerData>("/customer/card", Method.POST, newCustomer));
+        }
+
+        public async Task<CustomerData> CreateWithCardAsync(NewCustomerCard newCustomer)
+        {
+            return await HttpWrapper.CallAsync<NewCustomerCard, CustomerData>("/customer/card", Method.POST,
+                newCustomer);
         }
 
         public CustomerData CreateWithToken(NewCustomerToken newCustomer)
         {
-            return HttpWrapper.Call<NewCustomerToken, CustomerData>("/customer/token", Method.POST, newCustomer);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewCustomerToken, CustomerData>("/customer/token", Method.POST, newCustomer));
+        }
+
+        public async Task<CustomerData> CreateWithTokenAsync(NewCustomerToken newCustomer)
+        {
+            return await HttpWrapper.CallAsync<NewCustomerToken, CustomerData>("/customer/token", Method.POST,
+                newCustomer);
         }
 
         public PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod)
         {
-            return HttpWrapper.Call<NewPaymentMethodCard, PaymentMethodData>("/customer/"+ customerId + "/payment_method/card", Method.POST, newPaymentMethod);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewPaymentMethodCard, PaymentMethodData>(
+                    "/customer/" + customerId + "/payment_method/card", Method.POST, newPaymentMethod));
+        }
+
+        public async Task<PaymentMethodData> CreatePaymentMethodWithCardAsync(string customerId,
+            NewPaymentMethodCard newPaymentMethod)
+        {
+            return await HttpWrapper.CallAsync<NewPaymentMethodCard, PaymentMethodData>(
+                "/customer/" + customerId + "/payment_method/card", Method.POST, newPaymentMethod);
         }
 
         public PaymentMethodData CreatePaymentMethodWithToken(string customerId, NewPaymentMethodToken newPaymentMethod)
         {
-            return HttpWrapper.Call<NewPaymentMethodToken, PaymentMethodData>("/customer/"+ customerId + "/payment_method/token", Method.POST, newPaymentMethod);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewPaymentMethodToken, PaymentMethodData>(
+                    "/customer/" + customerId + "/payment_method/token", Method.POST, newPaymentMethod));
+        }
+
+        public async Task<PaymentMethodData> CreatePaymentMethodWithTokenAsync(string customerId,
+            NewPaymentMethodToken newPaymentMethod)
+        {
+            return await HttpWrapper.CallAsync<NewPaymentMethodToken, PaymentMethodData>(
+                "/customer/" + customerId + "/payment_method/token", Method.POST, newPaymentMethod);
+        }
+
+        public List<PaymentMethodData> GetPaymentMethods(string customerId)
+        {
+            customerId = HttpUtility.UrlEncode(customerId);
+
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, List<PaymentMethodData>>(
+                    "/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null));
+        }
+
+        public async Task<List<PaymentMethodData>> GetPaymentMethodsAsync(string customerId)
+        {
+            customerId = HttpUtility.UrlEncode(customerId);
+
+            return await HttpWrapper.CallAsync<string, List<PaymentMethodData>>(
+                "/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null);
         }
 
         public CustomerData Single(string customerId)
         {
-            return HttpWrapper.Call<string, CustomerData>("/customer/" + customerId, Method.GET, null);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, CustomerData>("/customer/" + customerId, Method.GET, null));
+        }
+
+        public async Task<CustomerData> SingleAsync(string customerId)
+        {
+            return await HttpWrapper.CallAsync<string, CustomerData>("/customer/" + customerId, Method.GET, null);
         }
 
         public CustomerList Search(CustomerSearch searchData)
+        {
+            var queryString = BuildSearchQueryString(searchData);
+
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, CustomerList>("/customer" + queryString, Method.GET, null));
+        }
+
+        public async Task<CustomerList> SearchAsync(CustomerSearch searchData)
+        {
+            var queryString = BuildSearchQueryString(searchData);
+
+            return await HttpWrapper.CallAsync<string, CustomerList>("/customer" + queryString, Method.GET, null);
+        }
+
+        private static string BuildSearchQueryString(CustomerSearch searchData)
         {
             // TODO: move into a shared class
             var queryString = "";
@@ -59,22 +131,17 @@ namespace payfurl.sdk
                 queryString = "Search=" + HttpUtility.UrlEncode(searchData.Search);
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" + HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString = "AddedAfter=" +
+                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" + HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString = "AddedBefore=" +
+                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
 
-            return HttpWrapper.Call<string, CustomerList>("/customer" + queryString, Method.GET, null);
-        }
-
-        public List<PaymentMethodData> GetPaymentMethods(string customerId)
-        {
-            customerId = HttpUtility.UrlEncode(customerId);
-
-            return HttpWrapper.Call<string, List<PaymentMethodData>>("/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null);
+            return queryString;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
+using payfurl.sdk.Helpers;
 
 namespace payfurl.sdk
 {
@@ -9,15 +11,43 @@ namespace payfurl.sdk
     {
         public List<TransferData> Create(NewTransferGroup newTransfer)
         {
-            return HttpWrapper.Call<NewTransferGroup, List<TransferData>>("/transfer", Method.POST, newTransfer);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewTransferGroup, List<TransferData>>("/transfer", Method.POST, newTransfer));
+        }
+
+        public async Task<List<TransferData>> CreateAsync(NewTransferGroup newTransfer)
+        {
+            return await HttpWrapper.CallAsync<NewTransferGroup, List<TransferData>>("/transfer", Method.POST,
+                newTransfer);
         }
 
         public TransferData Single(string transferId)
         {
-            return HttpWrapper.Call<string, TransferData>("/transfer/" + transferId, Method.GET, null);
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, TransferData>("/transfer/" + transferId, Method.GET, null));
+        }
+
+        public async Task<TransferData> SingleAsync(string transferId)
+        {
+            return await HttpWrapper.CallAsync<string, TransferData>("/transfer/" + transferId, Method.GET, null);
         }
 
         public TransferList Search(TransferSearch searchData)
+        {
+            var queryString = BuildSearchQueryString(searchData);
+
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, TransferList>("/transfer" + queryString, Method.GET, null));
+        }
+
+        public async Task<TransferList> SearchAsync(TransferSearch searchData)
+        {
+            var queryString = BuildSearchQueryString(searchData);
+
+            return await HttpWrapper.CallAsync<string, TransferList>("/transfer" + queryString, Method.GET, null);
+        }
+
+        private static string BuildSearchQueryString(TransferSearch searchData)
         {
             // TODO: move into a shared class to handle formatting
             var queryString = "";
@@ -38,18 +68,19 @@ namespace payfurl.sdk
                 queryString = "Status=" + HttpUtility.UrlEncode(searchData.Status);
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" + HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString = "AddedAfter=" +
+                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" + HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString = "AddedBefore=" +
+                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString = "SortBy=" + searchData.SortBy;
 
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
-
-            return HttpWrapper.Call<string, TransferList>("/transfer" + queryString, Method.GET, null);
+            return queryString;
         }
     }
 }

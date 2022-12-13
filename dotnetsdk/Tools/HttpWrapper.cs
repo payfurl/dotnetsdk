@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-using payfurl.sdk.Helpers;
 
 namespace payfurl.sdk.Tools
 {
@@ -37,13 +37,13 @@ namespace payfurl.sdk.Tools
 
         static HttpWrapper()
         {
-            // enforce min TLS 1.2
+            // Enforce min TLS 1.2
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
             ServicePointManager.DefaultConnectionLimit = 9999;
         }
 
-        public static TResult Call<TInput, TResult>(string endpoint, Method httpMethod, TInput body)
+        public static async Task<TResult> CallAsync<TInput, TResult>(string endpoint, Method httpMethod, TInput body)
         {
             var httpRequest = PrepareHttpRequestMessage<TInput>(endpoint, httpMethod, body);
 
@@ -52,8 +52,8 @@ namespace payfurl.sdk.Tools
 
             try
             {
-                response = AsyncHelper.RunSync(() => HttpClient.SendAsync(httpRequest));
-                responseString = AsyncHelper.RunSync(() => response.Content.ReadAsStringAsync());
+                response = await HttpClient.SendAsync(httpRequest);
+                responseString = await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
