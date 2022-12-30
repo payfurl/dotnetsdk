@@ -132,8 +132,7 @@ namespace FunctionalTests
             var newPaymentMethod = new NewPaymentMethodVault
             {
                 ProviderId = ProviderId,
-                PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId,
-                VaultId = customer.DefaultPaymentMethod.VaultId
+                PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId
             };
 
             var svc = new payfurl.sdk.PaymentMethod();
@@ -151,8 +150,7 @@ namespace FunctionalTests
             var newPaymentMethod = new NewPaymentMethodVault
             {
                 ProviderId = ProviderId,
-                PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId,
-                VaultId = customer.DefaultPaymentMethod.VaultId
+                PaymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId
             };
 
             var svc = new payfurl.sdk.PaymentMethod();
