@@ -11,6 +11,8 @@ namespace payfurl.sdk
         Task<PaymentMethodData> CreatePaymentMethodWithVaultAsync(NewPaymentMethodVault newPaymentMethodVault);
         PaymentMethodData CreatePaymentMethodWithCard(NewPaymentMethodCard newNewPaymentMethodCard);
         Task<PaymentMethodData> CreatePaymentMethodWithCardAsync(NewPaymentMethodCard newNewPaymentMethodCard);
+        PaymentMethodData CreatePaymentMethodWithPayto(NewPayToAgreement newNewPaymentMethodCard);
+        Task<PaymentMethodData> CreatePaymentMethodWithPaytoAsync(NewPayToAgreement newNewPaymentMethodCard);
         PaymentMethodData Single(string paymentMethodId);
         Task<PaymentMethodData> SingleAsync(string paymentMethodId);
         PaymentMethodList Search(PaymentMethodSearch searchData);

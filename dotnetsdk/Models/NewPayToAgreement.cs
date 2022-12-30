@@ -1,3 +1,5 @@
+﻿using System;
+
 namespace payfurl.sdk.Models
 {
     public class NewPayToAgreement
@@ -14,6 +16,5 @@ namespace payfurl.sdk.Models
             public string PayId { get; set; }
             public string PayIdType { get; set; }
         }
-
     }
 }
