@@ -13,7 +13,8 @@ namespace payfurl.sdk.Tools
     {
         GET,
         POST,
-        DELETE
+        DELETE,
+        PUT
     }
 
     public static class HttpWrapper

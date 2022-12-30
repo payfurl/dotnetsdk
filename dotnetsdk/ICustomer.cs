@@ -20,5 +20,9 @@ namespace payfurl.sdk
         Task<CustomerData> SingleAsync(string customerId);
         CustomerList Search(CustomerSearch searchData);
         Task<CustomerList> SearchAsync(CustomerSearch searchData);
+        CustomerData Delete(string customerId);
+        Task<CustomerData> DeleteAsync(string customerId);
+        CustomerData Update(string customerId, UpdateCustomer updateCustomer);
+        Task<CustomerData> UpdateAsync(string customerId, UpdateCustomer updateCustomer);
     }
 }

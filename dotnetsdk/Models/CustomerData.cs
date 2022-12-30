@@ -12,5 +12,8 @@ namespace payfurl.sdk.Models
         public string Phone { get; set; }
         public DateTime DateAdded { get; set; }
         public PaymentMethodSummary DefaultPaymentMethod { get; set; }
+        public string Ip { get; set; }
+        public DateTime? DateRemoved { get; set; }
+        public Address Address { get; set; }
     }
 }
