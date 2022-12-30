@@ -172,5 +172,16 @@ namespace FunctionalTests
 
             Assert.Equal(SuccessResponseValue, result.Status);
         }
+
+        [Fact]
+        public async Task ChargeWithInvalidCard()
+        {
+            var svc = new payfurl.sdk.Charge();
+            
+            Task Act() => svc.CreateWithCardAsync(new NewChargeCard());
+            var ex = await Assert.ThrowsAsync<ApiException>(Act);
+
+            Assert.Equal(90, ex.Code);
+        }
     }
 }

@@ -33,6 +33,18 @@ namespace payfurl.sdk
                 newCustomer);
         }
 
+        public CustomerData CreateWithProviderToken(NewCustomerProviderToken newCustomer)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewCustomerProviderToken, CustomerData>("/customer/provider_token", Method.POST, newCustomer));
+        }
+
+        public async Task<CustomerData> CreateWithProviderTokenAsync(NewCustomerProviderToken newCustomer)
+        {
+            return await HttpWrapper.CallAsync<NewCustomerProviderToken, CustomerData>("/customer/provider_token", Method.POST,
+                newCustomer);
+        }
+
         public PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod)
         {
             return AsyncHelper.RunSync(() =>
