@@ -13,7 +13,8 @@ namespace payfurl.sdk.Tools
     {
         GET,
         POST,
-        DELETE
+        DELETE,
+        PUT
     }
 
     public static class HttpWrapper
@@ -104,7 +105,7 @@ namespace payfurl.sdk.Tools
                     Resource = ""
                 };
 
-                throw new ApiException(error, error.Message);
+                throw new ApiException(error, error.Message, 0, true);
             }
 
             try
@@ -121,10 +122,10 @@ namespace payfurl.sdk.Tools
                     Resource = ""
                 };
 
-                throw new ApiException(error, responseString);
+                throw new ApiException(error, responseString, 0, true);
             }
 
-            throw new ApiException(error, error.Message);
+            throw new ApiException(error, error.Message, error.Code, error.IsRetryable);
         }
 
         private static void TranslateException(Exception exception)
@@ -137,7 +138,7 @@ namespace payfurl.sdk.Tools
                 Resource = ""
             };
 
-            throw new ApiException(error, error.Message);
+            throw new ApiException(error, error.Message, 0, true);
         }
     }
 }

@@ -33,6 +33,18 @@ namespace payfurl.sdk
                 newCustomer);
         }
 
+        public CustomerData CreateWithProviderToken(NewCustomerProviderToken newCustomer)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewCustomerProviderToken, CustomerData>("/customer/provider_token", Method.POST, newCustomer));
+        }
+
+        public async Task<CustomerData> CreateWithProviderTokenAsync(NewCustomerProviderToken newCustomer)
+        {
+            return await HttpWrapper.CallAsync<NewCustomerProviderToken, CustomerData>("/customer/provider_token", Method.POST,
+                newCustomer);
+        }
+
         public PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod)
         {
             return AsyncHelper.RunSync(() =>
@@ -102,6 +114,30 @@ namespace payfurl.sdk
             var queryString = BuildSearchQueryString(searchData);
 
             return await HttpWrapper.CallAsync<string, CustomerList>("/customer" + queryString, Method.GET, null);
+        }
+
+        public CustomerData Delete(string customerId)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, CustomerData>("/customer/" + customerId, Method.DELETE, null));
+        }
+
+        public async Task<CustomerData> DeleteAsync(string customerId)
+        {
+            return await HttpWrapper.CallAsync<string, CustomerData>("/customer/" + customerId, Method.DELETE, null);
+        }
+
+        public CustomerData Update(string customerId, UpdateCustomer updateCustomer)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<UpdateCustomer, CustomerData>(
+                    "/customer/" + customerId, Method.PUT, updateCustomer));
+        }
+
+        public async Task<CustomerData> UpdateAsync(string customerId, UpdateCustomer updateCustomer)
+        {
+            return await HttpWrapper.CallAsync<UpdateCustomer, CustomerData>(
+                "/customer/" + customerId, Method.PUT, updateCustomer);
         }
 
         private static string BuildSearchQueryString(CustomerSearch searchData)

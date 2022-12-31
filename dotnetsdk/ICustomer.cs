@@ -10,6 +10,8 @@ namespace payfurl.sdk
         Task<CustomerData> CreateWithCardAsync(NewCustomerCard newCustomer);
         CustomerData CreateWithToken(NewCustomerToken newCustomer);
         Task<CustomerData> CreateWithTokenAsync(NewCustomerToken newCustomer);
+        CustomerData CreateWithProviderToken(NewCustomerProviderToken newCustomer);
+        Task<CustomerData> CreateWithProviderTokenAsync(NewCustomerProviderToken newCustomer);
         PaymentMethodData CreatePaymentMethodWithCard(string customerId, NewPaymentMethodCard newPaymentMethod);
         Task<PaymentMethodData> CreatePaymentMethodWithCardAsync(string customerId, NewPaymentMethodCard newPaymentMethod);
         PaymentMethodData CreatePaymentMethodWithToken(string customerId, NewPaymentMethodToken newPaymentMethod);
@@ -20,5 +22,9 @@ namespace payfurl.sdk
         Task<CustomerData> SingleAsync(string customerId);
         CustomerList Search(CustomerSearch searchData);
         Task<CustomerList> SearchAsync(CustomerSearch searchData);
+        CustomerData Delete(string customerId);
+        Task<CustomerData> DeleteAsync(string customerId);
+        CustomerData Update(string customerId, UpdateCustomer updateCustomer);
+        Task<CustomerData> UpdateAsync(string customerId, UpdateCustomer updateCustomer);
     }
 }

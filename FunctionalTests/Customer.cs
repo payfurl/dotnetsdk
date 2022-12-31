@@ -105,7 +105,6 @@ namespace FunctionalTests
             await Assert.ThrowsAsync<ApiException>(() => svc.SearchAsync(_search));
         }
         
-
         [Fact]
         public void AddWithCard()
         {
@@ -260,6 +259,38 @@ namespace FunctionalTests
             Assert.Equal(newCustomer.CustomerId, result.CustomerId);
             Assert.Equal(newCustomer.FirstName, result.FirstName);
             Assert.Equal(newCustomer.LastName, result.LastName);
+        }
+        
+        [Fact]
+        public void AddWithProviderToken()
+        {
+            var customer = CreateNewCustomerProviderToken();
+
+            var svc = new payfurl.sdk.Customer();
+            var result = svc.CreateWithProviderToken(customer);
+
+            Assert.NotNull(result.CustomerId);
+        }
+
+        [Fact]
+        public async Task AddWithProviderTokenAsync()
+        {
+            var customer = CreateNewCustomerProviderToken();
+
+            var svc = new payfurl.sdk.Customer();
+            var result = await svc.CreateWithProviderTokenAsync(customer);
+
+            Assert.NotNull(result.CustomerId);
+        }
+
+        private static NewCustomerProviderToken CreateNewCustomerProviderToken()
+        {
+            var customer = new NewCustomerProviderToken
+            {
+                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                ProviderToken = "123"
+            };
+            return customer;
         }
     }
 }
