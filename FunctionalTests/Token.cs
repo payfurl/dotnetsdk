@@ -21,7 +21,7 @@ namespace FunctionalTests
 
             var token = svc.Single(tokenId);
 
-            Assert.Equal(tokenId, token.Id);
+            Assert.Equal(tokenId, token.TokenId);
         }
 
         [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
@@ -32,7 +32,7 @@ namespace FunctionalTests
 
             var token = await svc.SingleAsync(tokenId);
 
-            Assert.Equal(tokenId, token.Id);
+            Assert.Equal(tokenId, token.TokenId);
         }
 
         [Fact]
