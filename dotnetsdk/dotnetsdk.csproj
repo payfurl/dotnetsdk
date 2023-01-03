@@ -3,11 +3,11 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.9</Version>
+    <Version>2.0.10</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.9 Add support for token endpoint and additional parameters</PackageReleaseNotes>
-    <Copyright>Copyright 2022</Copyright>
+    <PackageReleaseNotes>2.0.10 Add comment parameter with refund</PackageReleaseNotes>
+    <Copyright>Copyright 2023</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;net451;net48</TargetFrameworks>
