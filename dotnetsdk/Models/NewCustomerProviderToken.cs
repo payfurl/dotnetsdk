@@ -7,5 +7,6 @@ namespace payfurl.sdk.Models
         public string ProviderId { get; set; }
         public string ProviderToken { get; set; }
         public Dictionary<string,string> ProviderTokenData { get; set; }
+        public bool Verify { get; set; }
     }
 }
