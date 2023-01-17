@@ -27,6 +27,7 @@ namespace payfurl.sdk.Models
         public string ThreeDSServerTransID { get; set; }
         public bool ThreeDsVerified { get; set; }
         public decimal? AuthorisationAmount { get; set; }
+        public string Initiator { get; set; }
 
         public class Refund
         {

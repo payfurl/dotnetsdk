@@ -8,5 +8,6 @@
         public string Token { get; set; }
         public CheckoutTransfer Transfer { get; set; }
         public bool Capture { get; set; } = true;
+        public Initiator? Initiator {  get;  set; }
     }
 }

@@ -7,5 +7,6 @@
         public string CustomerId { get; set; }
         public string Reference { get; set; }
         public bool Capture { get; set; } = true;
+        public Initiator? Initiator {  get;  set; }
     }
 }
