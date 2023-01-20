@@ -28,5 +28,6 @@ namespace payfurl.sdk.Models
         public int Quantity { get; set; }
         public string UnitOfMeasure { get; set; }
         public decimal Amount { get; set; }
+        public decimal TaxAmount { get; set; }
     }
 }
