@@ -8,5 +8,6 @@
         public string Reference { get; set; }
         public bool Capture { get; set; } = true;
         public Initiator? Initiator {  get;  set; }
+        public WebhookConfig Webhook { get; set; }
     }
 }
