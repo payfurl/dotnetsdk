@@ -11,7 +11,7 @@ namespace payfurl.sdk
         /// should be discarded as they cannot be trusted.
         /// </summary>
         /// <param name="requestBody">HTTP request body</param>
-        /// <param name="signatureHeader">Webhook signature header (X-Payfurl-Signature)</param>
+        /// <param name="signatureHeader">Webhook signature header <code>X-Payfurl-Signature</code></param>
         /// <param name="signatureKey">Webhook signature key (from dashboard)</param>
         /// <returns>If the request from PayFURL returns true, otherwise false</returns>
         public static bool IsFormPayfurl(string requestBody, string signatureHeader, string signatureKey)

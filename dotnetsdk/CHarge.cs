@@ -135,8 +135,6 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<string, ChargeList>("/charge" + queryString, Method.GET, null);
         }
 
-      
-
         private static string BuildRefundQueryString(NewRefund newCharge)
         {
             var queryString = "";

@@ -21,7 +21,7 @@ namespace FunctionalTests
             var signatureHeader = request.Headers.GetValues("X-Payfurl-Signature").FirstOrDefault();
             var requestBody = await request.Content.ReadAsStringAsync();
 
-            var isFromPayFurl =  payfurl.sdk.WebhookTools.IsFormPayfurl(requestBody, signatureHeader, webhookSignatureKey);
+            var isFromPayFurl = payfurl.sdk.WebhookTools.IsFormPayfurl(requestBody, signatureHeader, webhookSignatureKey);
 
             Assert.Equal(isFromPayFurl, expected);
         }
