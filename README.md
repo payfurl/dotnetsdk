@@ -46,7 +46,16 @@ class Example
     var chargeData = new NewChargeToken
     {
         Amount = 20,
-        Token = "5db53c06443c8f28c0cba6e5"
+        Token = "5db53c06443c8f28c0cba6e5",
+        
+        // Optional webhook
+        Webhook =  new WebhookConfig
+        {
+            Url = "https://webhook.site/1da8cac9-fef5-47bf-a276-81856f73d7ca",
+            
+            // Optional authorization
+            Authorization = "Basic user:password"
+        };
     };
 
     var svc = new payfurl.sdk.Charge();
