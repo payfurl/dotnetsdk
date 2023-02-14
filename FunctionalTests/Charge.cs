@@ -51,6 +51,22 @@ namespace FunctionalTests
         }
 
         [Fact]
+        public void ChargeWithValidCardWithWebhook()
+        {
+            var svc = new payfurl.sdk.Charge();
+
+            _chargeData.Webhook = new WebhookConfig
+            {
+                Url = "https://webhook.site/1da8cac9-fef5-47bf-a276-81856f73d7ca",
+                Authorization = "Basic user:password"
+            };
+
+            var result = svc.CreateWithCard(_chargeData);
+
+            Assert.Equal(SuccessResponseValue, result.Status);
+        }
+
+        [Fact]
         public async Task ChargeWithValidCardAsync()
         {
             var svc = new payfurl.sdk.Charge();
