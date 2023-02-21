@@ -10,6 +10,7 @@ namespace payfurl.sdk.Models
         public int MaximumAmount { get; set; }
         public string ProviderId { get; set; }
         public string Ip { get; set; }
+        public bool SetDefault { get; set; }
 
         public class PayIdDetails
         {

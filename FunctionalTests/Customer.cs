@@ -24,6 +24,18 @@ namespace FunctionalTests
                 Ccv = "123"
             }
         };
+        
+        private readonly NewPaymentMethodCard _paymentMethodSetDefault = new()
+        {
+            ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+            PaymentInformation = new CardRequestInformation
+            {
+                CardNumber = "4111111111111111",
+                ExpiryDate = "12/35",
+                Ccv = "123"
+            },
+            SetDefault = true
+        };
 
         private static NewCustomerCard CreateNewCustomerCard(string reference = "")
         {
@@ -150,6 +162,38 @@ namespace FunctionalTests
             var result = await svc.CreatePaymentMethodWithCardAsync(newCustomer.CustomerId, _paymentMethod);
             Assert.NotNull(result.PaymentMethodId);
         }
+        
+        [Fact]
+        public void AddPaymentMethodWithCardSetDefault()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var result = svc.CreatePaymentMethodWithCard(newCustomer.CustomerId, _paymentMethodSetDefault);
+            Assert.NotNull(result.PaymentMethodId);
+
+            var updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task AddPaymentMethodWithCardSetDefaultAsync()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = await svc.CreateWithCardAsync(customer);
+
+            var result = await svc.CreatePaymentMethodWithCardAsync(newCustomer.CustomerId, _paymentMethodSetDefault);
+            Assert.NotNull(result.PaymentMethodId);
+            
+            var updatedCustomer = await svc.SingleAsync(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+        }
 
         [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void AddPaymentMethodWithToken()
@@ -168,6 +212,27 @@ namespace FunctionalTests
             Assert.NotNull(result.PaymentMethodId);
         }
         
+        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        public void AddPaymentMethodWithTokenSetDefault()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var paymentMethod = new NewPaymentMethodToken()
+            {
+                Token = "5512cf49df66482fada5cbcc5ddbf873",
+                SetDefault = true
+            };
+            
+            var result = svc.CreatePaymentMethodWithToken(newCustomer.CustomerId, paymentMethod);
+            Assert.NotNull(result.PaymentMethodId);
+            
+            var updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+        }
 
         [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void AddWithToken()
@@ -281,6 +346,30 @@ namespace FunctionalTests
             var result = await svc.CreateWithProviderTokenAsync(customer);
 
             Assert.NotNull(result.CustomerId);
+        }
+        
+        [Fact]
+        public void UpdateCustomerDefaultPaymentMethodId()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            // Do not set as default here
+            var result = svc.CreatePaymentMethodWithCard(newCustomer.CustomerId, _paymentMethod);
+            Assert.NotNull(result.PaymentMethodId);
+
+            var updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.Equal(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.NotEqual(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+
+            // Update Customer's DefaultPaymentMethodId
+            svc.Update(newCustomer.CustomerId, new UpdateCustomer() { DefaultPaymentMethodId = result.PaymentMethodId });
+            
+            updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
         }
 
         private static NewCustomerProviderToken CreateNewCustomerProviderToken()
