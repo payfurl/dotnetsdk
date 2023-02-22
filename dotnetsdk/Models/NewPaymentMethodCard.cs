@@ -9,5 +9,6 @@ namespace payfurl.sdk.Models
         public bool VaultCard { get; set; }
         public DateTime? VaultExpireDate { get; set; }
         public int? VaultExpireSeconds { get; set; }
+        public bool SetDefault { get; set; }
     }
 }
