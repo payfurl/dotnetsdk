@@ -72,6 +72,20 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<NewPaymentMethodToken, PaymentMethodData>(
                 "/customer/" + customerId + "/payment_method/token", Method.POST, newPaymentMethod);
         }
+        
+        public PaymentMethodData CreatePaymentMethodWithPayTo(string customerId, NewPayToAgreement newPayToAgreement)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewPayToAgreement, PaymentMethodData>(
+                    "/customer/" + customerId + "/payment_method/payto", Method.POST, newPayToAgreement));
+        }
+
+        public async Task<PaymentMethodData> CreatePaymentMethodWithPayToAsync(string customerId,
+            NewPayToAgreement newPayToAgreement)
+        {
+            return await HttpWrapper.CallAsync<NewPayToAgreement, PaymentMethodData>(
+                "/customer/" + customerId + "/payment_method/payto", Method.POST, newPayToAgreement);
+        }
 
         public List<PaymentMethodData> GetPaymentMethods(string customerId)
         {
