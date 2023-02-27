@@ -36,6 +36,33 @@ namespace FunctionalTests
             },
             SetDefault = true
         };
+        
+        private readonly NewPayToAgreement _payToSetDefault = new()
+        {
+            ProviderId = "ec422274fe6d4a6e9f54157381603740",
+            PayerName = "This is a name",
+            Description = "This is a description",
+            MaximumAmount = 500,
+            PayerPayIdDetails = new NewPayToAgreement.PayIdDetails()
+            {
+                PayId = "david_jones@email.com",
+                PayIdType = "EMAIL"
+            },
+            SetDefault = true
+        };
+        
+        private readonly NewPayToAgreement _payTo = new()
+        {
+            ProviderId = "ec422274fe6d4a6e9f54157381603740",
+            PayerName = "This is a name",
+            Description = "This is a description",
+            MaximumAmount = 500,
+            PayerPayIdDetails = new NewPayToAgreement.PayIdDetails()
+            {
+                PayId = "david_jones@email.com",
+                PayIdType = "EMAIL"
+            }
+        };
 
         private static NewCustomerCard CreateNewCustomerCard(string reference = "")
         {
@@ -43,7 +70,7 @@ namespace FunctionalTests
             {
                 FirstName = "test",
                 LastName = "test",
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                ProviderId = "ec422274fe6d4a6e9f54157381603740",
                 Reference = reference,
                 PaymentInformation = new CardRequestInformation
                 {
@@ -56,7 +83,7 @@ namespace FunctionalTests
 
         public Customer()
         {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
+            Config.Setup("secteste760dc4185ba394e6148e2612b644de493cd068aa6", Environment.LOCAL);
         }
 
         [Fact]
@@ -230,6 +257,62 @@ namespace FunctionalTests
             Assert.NotNull(result.PaymentMethodId);
             
             var updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+        }
+        
+        [Fact]
+        public void AddPaymentMethodWithPayTo()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var result = svc.CreatePaymentMethodWithPayTo(newCustomer.CustomerId, _payTo);
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task AddPaymentMethodWithPayToAsync()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = await svc.CreateWithCardAsync(customer);
+
+            var result = await svc.CreatePaymentMethodWithPayToAsync(newCustomer.CustomerId, _payTo);
+            Assert.NotNull(result.PaymentMethodId);
+        }
+        
+        [Fact]
+        public void AddPaymentMethodWithPayToSetDefault()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithCard(customer);
+
+            var result = svc.CreatePaymentMethodWithPayTo(newCustomer.CustomerId, _payToSetDefault);
+            Assert.NotNull(result.PaymentMethodId);
+
+            var updatedCustomer = svc.Single(newCustomer.CustomerId);
+            Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task AddPaymentMethodWithPayToSetDefaultAsync()
+        {
+            var customer = CreateNewCustomerCard();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = await svc.CreateWithCardAsync(customer);
+
+            var result = await svc.CreatePaymentMethodWithPayToAsync(newCustomer.CustomerId, _payToSetDefault);
+            Assert.NotNull(result.PaymentMethodId);
+            
+            var updatedCustomer = await svc.SingleAsync(newCustomer.CustomerId);
             Assert.NotEqual(newCustomer.DefaultPaymentMethod.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
             Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
         }
