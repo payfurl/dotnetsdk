@@ -1,8 +1,10 @@
 ﻿using payfurl.sdk.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -63,7 +65,7 @@ namespace payfurl.sdk.Tools
 
             if (!response.IsSuccessStatusCode)
             {
-                TranslateException(response.StatusCode, responseString);
+                TranslateException(null, response.StatusCode, responseString);
             }
 
             return JsonConvert.DeserializeObject<TResult>(responseString, JsonSettings);
@@ -92,53 +94,69 @@ namespace payfurl.sdk.Tools
             return httpRequest;
         }
 
-        private static void TranslateException(HttpStatusCode statusCode, string responseString)
+        private static void TranslateException(Exception exception, HttpStatusCode? statusCode = null, string responseString = null)
         {
-            Error error = null;
-            if (statusCode == HttpStatusCode.RequestTimeout)
+            var error = BuildDefaultError();
+
+            if (exception != null && IsTimeoutException(exception) || (statusCode.HasValue && (statusCode == HttpStatusCode.RequestTimeout || statusCode == HttpStatusCode.GatewayTimeout)))
             {
-                error = new Error
+                var timeoutError = BuildTimeoutError();
+
+                throw new ApiException(timeoutError, timeoutError.Message, timeoutError.Code, true);
+            }
+
+            if (!string.IsNullOrEmpty(responseString))
+            {
+                try
                 {
-                    HttpStatus = 408,
-                    Message = "Request Timeout",
-                    Details = new Dictionary<string, string>(),
-                    Resource = ""
-                };
+                    var responseError = JsonConvert.DeserializeObject<Error>(responseString);
 
-                throw new ApiException(error, error.Message, 0, true);
-            }
-
-            try
-            {
-                error = JsonConvert.DeserializeObject<Error>(responseString);
-            }
-            catch (Exception)
-            {
-                error = new Error
+                    throw new ApiException(responseError, responseError?.Message, responseError.Code, true);
+                }
+                catch (Exception)
                 {
-                    HttpStatus = 0,
-                    Message = responseString,
-                    Details = new Dictionary<string, string>(),
-                    Resource = ""
-                };
-
-                throw new ApiException(error, responseString, 0, true);
+                    throw new ApiException(error, responseString, error.Code, true);
+                }
             }
 
-            throw new ApiException(error, error.Message, error.Code, error.IsRetryable);
+            throw new ApiException(error, error.Message, error.Code, true);
         }
 
-        private static void TranslateException(Exception exception)
+        private static bool IsTimeoutException(Exception exception)
+        {
+            return exception is TaskCanceledException ||
+                   (exception is HttpRequestException httpException &&
+                    httpException.InnerException is IOException ioException
+                    && ioException.InnerException is SocketException socketException
+                    && socketException.SocketErrorCode == SocketError.ConnectionReset);
+        }
+
+        private static Error BuildDefaultError()
         {
             var error = new Error
             {
-                HttpStatus = 0,
-                Message = exception.Message,
+                HttpStatus = 500,
+                Code = 0,
+                Message = "Unknown error",
                 Details = new Dictionary<string, string>(),
                 Resource = ""
             };
 
-            throw new ApiException(error, error.Message, 0, true);
+            return error;
+        }
+
+        private static Error BuildTimeoutError()
+        {
+            var error = new Error
+            {
+                HttpStatus = 408,
+                Code = 0,
+                Message = "Request Timeout",
+                Details = new Dictionary<string, string>(),
+                Resource = ""
+            };
+
+            return error;
         }
     }
 }
