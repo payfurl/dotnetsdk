@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using payfurl.sdk;
 using payfurl.sdk.Models;
@@ -92,6 +93,7 @@ namespace FunctionalTests
             var reference = Guid.NewGuid().ToString();
 
             var customer = CreateNewCustomerCard(reference);
+            customer.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
             var svc = new payfurl.sdk.Customer();
             svc.CreateWithCard(customer);
             
