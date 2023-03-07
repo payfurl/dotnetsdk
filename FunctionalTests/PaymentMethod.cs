@@ -87,6 +87,7 @@ namespace FunctionalTests
         {
 
             var svc = new payfurl.sdk.PaymentMethod();
+            _newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
             var result = svc.CreatePaymentMethodWithCard(_newPaymentMethod);
 
             Assert.NotNull(result.PaymentMethodId);

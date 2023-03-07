@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using payfurl.sdk;
 using payfurl.sdk.Models;
 using Xunit;
@@ -45,6 +46,7 @@ namespace FunctionalTests
         public void ChargeWithValidCard()
         {
             var svc = new payfurl.sdk.Charge();
+            _chargeData.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
             var result = svc.CreateWithCard(_chargeData);
 
             Assert.Equal(SuccessResponseValue, result.Status);

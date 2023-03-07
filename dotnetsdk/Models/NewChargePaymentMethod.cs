@@ -1,4 +1,6 @@
-﻿namespace payfurl.sdk.Models
+﻿using System.Collections.Generic;
+
+namespace payfurl.sdk.Models
 {
     public class NewChargePaymentMethod
     {
@@ -9,5 +11,6 @@
         public bool Capture { get; set; } = true;
         public Initiator? Initiator {  get;  set; }
         public WebhookConfig Webhook { get; set; }
+        public Dictionary<string, string> Metadata { get; set; } = null;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace payfurl.sdk.Models
 {
@@ -10,5 +11,6 @@ namespace payfurl.sdk.Models
         public DateTime? VaultExpireDate { get; set; }
         public int? VaultExpireSeconds { get; set; }
         public bool SetDefault { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }
