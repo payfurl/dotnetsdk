@@ -4,10 +4,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
-    public class WebhookTools
+    public class WebhookTools : BaseTest
     {
         [Fact]
         public async Task DeserializeWebhookTransactionWithValidSignature()
@@ -35,6 +36,10 @@ namespace FunctionalTests
             var ex = Assert.Throws<ArgumentException>(() => payfurl.sdk.WebhookTools.DeserializeTransaction("", "InvalidSignature", webhookSignatureKey));
 
             Assert.Equal("Request body is not from PayFURL", ex.Message);
+        }
+
+        public WebhookTools(ITestOutputHelper output) : base(output)
+        {
         }
     }
 }

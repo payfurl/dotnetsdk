@@ -2,17 +2,13 @@
 using payfurl.sdk.Models;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
-    public class Token
+    public class Token : BaseTest
     {
-        public Token()
-        {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
-        }
-
         [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
         public void Single()
         {
@@ -61,6 +57,10 @@ namespace FunctionalTests
             var tokenList = await svc.SearchAsync(tokenSearch);
 
             Assert.Equal(tokenSearch.Limit, tokenList.Limit);
+        }
+
+        public Token(ITestOutputHelper output) : base(output)
+        {
         }
     }
 }

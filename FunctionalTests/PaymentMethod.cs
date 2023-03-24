@@ -3,11 +3,12 @@ using payfurl.sdk.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
-    public class PaymentMethod
+    public class PaymentMethod : BaseTest
     {
         private const string ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed";
 
@@ -28,7 +29,7 @@ namespace FunctionalTests
                 { { "HideShipping", "true"} }
         };
 
-        private readonly NewPaymentMethodCard _newPaymentMethod = new() 
+        private readonly NewPaymentMethodCard _newPaymentMethod = new()
         {
             ProviderId = ProviderId,
             PaymentInformation = CardRequestInformation
@@ -46,11 +47,6 @@ namespace FunctionalTests
             ProviderId = ProviderId,
             PaymentInformation = CardRequestInformation
         };
-
-        public PaymentMethod()
-        {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
-        }
 
         [Fact]
         public void Checkout()
@@ -77,7 +73,7 @@ namespace FunctionalTests
 
             var svc = new payfurl.sdk.PaymentMethod();
             var result = await svc.CheckoutAsync(checkout);
-            
+
             Assert.NotNull(result.CheckoutId);
             Assert.NotNull(result.TransactionId);
         }
@@ -107,7 +103,7 @@ namespace FunctionalTests
         {
             var svc = new payfurl.sdk.PaymentMethod();
             var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(_newPaymentMethodCard);
-            
+
             var result = svc.Single(paymentMethodWithCard.PaymentMethodId);
 
             Assert.Equal(paymentMethodWithCard.PaymentMethodId, result.PaymentMethodId);
@@ -129,7 +125,7 @@ namespace FunctionalTests
         {
             var custSvc = new payfurl.sdk.Customer();
             var customer = custSvc.CreateWithCard(_newCustomer);
-            
+
             var newPaymentMethod = new NewPaymentMethodVault
             {
                 ProviderId = ProviderId,
@@ -147,7 +143,7 @@ namespace FunctionalTests
         {
             var custSvc = new payfurl.sdk.Customer();
             var customer = await custSvc.CreateWithCardAsync(_newCustomer);
-            
+
             var newPaymentMethod = new NewPaymentMethodVault
             {
                 ProviderId = ProviderId,
@@ -165,7 +161,7 @@ namespace FunctionalTests
         {
             var svc = new payfurl.sdk.PaymentMethod();
             var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(_newPaymentMethod);
-            
+
             var result = svc.Search(new PaymentMethodSearch { ProviderId = _newPaymentMethod.ProviderId});
 
             Assert.False(result.Count == 0);
@@ -180,6 +176,10 @@ namespace FunctionalTests
             var result = svc.Search(new PaymentMethodSearch { ProviderId = _newPaymentMethod.ProviderId });
 
             Assert.False(result.Count == 0);
+        }
+
+        public PaymentMethod(ITestOutputHelper output) : base(output)
+        {
         }
     }
 }
