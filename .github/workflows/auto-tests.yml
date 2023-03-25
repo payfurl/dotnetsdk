@@ -19,6 +19,6 @@ jobs:
       - name: Docker login
         run: echo "${{ inputs.DOCKER_PASSWORD }}" | docker login registry.gitlab.com -u "${{ inputs.DOCKER_USERNAME }}" --password-stdin
       - name: Check sources
-        run: pwd && ls -la
+        run: pwd && ls -la && df -h
       - name: Run tests
         run: docker run --rm -v ${PWD}:/app/tests registry.gitlab.com/payfurl/build/dotnet-sdk-test:latest
