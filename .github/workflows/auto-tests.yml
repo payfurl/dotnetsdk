@@ -21,4 +21,4 @@ jobs:
       - name: Create config
         run: docker run --rm registry.gitlab.com/payfurl/build/dotnet-sdk-test:latest > ./FunctionalTests/appsettings.json
       - name: Run tests
-        run: dotnet test
+        run: dotnet test -nowarn:NU1701,NETSDK1138
