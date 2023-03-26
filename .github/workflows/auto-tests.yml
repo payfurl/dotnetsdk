@@ -21,4 +21,4 @@ jobs:
       - name: Check sources
         run: pwd && ls -la && df -h
       - name: Run tests
-        run: docker run --rm -v ${PWD}:/app/tests registry.gitlab.com/payfurl/build/dotnet-sdk-test:latest
+        run: dotnet test
