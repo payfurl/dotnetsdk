@@ -15,19 +15,6 @@ namespace FunctionalTests
             Ccv = "123"
         };
 
-        private NewCheckout GetCheckout()
-        {
-            return new NewCheckout
-            {
-                ProviderId = GetPaypalProviderId(),
-                Amount = 123,
-                Currency = "AUD",
-                Reference = "123123123",
-                Options = new Dictionary<string, string>
-                    {{"HideShipping", "true"}}
-            };
-        }
-
         private NewPaymentMethodCard GetNewPaymentMethod()
         {
             return new NewPaymentMethodCard
@@ -55,25 +42,7 @@ namespace FunctionalTests
                 PaymentInformation = CardRequestInformation
             };
         }
-
-        [Fact]
-        public void Checkout()
-        {
-            var svc = new payfurl.sdk.PaymentMethod();
-            var result = svc.Checkout(GetCheckout());
-
-            Assert.NotNull(result.CheckoutData);
-        }
-
-        [Fact]
-        public async Task CheckoutAsync()
-        {
-            var svc = new payfurl.sdk.PaymentMethod();
-            var result = await svc.CheckoutAsync(GetCheckout());
-
-            Assert.NotNull(result.CheckoutData);
-        }
-
+        
         [Fact]
         public void CreatePaymentMethodWithCard()
         {

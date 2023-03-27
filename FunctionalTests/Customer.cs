@@ -49,7 +49,7 @@ namespace FunctionalTests
         {
             return new NewPayToAgreement
             {
-                ProviderId = GetPayToProviderId(),
+                ProviderId = GetProviderId(),
                 PayerName = "This is a name",
                 Description = "This is a description",
                 MaximumAmount = 500,
@@ -66,7 +66,7 @@ namespace FunctionalTests
         {
             return new NewPayToAgreement
             {
-                ProviderId = GetPayToProviderId(),
+                ProviderId = GetProviderId(),
                 PayerName = "This is a name",
                 Description = "This is a description",
                 MaximumAmount = 500,
@@ -242,7 +242,7 @@ namespace FunctionalTests
 
             var paymentMethod = new NewPaymentMethodToken()
             {
-                Token = GetPaymentToken("Customer")
+                Token = GetPaymentToken()
             };
 
             var result = svc.CreatePaymentMethodWithToken(newCustomer.CustomerId, paymentMethod);
@@ -259,7 +259,7 @@ namespace FunctionalTests
 
             var paymentMethod = new NewPaymentMethodToken()
             {
-                Token = GetPaymentToken("Customer2"),
+                Token = GetPaymentToken(),
                 SetDefault = true
             };
 
@@ -334,7 +334,7 @@ namespace FunctionalTests
             {
                 FirstName = "test",
                 LastName = "test",
-                Token = GetPaymentToken("Customer3")
+                Token = GetPaymentToken()
             };
 
             var svc = new payfurl.sdk.Customer();
@@ -469,7 +469,7 @@ namespace FunctionalTests
         {
             var customer = new NewCustomerProviderToken
             {
-                ProviderId = GetPayToProviderId(),
+                ProviderId = GetProviderId(),
                 ProviderToken = "123"
             };
             return customer;

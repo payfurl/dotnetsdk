@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using payfurl.sdk;
 using Xunit.Abstractions;
@@ -9,6 +11,7 @@ namespace FunctionalTests;
 public class BaseTest
 {
     private readonly IConfiguration _configuration;
+    public static int TokenNum = 0;
         
     public BaseTest()
     {
@@ -25,19 +28,14 @@ public class BaseTest
     {
         return _configuration["ProviderId"];
     }
-
-    protected string GetPayToProviderId()
+    
+    protected string GetPaymentToken()
     {
-        return _configuration["PayToProviderId"];
-    }
+        var tokens = _configuration.GetSection("Token").AsEnumerable().ToArray();
+        TokenNum++;
+        if (tokens.Count() <= TokenNum)
+            return "";
 
-    protected string GetPaypalProviderId()
-    {
-        return _configuration["PaypalProviderId"];
-    }
-
-    protected string GetPaymentToken(string suffix = "")
-    {
-        return _configuration["Token" + suffix];
+        return tokens[TokenNum].Value;
     }
 }

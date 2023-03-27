@@ -13,7 +13,7 @@ namespace FunctionalTests
         public void Single()
         {
             var svc = new payfurl.sdk.Token();
-            var tokenId = GetPaymentToken("2");
+            var tokenId = GetPaymentToken();
 
             var token = svc.Single(tokenId);
 
@@ -24,7 +24,7 @@ namespace FunctionalTests
         public async Task SingleAsync()
         {
             var svc = new payfurl.sdk.Token();
-            var tokenId = GetPaymentToken("3");
+            var tokenId = GetPaymentToken();
 
             var token = await svc.SingleAsync(tokenId);
 
