@@ -31,7 +31,7 @@ public class BaseTest
     
     protected string GetPaymentToken()
     {
-        var tokens = _configuration.GetSection("Token").AsEnumerable().ToArray();
+        var tokens = _configuration.GetSection("Tokens").AsEnumerable().ToArray();
         TokenNum++;
         if (tokens.Count() <= TokenNum)
             return "";
