@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
@@ -214,10 +213,6 @@ namespace FunctionalTests
             var ex = await Assert.ThrowsAsync<ApiException>(Act);
             
             Assert.Equal(81, ex.Code);
-        }
-
-        public Charge(ITestOutputHelper output) : base(output)
-        {
         }
     }
 }

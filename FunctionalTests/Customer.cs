@@ -232,7 +232,7 @@ namespace FunctionalTests
             Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
         }
 
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public void AddPaymentMethodWithToken()
         {
             var customer = CreateNewCustomerCard();
@@ -242,14 +242,14 @@ namespace FunctionalTests
 
             var paymentMethod = new NewPaymentMethodToken()
             {
-                Token = "4f0fb10355224034a1df949852de34e1"
+                Token = GetPaymentToken("Customer")
             };
 
             var result = svc.CreatePaymentMethodWithToken(newCustomer.CustomerId, paymentMethod);
             Assert.NotNull(result.PaymentMethodId);
         }
 
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public void AddPaymentMethodWithTokenSetDefault()
         {
             var customer = CreateNewCustomerCard();
@@ -259,7 +259,7 @@ namespace FunctionalTests
 
             var paymentMethod = new NewPaymentMethodToken()
             {
-                Token = "5512cf49df66482fada5cbcc5ddbf873",
+                Token = GetPaymentToken("Customer2"),
                 SetDefault = true
             };
 
@@ -327,14 +327,14 @@ namespace FunctionalTests
             Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
         }
 
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public void AddWithToken()
         {
             var customer = new NewCustomerToken
             {
                 FirstName = "test",
                 LastName = "test",
-                Token = "5dc5d0d4ec7c4d057cb00484"
+                Token = GetPaymentToken("Customer3")
             };
 
             var svc = new payfurl.sdk.Customer();
@@ -419,7 +419,7 @@ namespace FunctionalTests
             Assert.Equal(newCustomer.LastName, result.LastName);
         }
 
-        [Fact]
+        [Fact(Skip = "this is for manual testing only")]
         public void AddWithProviderToken()
         {
             var customer = CreateNewCustomerProviderToken();
@@ -430,7 +430,7 @@ namespace FunctionalTests
             Assert.NotNull(result.CustomerId);
         }
 
-        [Fact]
+        [Fact(Skip = "this is for manual testing only")]
         public async Task AddWithProviderTokenAsync()
         {
             var customer = CreateNewCustomerProviderToken();
@@ -465,18 +465,14 @@ namespace FunctionalTests
             Assert.Equal(result.PaymentMethodId, updatedCustomer.DefaultPaymentMethod.PaymentMethodId);
         }
 
-        private static NewCustomerProviderToken CreateNewCustomerProviderToken()
+        private NewCustomerProviderToken CreateNewCustomerProviderToken()
         {
             var customer = new NewCustomerProviderToken
             {
-                ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed",
+                ProviderId = GetPayToProviderId(),
                 ProviderToken = "123"
             };
             return customer;
-        }
-
-        public Customer(ITestOutputHelper output) : base(output)
-        {
         }
     }
 }

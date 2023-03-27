@@ -8,13 +8,10 @@ namespace FunctionalTests;
 
 public class BaseTest
 {
-    protected readonly ITestOutputHelper output;
     private readonly IConfiguration _configuration;
         
-    public BaseTest(ITestOutputHelper output)
+    public BaseTest()
     {
-        this.output = output;
-
         _configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .AddEnvironmentVariables() 
@@ -34,8 +31,13 @@ public class BaseTest
         return _configuration["PayToProviderId"];
     }
 
-    protected string GetPaymentToken()
+    protected string GetPaypalProviderId()
     {
-        return _configuration["Token"];
+        return _configuration["PaypalProviderId"];
+    }
+
+    protected string GetPaymentToken(string suffix = "")
+    {
+        return _configuration["Token" + suffix];
     }
 }

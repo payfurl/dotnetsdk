@@ -61,8 +61,4 @@ public class Provider : BaseTest
             }
         };
     }
-
-    public Provider(ITestOutputHelper output) : base(output)
-    {
-    }
 }

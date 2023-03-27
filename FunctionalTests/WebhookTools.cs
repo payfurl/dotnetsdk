@@ -37,9 +37,5 @@ namespace FunctionalTests
 
             Assert.Equal("Request body is not from PayFURL", ex.Message);
         }
-
-        public WebhookTools(ITestOutputHelper output) : base(output)
-        {
-        }
     }
 }

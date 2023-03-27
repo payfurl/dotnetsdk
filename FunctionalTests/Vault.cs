@@ -79,9 +79,5 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Vault();
             return await svc.CreateAsync(NewVault);
         }
-
-        public Vault(ITestOutputHelper output) : base(output)
-        {
-        }
     }
 }
