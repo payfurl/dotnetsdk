@@ -2,11 +2,12 @@
 using payfurl.sdk.Models;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
-    public class Vault
+    public class Vault : BaseTest
     {
 
         private static readonly NewVault NewVault = new()
@@ -14,11 +15,6 @@ namespace FunctionalTests
             CardNumber = "4111111111111111",
             Ccv = "123"
         };
-
-        public Vault()
-        {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
-        }
 
         [Fact]
         public void Create()

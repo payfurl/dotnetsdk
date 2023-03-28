@@ -107,16 +107,9 @@ namespace payfurl.sdk.Tools
 
             if (!string.IsNullOrEmpty(responseString))
             {
-                try
-                {
-                    var responseError = JsonConvert.DeserializeObject<Error>(responseString);
+                var responseError = JsonConvert.DeserializeObject<Error>(responseString);
 
-                    throw new ApiException(responseError, responseError?.Message, responseError.Code, true);
-                }
-                catch (Exception)
-                {
-                    throw new ApiException(error, responseString, error.Code, true);
-                }
+                throw new ApiException(responseError, responseError?.Message, responseError.Code, true);
             }
 
             throw new ApiException(error, error.Message, error.Code, true);

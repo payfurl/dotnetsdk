@@ -2,33 +2,29 @@
 using payfurl.sdk.Models;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
-    public class Token
+    public class Token : BaseTest
     {
-        public Token()
-        {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
-        }
-
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public void Single()
         {
             var svc = new payfurl.sdk.Token();
-            var tokenId = "b9a28ccf5ff148d09a719903b9901142";
+            var tokenId = GetPaymentToken();
 
             var token = svc.Single(tokenId);
 
             Assert.Equal(tokenId, token.TokenId);
         }
 
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public async Task SingleAsync()
         {
             var svc = new payfurl.sdk.Token();
-            var tokenId = "b9a28ccf5ff148d09a719903b9901142";
+            var tokenId = GetPaymentToken();
 
             var token = await svc.SingleAsync(tokenId);
 

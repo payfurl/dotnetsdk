@@ -22,6 +22,9 @@
                 case Environment.LOCAL:
                     BaseUrl = "https://localhost:5001";
                     break;
+                case Environment.DEVELOPMENT:
+                    BaseUrl = "https://develop-api.payfurl.com";
+                    break;
                 case Environment.SANDBOX:
                     BaseUrl = "https://sandbox-api.payfurl.com";
                     break;

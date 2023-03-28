@@ -4,10 +4,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
-    public class WebhookTools
+    public class WebhookTools : BaseTest
     {
         [Fact]
         public async Task DeserializeWebhookTransactionWithValidSignature()

@@ -1,14 +1,7 @@
 name: SDK auto-tests
 
 on:
-  workflow_dispatch:
-    inputs:
-      DOCKER_USERNAME:
-        default: 'alex_at_payfurl'
-        required: true
-      DOCKER_PASSWORD:
-        description: 'Password'
-        required: true
+  workflow_dispatch
 
 jobs:
   test:
@@ -16,9 +9,7 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
-      - name: Docker login
-        run: echo "${{ inputs.DOCKER_PASSWORD }}" | docker login registry.gitlab.com -u "${{ inputs.DOCKER_USERNAME }}" --password-stdin
-      - name: Create config
-        run: docker run --rm registry.gitlab.com/payfurl/build/dotnet-sdk-test:latest > ./FunctionalTests/appsettings.json
+      - name: Generate appsettings
+        run: docker run --rm ghcr.io/payfurl/config-build:main > ./FunctionalTests/appsettings.json
       - name: Run tests
         run: dotnet test -nowarn:NU1701,NETSDK1138

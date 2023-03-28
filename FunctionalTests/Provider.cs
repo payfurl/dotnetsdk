@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using payfurl.sdk;
 using payfurl.sdk.Models;
 using Xunit;
+using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests;
 
-public class Provider
+public class Provider : BaseTest
 {
-    public Provider()
-    {
-        Config.Setup("sectestab8c10faebf84918758da45df1530a590dc295513b", Environment.LOCAL);
-    }
-    
     [Fact]
     public void CreateProvider()
     {

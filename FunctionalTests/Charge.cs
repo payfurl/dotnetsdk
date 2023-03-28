@@ -1,53 +1,56 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using payfurl.sdk;
 using payfurl.sdk.Models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
-    public class Charge
+    public class Charge : BaseTest
     {
         private const string SuccessResponseValue = "SUCCESS";
-        private const string ProviderId = "a26c371f-94f6-40da-add2-28ec8e9da8ed";
 
         private static readonly CardRequestInformation CardRequestInformation = new()
         {
             CardNumber = "4111111111111111",
-            ExpiryDate = "12/35",
-            Ccv = "123"
+            ExpiryDate = "02/32",
+            Ccv = "987",
+            Cardholder = "John Smith"
         };
 
-        private readonly NewChargeCard _chargeData = new()
+        private NewChargeCard GetChargeData()
         {
-            Amount = 20,
-            ProviderId = ProviderId,
-            PaymentInformation = CardRequestInformation
-        };
+            return new NewChargeCard
+            {
+                Amount = 20,
+                ProviderId = GetProviderId(),
+                PaymentInformation = CardRequestInformation
+            };
+        }
 
         private readonly NewChargeCardLeastCost _newChargeCardLeastCost = new()
         {
             Amount = 20,
+            Currency = "AUD",
             PaymentInformation = CardRequestInformation
         };
 
-        private readonly NewCustomerCard _newCustomer = new()
+        private NewCustomerCard GetNewCustomer()
         {
-            ProviderId = ProviderId,
-            PaymentInformation = CardRequestInformation
-        };
-
-        public Charge()
-        {
-            Config.Setup("SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", Environment.LOCAL);
+            return new NewCustomerCard
+            {
+                ProviderId = GetProviderId(),
+                PaymentInformation = CardRequestInformation
+            };
         }
 
         [Fact]
         public void ChargeWithValidCard()
         {
             var svc = new payfurl.sdk.Charge();
-            _chargeData.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
-            var result = svc.CreateWithCard(_chargeData);
+            var chargeData = GetChargeData();
+            chargeData.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = svc.CreateWithCard(chargeData);
 
             Assert.Equal(SuccessResponseValue, result.Status);
         }
@@ -57,13 +60,14 @@ namespace FunctionalTests
         {
             var svc = new payfurl.sdk.Charge();
 
-            _chargeData.Webhook = new WebhookConfig
+            var chargeData = GetChargeData();
+            chargeData.Webhook = new WebhookConfig
             {
                 Url = "https://webhook.site/1da8cac9-fef5-47bf-a276-81856f73d7ca",
                 Authorization = "Basic user:password"
             };
 
-            var result = svc.CreateWithCard(_chargeData);
+            var result = svc.CreateWithCard(chargeData);
 
             Assert.Equal(SuccessResponseValue, result.Status);
         }
@@ -72,7 +76,8 @@ namespace FunctionalTests
         public async Task ChargeWithValidCardAsync()
         {
             var svc = new payfurl.sdk.Charge();
-            var result = await svc.CreateWithCardAsync(_chargeData);
+            var chargeData = GetChargeData();
+            var result = await svc.CreateWithCardAsync(chargeData);
 
             Assert.Equal(SuccessResponseValue, result.Status);
         }
@@ -118,7 +123,8 @@ namespace FunctionalTests
         public void ChargePaymentMethod()
         {
             var custSvc = new payfurl.sdk.Customer();
-            var createdCustomer = custSvc.CreateWithCard(_newCustomer);
+            var newCustomer = GetNewCustomer();
+            var createdCustomer = custSvc.CreateWithCard(newCustomer);
 
             var createdPaymentMethod = custSvc.GetPaymentMethods(createdCustomer.CustomerId);
 
@@ -138,7 +144,8 @@ namespace FunctionalTests
         public async Task ChargePaymentMethodAsync()
         {
             var custSvc = new payfurl.sdk.Customer();
-            var createdCustomer = await custSvc.CreateWithCardAsync(_newCustomer);
+            var newCustomer = GetNewCustomer();
+            var createdCustomer = await custSvc.CreateWithCardAsync(newCustomer);
 
             var createdPaymentMethod = await custSvc.GetPaymentMethodsAsync(createdCustomer.CustomerId);
 
@@ -158,31 +165,33 @@ namespace FunctionalTests
         public void Refund()
         {
             var svc = new payfurl.sdk.Charge();
-            var chargeResult = svc.CreateWithCard(_chargeData);
+            var chargeData = GetChargeData();
+            var chargeResult = svc.CreateWithCard(chargeData);
 
             var refundResult = svc.Refund(new NewRefund { ChargeId = chargeResult.ChargeId });
 
-            Assert.Equal(_chargeData.Amount, refundResult.RefundedAmount);
+            Assert.Equal(chargeData.Amount, refundResult.RefundedAmount);
         }
 
         [Fact]
         public async Task RefundAsync()
         {
             var svc = new payfurl.sdk.Charge();
-            var chargeResult = await svc.CreateWithCardAsync(_chargeData);
+            var chargeData = GetChargeData();
+            var chargeResult = await svc.CreateWithCardAsync(chargeData);
 
             var refundResult = await svc.RefundAsync(new NewRefund { ChargeId = chargeResult.ChargeId });
 
-            Assert.Equal(_chargeData.Amount, refundResult.RefundedAmount);
+            Assert.Equal(chargeData.Amount, refundResult.RefundedAmount);
         }
 
-        [Fact(Skip = "tokens expire, so this test needs to be adjusted each time it's run")]
+        [Fact]
         public void ChargeWithValidToken()
         {
             var chargeData = new NewChargeToken
             {
                 Amount = 20,
-                Token = "5dc5cfbaec7c4d057cb00482"
+                Token = GetPaymentToken()
             };
 
             var svc = new payfurl.sdk.Charge();
@@ -195,11 +204,15 @@ namespace FunctionalTests
         public async Task ChargeWithInvalidCard()
         {
             var svc = new payfurl.sdk.Charge();
-            
-            Task Act() => svc.CreateWithCardAsync(new NewChargeCard());
-            var ex = await Assert.ThrowsAsync<ApiException>(Act);
 
-            Assert.Equal(90, ex.Code);
+            Task Act() => svc.CreateWithCardAsync(new NewChargeCard
+            {
+                Amount = 20,
+                ProviderId = GetProviderId()
+            });
+            var ex = await Assert.ThrowsAsync<ApiException>(Act);
+            
+            Assert.Equal(81, ex.Code);
         }
     }
 }
