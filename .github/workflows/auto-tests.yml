@@ -5,8 +5,11 @@ on: [workflow_dispatch, push]
 jobs:
   test:
     runs-on: ubuntu-latest
+
     permissions:
+      contents: read
       packages: read
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
