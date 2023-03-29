@@ -354,4 +354,4 @@ MigrationBackup/
 # rider
 .idea/
 
-./FunctionalTests/appsettings.json
+/FunctionalTests/appsettings.json

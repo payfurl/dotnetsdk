@@ -29,7 +29,7 @@ namespace FunctionalTests
         }
 
         [Fact]
-        public async Task DeserializeWebhookTransactionWithInvalidSignature()
+        public void DeserializeWebhookTransactionWithInvalidSignature()
         {
             const string webhookSignatureKey = "dCM6l9ngZMJXVappk73yS607k1K7byfyzTTdToaKMa8=";
 
