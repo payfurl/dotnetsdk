@@ -8,18 +8,6 @@ namespace payfurl.sdk
 {
     public class PaymentMethod : IPaymentMethod
     {
-        public Checkout Checkout(NewCheckout newCheckout)
-        {
-            return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<NewCheckout, Checkout>("/payment_method/checkout", Method.POST, newCheckout));
-        }
-
-        public async Task<Checkout> CheckoutAsync(NewCheckout newCheckout)
-        {
-            return await HttpWrapper.CallAsync<NewCheckout, Checkout>("/payment_method/checkout", Method.POST,
-                newCheckout);
-        }
-
         public PaymentMethodData CreatePaymentMethodWithVault(NewPaymentMethodVault newPaymentMethodVault)
         {
             return AsyncHelper.RunSync(() =>

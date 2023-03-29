@@ -5,8 +5,6 @@ namespace payfurl.sdk
 {
     public interface IPaymentMethod
     {
-        Checkout Checkout(NewCheckout newCheckout);
-        Task<Checkout> CheckoutAsync(NewCheckout newCheckout);
         PaymentMethodData CreatePaymentMethodWithVault(NewPaymentMethodVault newPaymentMethodVault);
         Task<PaymentMethodData> CreatePaymentMethodWithVaultAsync(NewPaymentMethodVault newPaymentMethodVault);
         PaymentMethodData CreatePaymentMethodWithCard(NewPaymentMethodCard newNewPaymentMethodCard);
