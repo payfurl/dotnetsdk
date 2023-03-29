@@ -32,50 +32,19 @@ NuGet\Install-Package PayfurlSdk -Version <version>
 
 ## 👷 Usage
 
-An example of creating a PayFURL client with **sandbox** environment.
+An example of creating a PayFURL client with **development** environment.
+FunctionalTests folder must contain **appsettings.json** file with following contents:
 
-```csharp
-using payfurl.sdk;
-using payfurl.sdk.Models;
-
-class Example 
+```json
 {
-    // Initialize
-    Config.Setup("PAYFURL_ACCESS_TOKEN", Environment.SANDBOX);
-    
-    var chargeData = new NewChargeToken
-    {
-        Amount = 20,
-        Token = "5db53c06443c8f28c0cba6e5",
-        
-        // Optional webhook
-        Webhook =  new WebhookConfig
-        {
-            Url = "https://webhook.site/1da8cac9-fef5-47bf-a276-81856f73d7ca",
-            
-            // Optional authorization
-            Authorization = "Basic user:password"
-        };
-    };
-
-    var svc = new payfurl.sdk.Charge();
-    var result = svc.CreateWithToken(chargeData);
+  "Environment": "Development",
+  "SecretKey": "PAYFURL_SECRET_KEY",
+  "ProviderId": "DUMMY_PROVIDER_ID",
+  "Tokens": ["PAYMENT_TOKEN1","PAYMENT_TOKEN2"]
 }
 ```
+We recommend to have 8 payment tokens to make all tests passed.
 
 ## 🔨 Tests
 
-Clone the repo locally and `cd` into the directory.
-
-```sh
-git clone https://github.com/payfurl/dotnetsdk
-```
-
-Before running tests, go into `FunctionalTests` folder and open a file with tests that you want to run. Change the token in setup section for the corresponding API and set `Environment` to `Environment.SANDBOX`. `Charge.cs` example:
-
-```csharp
-public Charge()
-{
-    Config.Setup("<SPECIFY_TOKEN_HERE", Environment.SANDBOX);
-}
-```
+Clone the repo locally, `cd` into the directory and run `dotnet test`
