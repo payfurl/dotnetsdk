@@ -16,7 +16,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate appsettings
         run: docker run --rm ghcr.io/payfurl/config-build:main > ./FunctionalTests/appsettings.json
-      - name: Check if appsettings
-        run: pwd && ls -la && cd ./FunctionalTests && ls -la && cat appsettings.json
       - name: Run tests
         run: dotnet test -nowarn:NU1701,NETSDK1138
