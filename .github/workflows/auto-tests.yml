@@ -2,12 +2,11 @@ name: SDK auto-tests
 
 on: [workflow_dispatch, push]
 
-permissions:
-  packages: read
-
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
