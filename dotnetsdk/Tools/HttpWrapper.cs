@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using payfurl.sdk.Helpers;
 
 namespace payfurl.sdk.Tools
 {
@@ -129,7 +130,8 @@ namespace payfurl.sdk.Tools
             var error = new Error
             {
                 HttpStatus = 500,
-                Code = 0,
+                Code = ErrorCodeType.UnknownError,
+                Type = ErrorCodeTypeTranslator.GetErrorCodeUrlByCode(ErrorCodeType.UnknownError),
                 Message = "Unknown error",
                 Details = new Dictionary<string, string>(),
                 Resource = ""
@@ -143,7 +145,8 @@ namespace payfurl.sdk.Tools
             var error = new Error
             {
                 HttpStatus = 408,
-                Code = 0,
+                Code = ErrorCodeType.Timeout,
+                Type = ErrorCodeTypeTranslator.GetErrorCodeUrlByCode(ErrorCodeType.Timeout),
                 Message = "Request Timeout",
                 Details = new Dictionary<string, string>(),
                 Resource = ""
