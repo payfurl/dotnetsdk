@@ -212,7 +212,7 @@ namespace FunctionalTests
             });
             var ex = await Assert.ThrowsAsync<ApiException>(Act);
             
-            Assert.Equal(81, ex.Code);
+            Assert.Equal(81, (int)ex.Code);
         }
     }
 }

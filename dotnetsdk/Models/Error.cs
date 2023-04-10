@@ -11,7 +11,8 @@ namespace payfurl.sdk.Models
         public string Resource { get; set; }
         public string GatewayMessage { get; set; }
         public string GatewayCode { get; set; }
-        public int Code {get; set;}
+        public ErrorCodeType Code {get; set;}
         public bool IsRetryable {get; set;}
+        public string Type { get; set; }
     }
 }
