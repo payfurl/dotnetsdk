@@ -16,6 +16,7 @@ namespace payfurl.sdk
         AU,
         JP,
         US,
+        EU,
         NONE
     }
 
@@ -40,7 +41,8 @@ namespace payfurl.sdk
                 { (Region.AU, Environment.SANDBOX), "https://sandbox-api-au.payfurl.com" },
                 { (Region.US, Environment.SANDBOX), "https://sandbox-api-us.payfurl.com" },
                 { (Region.AU, Environment.PROD), "https://api-au.payfurl.com" },
-                { (Region.US, Environment.PROD), "https://api-us.payfurl.com" }
+                { (Region.US, Environment.PROD), "https://api-us.payfurl.com" },
+                { (Region.EU, Environment.PROD), "https://api-eu.payfurl.com" }
             };
 
         public static void Setup(string secretKey, Environment environment, int timeoutMilliseconds = 60000)
