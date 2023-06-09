@@ -4,7 +4,7 @@ namespace payfurl.sdk.Helpers
 {
     public static class ErrorCodeTypeTranslator
     {
-        private const string TypeBaseUrl = "https://docs.payfurl.com/errorcodes.html#";
+        private const string TypeBaseUrl = "https://docs.payfurl.com/errorcodes#";
         
         public static string GetErrorCodeUrlByCode(ErrorCodeType code)
         {
