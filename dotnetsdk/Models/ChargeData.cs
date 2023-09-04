@@ -28,6 +28,7 @@ namespace payfurl.sdk.Models
         public bool ThreeDsVerified { get; set; }
         public decimal? AuthorisationAmount { get; set; }
         public string Initiator { get; set; }
+        public VisaInstallmentsInfo VisaInstallments { get; set; }
 
         public class Refund
         {
