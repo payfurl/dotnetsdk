@@ -12,5 +12,6 @@ namespace payfurl.sdk.Models
         public Initiator? Initiator {  get;  set; }
         public WebhookConfig Webhook { get; set; }
         public Dictionary<string, string> Metadata { get; set; } = null;
+        public string Descriptor { get; set; }
     }
 }
