@@ -29,6 +29,7 @@ namespace payfurl.sdk.Models
         public decimal? AuthorisationAmount { get; set; }
         public string Initiator { get; set; }
         public VisaInstallmentsInfo VisaInstallments { get; set; }
+        public string Descriptor { get; set; }
 
         public class Refund
         {
