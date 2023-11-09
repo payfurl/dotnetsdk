@@ -6,7 +6,7 @@
     <Version>2.0.16</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.16 Added more transaction information</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.17 Add descriptor</PackageReleaseNotes>
     <Copyright>Copyright 2023</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
