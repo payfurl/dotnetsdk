@@ -32,6 +32,18 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<NewCustomerToken, CustomerData>("/customer/token", Method.POST,
                 newCustomer);
         }
+        
+        public CustomerData CreateWithSingleUseToken(NewCustomerSingleUseToken newCustomerSingleUseToken)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewCustomerSingleUseToken, CustomerData>("/customer/provider_single_use_token", Method.POST, newCustomerSingleUseToken));
+        }
+
+        public async Task<CustomerData> CreateWithSingleUseTokenAsync(NewCustomerSingleUseToken newCustomerSingleUseToken)
+        {
+            return await HttpWrapper.CallAsync<NewCustomerSingleUseToken, CustomerData>("/customer/provider_single_use_token", Method.POST,
+                newCustomerSingleUseToken);
+        }
 
         public CustomerData CreateWithProviderToken(NewCustomerProviderToken newCustomer)
         {

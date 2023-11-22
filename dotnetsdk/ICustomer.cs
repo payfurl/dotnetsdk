@@ -30,5 +30,7 @@ namespace payfurl.sdk
         Task<CustomerData> DeleteAsync(string customerId);
         CustomerData Update(string customerId, UpdateCustomer updateCustomer);
         Task<CustomerData> UpdateAsync(string customerId, UpdateCustomer updateCustomer);
+        CustomerData CreateWithSingleUseToken(NewCustomerSingleUseToken newCustomerSingleUseToken);
+        Task<CustomerData> CreateWithSingleUseTokenAsync(NewCustomerSingleUseToken newCustomerSingleUseToken);
     }
 }
