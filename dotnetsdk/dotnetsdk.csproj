@@ -3,10 +3,10 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.17</Version>
+    <Version>2.0.18</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.17 Add descriptor</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.18 Adjusted production environment name with backwards compatability</PackageReleaseNotes>
     <Copyright>Copyright 2023</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
