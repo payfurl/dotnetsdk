@@ -8,7 +8,8 @@ namespace payfurl.sdk
         LOCAL,
         DEVELOPMENT,
         SANDBOX,
-        PRODUCTION
+        PRODUCTION,
+        PROD
     }
 
     public enum Region
@@ -34,6 +35,7 @@ namespace payfurl.sdk
                 { (Region.NONE, Environment.DEVELOPMENT), "https://develop-api.payfurl.com" },
                 { (Region.NONE, Environment.SANDBOX), "https://sandbox-api.payfurl.com" },
                 { (Region.NONE, Environment.PRODUCTION), "https://api.payfurl.com" },
+                { (Region.NONE, Environment.PROD), "https://api.payfurl.com" },
 
                 { (Region.AU, Environment.DEVELOPMENT), "https://develop-api-au.payfurl.com" },
                 { (Region.US, Environment.DEVELOPMENT), "https://develop-api-us.payfurl.com" },
@@ -42,7 +44,10 @@ namespace payfurl.sdk
                 { (Region.US, Environment.SANDBOX), "https://sandbox-api-us.payfurl.com" },
                 { (Region.AU, Environment.PRODUCTION), "https://api-au.payfurl.com" },
                 { (Region.US, Environment.PRODUCTION), "https://api-us.payfurl.com" },
-                { (Region.EU, Environment.PRODUCTION), "https://api-eu.payfurl.com" }
+                { (Region.EU, Environment.PRODUCTION), "https://api-eu.payfurl.com" },
+                { (Region.AU, Environment.PROD), "https://api-au.payfurl.com" },
+                { (Region.US, Environment.PROD), "https://api-us.payfurl.com" },
+                { (Region.EU, Environment.PROD), "https://api-eu.payfurl.com" }
             };
 
         public static void Setup(string secretKey, Environment environment, int timeoutMilliseconds = 60000)
