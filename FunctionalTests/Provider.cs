@@ -46,6 +46,19 @@ public class Provider : BaseTest
         Assert.Equal(result.Name, newName);
     }
 
+    [Fact]
+    public void DeleteProvider()
+    {
+        var provider = CreateNewProvider();
+
+        var svc = new payfurl.sdk.Provider();
+        var result = svc.Create(provider);
+
+        var deletedProvider = svc.DeleteProvider(result.ProviderId);
+
+        Assert.Equal(result.ProviderId, deletedProvider.ProviderId);
+    }
+
     private NewProvider CreateNewProvider()
     {
         return new NewProvider
