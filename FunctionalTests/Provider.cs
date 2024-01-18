@@ -54,7 +54,7 @@ public class Provider : BaseTest
         var svc = new payfurl.sdk.Provider();
         var result = svc.Create(provider);
 
-        var deletedProvider = svc.DeleteProvider(result.ProviderId);
+        var deletedProvider = svc.Delete(result.ProviderId);
 
         Assert.Equal(result.ProviderId, deletedProvider.ProviderId);
     }
