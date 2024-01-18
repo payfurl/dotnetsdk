@@ -31,5 +31,16 @@ namespace payfurl.sdk
                 updateProvider);
         }
 
+        public Models.Provider Delete(string providerId)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, Models.Provider>("/provider/" + providerId, Method.DELETE, null));
+        }
+
+        public async Task<Models.Provider> DeleteAsync(string providerId)
+        {
+            return await HttpWrapper.CallAsync<string, Models.Provider>("/provider/" + providerId, Method.DELETE, null);
+        }
+
     }
 }
