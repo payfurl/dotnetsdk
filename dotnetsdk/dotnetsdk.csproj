@@ -3,11 +3,11 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.18</Version>
+    <Version>2.0.19</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.18 Adjusted production environment name with backwards compatability</PackageReleaseNotes>
-    <Copyright>Copyright 2023</Copyright>
+    <PackageReleaseNotes>2.0.14 Added support for delete provider</PackageReleaseNotes>
+    <Copyright>Copyright 2024</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1;net451;net48</TargetFrameworks>
