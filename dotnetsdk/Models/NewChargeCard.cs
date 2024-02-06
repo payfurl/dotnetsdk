@@ -14,5 +14,6 @@ namespace payfurl.sdk.Models
         public WebhookConfig Webhook { get; set; }
         public Dictionary<string, string> Metadata { get; set; } = null;
         public string Descriptor { get; set; }
+        public string ThreeDSNotificationUrl { get; set; }
     }
 }
