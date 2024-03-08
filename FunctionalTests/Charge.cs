@@ -45,6 +45,12 @@ namespace FunctionalTests
         }
 
         [Fact]
+        public void FailingTest()
+        {
+            Assert.False(true);
+        }
+
+        [Fact]
         public void ChargeWithValidCard()
         {
             var svc = new payfurl.sdk.Charge();
