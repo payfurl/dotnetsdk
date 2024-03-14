@@ -6,5 +6,6 @@
         public string ExpiryDate { get; set; }
         public string Cardholder { get; set; }
         public string Type { get; set; }
+        public IinData IinData { get; set; }
     }
 }
