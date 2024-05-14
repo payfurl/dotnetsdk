@@ -9,33 +9,39 @@ public class Batch : BaseTest
     [Fact]
     public void CreateTransactionWithPaymentMethod()
     {
+        var description = Guid.NewGuid().ToString();
         var svc = new payfurl.sdk.Batch();
-        var result = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod());
+        var result = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod(description));
 
-        Assert.Equal("RECEIVED", result.Status);
+        Assert.Equal(1, result.Count);
+        Assert.Equal(description, result.Description);
     }
     
     [Fact]
     public void GetBatch()
     {
+        var description = Guid.NewGuid().ToString();
         var svc = new payfurl.sdk.Batch();
-        var batch = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod());
+        var batch = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod(description));
 
         var result = svc.GetBatch(batch.BatchId);
         
-        Assert.Equal("RECEIVED", result.Status);
+        Assert.Equal(1, result.Count);
+        Assert.Equal(description, result.Description);
         Assert.Equal("PaymentMethodId,Amount,Currency,Reference,Status,TransactionId\r\n", result.Results);
     }
     
     [Fact]
     public void GetBatchStatus()
     {
+        var description = Guid.NewGuid().ToString();
         var svc = new payfurl.sdk.Batch();
-        var batch = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod());
+        var batch = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod(description));
 
         var result = svc.GetBatchStatus(batch.BatchId);
         
-        Assert.Equal("RECEIVED", result.Status);
+        Assert.Equal(1, result.Count);
+        Assert.Equal(description, result.Description);
     }
     
     [Fact]
