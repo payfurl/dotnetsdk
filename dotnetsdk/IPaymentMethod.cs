@@ -15,11 +15,9 @@ namespace payfurl.sdk
         Task<PaymentMethodData> SingleAsync(string paymentMethodId);
         PaymentMethodList Search(PaymentMethodSearch searchData);
         Task<PaymentMethodList> SearchAsync(PaymentMethodSearch searchData);
-
-        PaymentMethodData CreatePaymentMethodWithSingleUseToken(
-            NewPaymentMethodSingleUseToken newPaymentMethodSingleUseToken);
-
-        Task<PaymentMethodData> CreatePaymentMethodWithSingleUseTokenAsync(
-            NewPaymentMethodSingleUseToken newPaymentMethodSingleUseToken);
+        PaymentMethodData CreatePaymentMethodWithSingleUseToken(NewPaymentMethodSingleUseToken newPaymentMethodSingleUseToken);
+        Task<PaymentMethodData> CreatePaymentMethodWithSingleUseTokenAsync(NewPaymentMethodSingleUseToken newPaymentMethodSingleUseToken);
+        PaymentMethodData CreateWithProviderToken(NewProviderToken providerToken);
+        Task<PaymentMethodData> CreateWithProviderTokenAsync(NewProviderToken providerToken);
     }
 }

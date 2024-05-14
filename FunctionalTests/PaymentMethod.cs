@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
@@ -143,5 +142,20 @@ namespace FunctionalTests
 
             Assert.False(result.Count == 0);
         }
+        
+        [Fact]
+        public void CreateWithProviderToken()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethodWithCard = svc.CreateWithProviderToken(new NewProviderToken
+            {
+                ProviderId = GetProviderId(),
+            });
+
+            var result = svc.Search(new PaymentMethodSearch { ProviderId = GetProviderId()});
+
+            Assert.False(result.Count == 0);
+        }
+
     }
 }
