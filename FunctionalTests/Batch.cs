@@ -60,7 +60,7 @@ public class Batch : BaseTest
         Assert.Equal(description, result.Batches[0].Description);
     }
     
-    private NewTransactionPaymentMethod GetNewTransactionPaymentMethod(string description = "Test")
+    private NewTransactionPaymentMethod GetNewTransactionPaymentMethod(string description)
     {
         return new NewTransactionPaymentMethod
         {
