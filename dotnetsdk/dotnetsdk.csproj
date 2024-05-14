@@ -3,10 +3,10 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.20</Version>
+    <Version>2.0.21</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.0.14 Added support for delete provider</PackageReleaseNotes>
+    <PackageReleaseNotes>2.0.14 Added support payment batches</PackageReleaseNotes>
     <Copyright>Copyright 2024</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
