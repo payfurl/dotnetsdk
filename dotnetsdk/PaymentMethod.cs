@@ -50,6 +50,19 @@ namespace payfurl.sdk
                 Method.POST, newPaymentMethodSingleUseToken);
         }
 
+        public PaymentMethodData CreateWithProviderToken(NewProviderToken providerToken)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewProviderToken, PaymentMethodData>("/payment_method/provider_token", Method.POST,
+                    providerToken));
+        }
+
+        public async Task<PaymentMethodData> CreateWithProviderTokenAsync(NewProviderToken providerToken)
+        {
+            return await HttpWrapper.CallAsync<NewProviderToken, PaymentMethodData>("/payment_method/provider_token",
+                Method.POST, providerToken);
+        }
+        
         public PaymentMethodData CreatePaymentMethodWithPayto(NewPayToAgreement newNewPaymentMethodPayTo)
         {
             return AsyncHelper.RunSync(() =>
