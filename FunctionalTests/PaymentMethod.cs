@@ -125,7 +125,7 @@ namespace FunctionalTests
         public void Search()
         {
             var svc = new payfurl.sdk.PaymentMethod();
-            var paymentMethodWithCard = svc.CreatePaymentMethodWithCard(GetNewPaymentMethod());
+            svc.CreatePaymentMethodWithCard(GetNewPaymentMethod());
 
             var result = svc.Search(new PaymentMethodSearch { ProviderId = GetProviderId()});
 
@@ -136,7 +136,7 @@ namespace FunctionalTests
         public async Task SearchAsync()
         {
             var svc = new payfurl.sdk.PaymentMethod();
-            var paymentMethodWithCard = await svc.CreatePaymentMethodWithCardAsync(GetNewPaymentMethod());
+            await svc.CreatePaymentMethodWithCardAsync(GetNewPaymentMethod());
 
             var result = svc.Search(new PaymentMethodSearch { ProviderId = GetProviderId() });
 
@@ -147,15 +147,30 @@ namespace FunctionalTests
         public void CreateWithProviderToken()
         {
             var svc = new payfurl.sdk.PaymentMethod();
-            var paymentMethodWithCard = svc.CreateWithProviderToken(new NewProviderToken
+            var paymentMethod = svc.CreateWithProviderToken(new NewProviderToken
             {
                 ProviderId = GetProviderId(),
+                ProviderToken = "test"
             });
 
-            var result = svc.Search(new PaymentMethodSearch { ProviderId = GetProviderId()});
-
-            Assert.False(result.Count == 0);
+            Assert.NotNull(paymentMethod);
+            Assert.Null(paymentMethod.CustomerId);
+            Assert.Equal("CARD", paymentMethod.Type);
         }
 
+        [Fact]
+        public async Task CreateWithProviderTokenAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var paymentMethod = await svc.CreateWithProviderTokenAsync(new NewProviderToken
+            {
+                ProviderId = GetProviderId(),
+                ProviderToken = "test"
+            });
+
+            Assert.NotNull(paymentMethod);
+            Assert.Null(paymentMethod.CustomerId);
+            Assert.Equal("CARD", paymentMethod.Type);
+        }
     }
 }
