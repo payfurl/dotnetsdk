@@ -172,5 +172,42 @@ namespace FunctionalTests
             Assert.Null(paymentMethod.CustomerId);
             Assert.Equal("CARD", paymentMethod.Type);
         }
+        
+        [Fact]
+        public void CreatePaymentMethodWithBankAccount()
+        {
+
+            var svc = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = GetPaymentMethodWithBankAccount(); 
+            newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = svc.CreatePaymentMethodWithBankAccount(newPaymentMethod);
+
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task CreatePaymentMethodWithBankAccountAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = await svc.CreatePaymentMethodWithBankAccountAsync(GetPaymentMethodWithBankAccount());
+
+            Assert.NotNull(result.PaymentMethodId);
+        }
+        
+        private NewPaymentMethodBankPayment GetPaymentMethodWithBankAccount()
+        {
+            return new NewPaymentMethodBankPayment
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = GetProviderId(),
+                BankPaymentInformation = new NewBankPayment()
+                {
+                    BankCode = "123-456",
+                    AccountNumber = "123456",
+                    AccountName = "Bank Account"
+                }
+            };
+        }
     }
 }

@@ -474,5 +474,84 @@ namespace FunctionalTests
             };
             return customer;
         }
+        
+        [Fact]
+        public void AddWithBankAccount()
+        {
+            var customer = CreateNewCustomerBankAccount();
+
+            var svc = new payfurl.sdk.Customer();
+            var result = svc.CreateWithBankAccount(customer);
+
+            Assert.NotNull(result.CustomerId);
+        }
+
+        [Fact]
+        public async Task AddWithBankAccountAsync()
+        {
+            var customer = CreateNewCustomerBankAccount();
+
+            var svc = new payfurl.sdk.Customer();
+            var result = await svc.CreateWithBankAccountAsync(customer);
+
+            Assert.NotNull(result.CustomerId);
+        }
+        
+        private NewCustomerBankPayment CreateNewCustomerBankAccount(string reference = "")
+        {
+            return new NewCustomerBankPayment
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = GetProviderId(),
+                Reference = reference,
+                BankPaymentInformation = new NewBankPayment()
+                {
+                    BankCode = "123-456",
+                    AccountNumber = "123456",
+                    AccountName = "Bank Account"
+                }
+            };
+        }
+        
+        [Fact]
+        public void AddPaymentMethodWithBankAccount()
+        {
+            var customer = CreateNewCustomerBankAccount();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = svc.CreateWithBankAccount(customer);
+
+            var result = svc.CreatePaymentMethodWithBankAccount(newCustomer.CustomerId, GetPaymentMethodWithBankAccount());
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task AddPaymentMethodWithBankAccountAsync()
+        {
+            var customer = CreateNewCustomerBankAccount();
+
+            var svc = new payfurl.sdk.Customer();
+            var newCustomer = await svc.CreateWithBankAccountAsync(customer);
+
+            var result = await svc.CreatePaymentMethodWithBankAccountAsync(newCustomer.CustomerId, GetPaymentMethodWithBankAccount());
+            Assert.NotNull(result.PaymentMethodId);
+        }
+        
+        private NewPaymentMethodBankPayment GetPaymentMethodWithBankAccount()
+        {
+            return new NewPaymentMethodBankPayment
+            {
+                FirstName = "test",
+                LastName = "test",
+                ProviderId = GetProviderId(),
+                BankPaymentInformation = new NewBankPayment()
+                {
+                    BankCode = "123-456",
+                    AccountNumber = "123456",
+                    AccountName = "Bank Account"
+                }
+            };
+        }
     }
 }

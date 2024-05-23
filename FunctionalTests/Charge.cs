@@ -9,6 +9,7 @@ namespace FunctionalTests
     public class Charge : BaseTest
     {
         private const string SuccessResponseValue = "SUCCESS";
+        private const string PendingResponseValue = "PENDING";
 
         private static readonly CardRequestInformation CardRequestInformation = new()
         {
@@ -25,6 +26,24 @@ namespace FunctionalTests
                 Amount = 20,
                 ProviderId = GetProviderId(),
                 PaymentInformation = CardRequestInformation
+            };
+        }
+        
+        private NewChargeBankPayment GetChargeDataWithBankAccount()
+        {
+            return new NewChargeBankPayment()
+            {
+                Amount = 20,
+                Currency = "AUD",
+                ProviderId = GetProviderId(),
+                FirstName = "test",
+                LastName = "test",
+                BankPaymentInformation = new BankPaymentInformationData()
+                {
+                    BankCode = "123-456",
+                    AccountNumber = "123456",
+                    AccountName = "Bank Account"
+                }
             };
         }
 
@@ -213,6 +232,28 @@ namespace FunctionalTests
             var ex = await Assert.ThrowsAsync<ApiException>(Act);
             
             Assert.Equal(81, (int)ex.Code);
+        }
+        
+        [Fact]
+        public void ChargeWithValidBankAccount()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeDataWithBankAccount();
+            chargeData.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = svc.CreateWithBankAccount(chargeData);
+
+            Assert.Equal(PendingResponseValue, result.Status);
+        }
+        
+        [Fact]
+        public async Task ChargeWithValidBankAccountAsync()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeDataWithBankAccount();
+            chargeData.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = await svc.CreateWithBankAccountAsync(chargeData);
+
+            Assert.Equal(PendingResponseValue, result.Status);
         }
     }
 }
