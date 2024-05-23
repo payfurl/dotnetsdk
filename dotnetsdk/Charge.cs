@@ -134,6 +134,17 @@ namespace payfurl.sdk
 
             return await HttpWrapper.CallAsync<string, ChargeList>("/charge" + queryString, Method.GET, null);
         }
+        
+        public ChargeData CreateWithBankAccount(NewChargeBankPayment newCharge)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewChargeBankPayment, ChargeData>("/charge/bank_account", Method.POST, newCharge));
+        }
+
+        public async Task<ChargeData> CreateWithBankAccountAsync(NewChargeBankPayment newCharge)
+        {
+            return await HttpWrapper.CallAsync<NewChargeBankPayment, ChargeData>("/charge/bank_account", Method.POST, newCharge);
+        }
 
         private static string BuildRefundQueryString(NewRefund newCharge)
         {

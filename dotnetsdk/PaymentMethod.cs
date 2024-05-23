@@ -104,6 +104,20 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<string, PaymentMethodList>("/payment_method" + queryString, Method.GET,
                 null);
         }
+        
+        public PaymentMethodData CreatePaymentMethodWithBankAccount(NewPaymentMethodBankPayment newPaymentMethodCard)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewPaymentMethodBankPayment, PaymentMethodData>("/payment_method/bank_account", Method.POST,
+                    newPaymentMethodCard));
+        }
+
+        public async Task<PaymentMethodData> CreatePaymentMethodWithBankAccountAsync(
+            NewPaymentMethodBankPayment newNewPaymentMethodCard)
+        {
+            return await HttpWrapper.CallAsync<NewPaymentMethodBankPayment, PaymentMethodData>("/payment_method/bank_account",
+                Method.POST, newNewPaymentMethodCard);
+        }
 
         private static string BuildSearchQueryString(PaymentMethodSearch searchData)
         {
