@@ -36,8 +36,6 @@ namespace FunctionalTests
                 Amount = 20,
                 Currency = "AUD",
                 ProviderId = GetProviderId(),
-                FirstName = "test",
-                LastName = "test",
                 BankPaymentInformation = new BankPaymentInformationData()
                 {
                     BankCode = "123-456",
