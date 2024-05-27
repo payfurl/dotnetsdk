@@ -28,7 +28,7 @@ public class Batch : BaseTest
         
         Assert.Equal(1, result.Count);
         Assert.Equal(description, result.Description);
-        Assert.StartsWith("PaymentMethodId,Amount,Currency,Reference,Status,TransactionId\r\n", result.Results);
+        Assert.Equal("PaymentMethodId,Amount,Currency,Reference,Status,TransactionId\r\n", result.Results);
     }
     
     [Fact]
