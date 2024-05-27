@@ -501,8 +501,6 @@ namespace FunctionalTests
         {
             return new NewCustomerBankPayment
             {
-                FirstName = "test",
-                LastName = "test",
                 ProviderId = GetProviderId(),
                 Reference = reference,
                 BankPaymentInformation = new NewBankPayment()
@@ -542,8 +540,6 @@ namespace FunctionalTests
         {
             return new NewPaymentMethodBankPayment
             {
-                FirstName = "test",
-                LastName = "test",
                 ProviderId = GetProviderId(),
                 BankPaymentInformation = new NewBankPayment()
                 {
