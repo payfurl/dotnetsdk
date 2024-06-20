@@ -21,7 +21,7 @@ public class BaseTest
             .Build();
 
         Enum.TryParse(_configuration["Environment"]?.ToUpper() ?? "DEVELOPMENT", out Environment env);
-        Config.Setup(_configuration["SecretKey"], env);
+        Config.Setup(_configuration["SecretKey"], Environment.LOCAL);
     }
     
     protected string GetProviderId()

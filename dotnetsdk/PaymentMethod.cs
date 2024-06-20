@@ -62,7 +62,7 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<NewProviderToken, PaymentMethodData>("/payment_method/provider_token",
                 Method.POST, providerToken);
         }
-        
+
         public PaymentMethodData CreatePaymentMethodWithPayto(NewPayToAgreement newNewPaymentMethodPayTo)
         {
             return AsyncHelper.RunSync(() =>
@@ -157,6 +157,17 @@ namespace payfurl.sdk
                 queryString = "?" + queryString;
 
             return queryString;
+        }
+
+        public PaymentMethodData Delete(string paymentMethodId)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<string, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.DELETE, null));
+        }
+
+        public async Task<PaymentMethodData> DeleteAsync(string paymentMethodId)
+        {
+            return await HttpWrapper.CallAsync<string, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.DELETE, null);
         }
     }
 }

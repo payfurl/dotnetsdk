@@ -88,25 +88,25 @@ namespace payfurl.sdk
         public ChargeData Capture(string chargeId, NewChargeCapture chargeCaptureData)
         {
             return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<NewChargeCapture, ChargeData>($"/charge/{chargeId}", Method.POST,
+                HttpWrapper.CallAsync<NewChargeCapture, ChargeData>($"/charge/{chargeId}/capture", Method.POST,
                     chargeCaptureData));
         }
 
         public async Task<ChargeData> CaptureAsync(string chargeId, NewChargeCapture chargeCaptureData)
         {
-            return await HttpWrapper.CallAsync<NewChargeCapture, ChargeData>($"/charge/{chargeId}", Method.POST,
+            return await HttpWrapper.CallAsync<NewChargeCapture, ChargeData>($"/charge/{chargeId}/capture", Method.POST,
                 chargeCaptureData);
         }
 
         public ChargeData Void(string chargeId)
         {
             return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<string, ChargeData>($"/charge/{chargeId}", Method.DELETE, null));
+                HttpWrapper.CallAsync<string, ChargeData>($"/charge/{chargeId}/void", Method.DELETE, null));
         }
 
         public async Task<ChargeData> VoidAsync(string chargeId)
         {
-            return await HttpWrapper.CallAsync<string, ChargeData>($"/charge/{chargeId}", Method.DELETE, null);
+            return await HttpWrapper.CallAsync<string, ChargeData>($"/charge/{chargeId}/void", Method.DELETE, null);
         }
 
         public ChargeData Single(string chargeId)
@@ -153,6 +153,11 @@ namespace payfurl.sdk
             if (newCharge.RefundAmount.HasValue)
             {
                 queryString = "?amount=" + newCharge.RefundAmount.Value;
+            }
+
+            if (!string.IsNullOrEmpty(newCharge.Comment))
+            {
+                queryString = "?comment=" + newCharge.Comment;
             }
 
             return queryString;

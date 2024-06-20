@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
@@ -31,7 +30,7 @@ namespace FunctionalTests
         
         private NewChargeBankPayment GetChargeDataWithBankAccount()
         {
-            return new NewChargeBankPayment()
+            return new NewChargeBankPayment
             {
                 Amount = 20,
                 Currency = "AUD",
@@ -185,7 +184,8 @@ namespace FunctionalTests
             var chargeData = GetChargeData();
             var chargeResult = svc.CreateWithCard(chargeData);
 
-            var refundResult = svc.Refund(new NewRefund { ChargeId = chargeResult.ChargeId });
+            var refundResult = svc.Refund(new NewRefund
+                { ChargeId = chargeResult.ChargeId, Comment = "Refund comment" });
 
             Assert.Equal(chargeData.Amount, refundResult.RefundedAmount);
         }
@@ -197,7 +197,8 @@ namespace FunctionalTests
             var chargeData = GetChargeData();
             var chargeResult = await svc.CreateWithCardAsync(chargeData);
 
-            var refundResult = await svc.RefundAsync(new NewRefund { ChargeId = chargeResult.ChargeId });
+            var refundResult = await svc.RefundAsync(new NewRefund
+                { ChargeId = chargeResult.ChargeId, Comment = "Refund comment" });
 
             Assert.Equal(chargeData.Amount, refundResult.RefundedAmount);
         }
@@ -252,6 +253,75 @@ namespace FunctionalTests
             var result = await svc.CreateWithBankAccountAsync(chargeData);
 
             Assert.Equal(PendingResponseValue, result.Status);
+        }
+
+        [Fact]
+        public void AuthoriseAndCapture()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeData();
+            chargeData.Capture = false;
+
+            var chargeResult = svc.CreateWithCard(chargeData);
+
+            Assert.Equal("AUTHORISE", chargeResult.Status);
+            Assert.Equal(chargeData.Amount, chargeResult.AuthorisationAmount);
+
+            var captureResult = svc.Capture(chargeResult.ChargeId, new NewChargeCapture {Amount = chargeResult.Amount});
+
+            Assert.Equal("SUCCESS", captureResult.Status);
+        }
+
+        [Fact]
+        public async Task AuthoriseAndCaptureAsync()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeData();
+            chargeData.Capture = false;
+
+            var chargeResult = await svc.CreateWithCardAsync(chargeData);
+
+            Assert.Equal("AUTHORISE", chargeResult.Status);
+            Assert.Equal(chargeData.Amount, chargeResult.AuthorisationAmount);
+
+            var captureResult = await svc.CaptureAsync(chargeResult.ChargeId, new NewChargeCapture { Amount = chargeResult.Amount });
+
+            Assert.Equal("SUCCESS", captureResult.Status);
+        }
+
+
+        [Fact]
+        public void Void()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeData();
+            chargeData.Capture = false;
+
+            var chargeResult = svc.CreateWithCard(chargeData);
+
+            Assert.Equal("AUTHORISE", chargeResult.Status);
+            Assert.Equal(chargeData.Amount, chargeResult.AuthorisationAmount);
+
+            var voidResult = svc.Void(chargeResult.ChargeId);
+
+            Assert.Equal("AUTHORISE_CANCELLED", voidResult.Status);
+        }
+
+        [Fact]
+        public async Task VoidAsync()
+        {
+            var svc = new payfurl.sdk.Charge();
+            var chargeData = GetChargeData();
+            chargeData.Capture = false;
+
+            var chargeResult = await svc.CreateWithCardAsync(chargeData);
+
+            Assert.Equal("AUTHORISE", chargeResult.Status);
+            Assert.Equal(chargeData.Amount, chargeResult.AuthorisationAmount);
+
+            var voidResult = await svc.VoidAsync(chargeResult.ChargeId);
+
+            Assert.Equal("AUTHORISE_CANCELLED", voidResult.Status);
         }
     }
 }
