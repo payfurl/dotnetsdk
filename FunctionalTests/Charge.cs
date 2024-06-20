@@ -289,7 +289,6 @@ namespace FunctionalTests
             Assert.Equal("SUCCESS", captureResult.Status);
         }
 
-
         [Fact]
         public void Void()
         {

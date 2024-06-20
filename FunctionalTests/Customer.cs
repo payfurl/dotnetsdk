@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using payfurl.sdk;
 using payfurl.sdk.Models;
 using Xunit;
-using Xunit.Abstractions;
 using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
