@@ -193,7 +193,29 @@ namespace FunctionalTests
 
             Assert.NotNull(result.PaymentMethodId);
         }
-        
+
+        [Fact]
+        public void DeletePaymentMethod()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = GetNewPaymentMethod();
+            var result = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+
+            var deletedPaymentMethod = svc.Delete(result.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, deletedPaymentMethod.PaymentMethodId);
+        }
+
+        [Fact]
+        public async Task DeletePaymentMethodAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = GetNewPaymentMethod();
+            var result = await svc.CreatePaymentMethodWithCardAsync(newPaymentMethod);
+
+            var deletedPaymentMethod = await svc.DeleteAsync(result.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, deletedPaymentMethod.PaymentMethodId);
+        }
+
         private NewPaymentMethodBankPayment GetPaymentMethodWithBankAccount()
         {
             return new NewPaymentMethodBankPayment
