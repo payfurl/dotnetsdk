@@ -12,5 +12,6 @@ namespace payfurl.sdk.Models
         public int? VaultExpireSeconds { get; set; }
         public bool SetDefault { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
+        public bool SkipExpiryDateValidation { get; set; }
     }
 }
