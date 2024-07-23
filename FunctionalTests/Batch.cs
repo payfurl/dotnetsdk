@@ -1,4 +1,5 @@
 using System;
+using payfurl.sdk.Models;
 using payfurl.sdk.Models.Batch;
 using Xunit;
 
@@ -7,12 +8,31 @@ namespace FunctionalTests;
 public class Batch : BaseTest
 {
     [Fact]
+    public void CreateTransactionWithPaymentMethodWithWebhook()
+    {
+        var description = Guid.NewGuid().ToString();
+        var svc = new payfurl.sdk.Batch();
+        var newTransactionPaymentMethod = GetNewTransactionPaymentMethod(description);
+        newTransactionPaymentMethod.WebhookConfig = new WebhookConfig
+        {
+            Url = "https://example.com/webhook",
+            Authorization = "Bearer your_token_here"
+        };
+        
+        var result = svc.CreateTransactionWithPaymentMethod(newTransactionPaymentMethod);
+
+        Assert.Equal(1, result.Count);
+        Assert.Equal(description, result.Description);
+    }
+    
+    [Fact]
     public void CreateTransactionWithPaymentMethod()
     {
         var description = Guid.NewGuid().ToString();
         var svc = new payfurl.sdk.Batch();
+        
         var result = svc.CreateTransactionWithPaymentMethod(GetNewTransactionPaymentMethod(description));
-
+        
         Assert.Equal(1, result.Count);
         Assert.Equal(description, result.Description);
     }
