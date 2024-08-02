@@ -98,6 +98,19 @@ namespace payfurl.sdk.Models
         TokenVerificationNotSupported = 91,
         InvalidAddress = 92,
         CardBlocked = 93,
-        Timeout = 94
+        Timeout = 94,
+        VisIsNotSupported = 95,
+        TheOrderInformationIsInvalid = 96,
+        MetadataDoesNotContainRequiredFields = 97,
+        FraudIsNotSupported = 98,
+        CardIsNotEnrolledForVis = 99,
+        ProviderNotSupported = 100,
+        InvalidBatch = 101,
+        InvalidBatchData = 102,
+        DirectDebitNotSupported = 103,
+        InvalidSubscriptionId = 104,
+        NoDataToUpdateThePaymentMethod = 105,
+        PaymentMethodMustBeACardType = 106,
+        UnableToUpdateThePaymentMethod = 107,
     }
 }
