@@ -110,7 +110,7 @@ namespace payfurl.sdk.Models
         DirectDebitNotSupported = 103,
         InvalidSubscriptionId = 104,
         NoDataToUpdateThePaymentMethod = 105,
-        PaymentMethodMustBeACardType = 106,
+        PaymentMethodMustBeOfTypeCard = 106,
         UnableToUpdateThePaymentMethod = 107,
     }
 }
