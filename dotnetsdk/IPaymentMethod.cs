@@ -21,5 +21,7 @@ namespace payfurl.sdk
         Task<PaymentMethodData> CreateWithProviderTokenAsync(NewProviderToken providerToken);
         PaymentMethodData Delete(string paymentMethodId);
         Task<PaymentMethodData> DeleteAsync(string paymentMethodId);
+        PaymentMethodData UpdatePaymentMethod(string paymentMethodId, UpdatePaymentMethod updatePaymentMethod);
+        Task<PaymentMethodData> UpdatePaymentMethodAsync(string paymentMethodId, UpdatePaymentMethod updatePaymentMethod);
     }
 }

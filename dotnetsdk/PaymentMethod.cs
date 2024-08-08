@@ -169,5 +169,17 @@ namespace payfurl.sdk
         {
             return await HttpWrapper.CallAsync<string, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.DELETE, null);
         }
+
+        public PaymentMethodData UpdatePaymentMethod(string paymentMethodId, UpdatePaymentMethod updatePaymentMethod)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<UpdatePaymentMethod, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.PUT, updatePaymentMethod));
+        }
+
+        public async Task<PaymentMethodData> UpdatePaymentMethodAsync(string paymentMethodId,
+            UpdatePaymentMethod updatePaymentMethod)
+        {
+            return await HttpWrapper.CallAsync<UpdatePaymentMethod, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.PUT, updatePaymentMethod);
+        }
     }
 }

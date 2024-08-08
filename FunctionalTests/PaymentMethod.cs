@@ -215,6 +215,62 @@ namespace FunctionalTests
             var deletedPaymentMethod = await svc.DeleteAsync(result.PaymentMethodId);
             Assert.Equal(result.PaymentMethodId, deletedPaymentMethod.PaymentMethodId);
         }
+        
+        [Fact]
+        public void UpdatePaymentMethod()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = GetNewPaymentMethod(); 
+            newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = svc.CreatePaymentMethodWithCard(newPaymentMethod);
+
+            Assert.NotNull(result.PaymentMethodId);
+
+            var newExpiryDate = "04/31";
+            var newCardholderName = "UpdatedCardholderName";
+            
+            var updateResult = svc.UpdatePaymentMethod(result.PaymentMethodId, new UpdatePaymentMethod()
+            {
+                Card = new UpdatePaymentMethodCardRequestInformation()
+                {
+                    ExpiryDate = newExpiryDate,
+                    Cardholder = newCardholderName
+                }
+            });
+            
+            Assert.NotNull(updateResult.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updateResult.PaymentMethodId);
+            Assert.Equal(newExpiryDate, updateResult.Card.ExpiryDate);
+            Assert.Equal(newCardholderName, updateResult.Card.Cardholder);
+        }
+
+        [Fact]
+        public async Task UpdatePaymentMethodAsync()
+        {
+            var svc = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = GetNewPaymentMethod(); 
+            newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+            var result = await svc.CreatePaymentMethodWithCardAsync(newPaymentMethod);
+
+            Assert.NotNull(result.PaymentMethodId);
+
+            var newExpiryDate = "04/31";
+            var newCardholderName = "UpdatedCardholderName";
+            
+            var updateResult = await svc.UpdatePaymentMethodAsync(result.PaymentMethodId, new UpdatePaymentMethod()
+            {
+                Card = new UpdatePaymentMethodCardRequestInformation()
+                {
+                    ExpiryDate = newExpiryDate,
+                    Cardholder = newCardholderName
+                }
+            });
+            
+            Assert.NotNull(updateResult.PaymentMethodId);
+            Assert.Equal(result.PaymentMethodId, updateResult.PaymentMethodId);
+            Assert.Equal(newExpiryDate, updateResult.Card.ExpiryDate);
+            Assert.Equal(newCardholderName, updateResult.Card.Cardholder);
+        }
 
         private NewPaymentMethodBankPayment GetPaymentMethodWithBankAccount()
         {
