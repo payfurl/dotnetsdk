@@ -193,6 +193,24 @@ namespace payfurl.sdk
             if (!string.IsNullOrWhiteSpace(searchData.Status))
                 queryString = "Status=" + HttpUtility.UrlEncode(searchData.Status);
 
+            if (!string.IsNullOrWhiteSpace(searchData.ProviderId))
+                queryString = "ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId);
+
+            if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
+                queryString = "PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType);
+
+            if (!string.IsNullOrWhiteSpace(searchData.CardType))
+                queryString = "CardType=" + HttpUtility.UrlEncode(searchData.CardType);
+
+            if (!string.IsNullOrWhiteSpace(searchData.Currency))
+                queryString = "Currency=" + HttpUtility.UrlEncode(searchData.Currency);
+
+            if (!string.IsNullOrWhiteSpace(searchData.CardNumber))
+                queryString = "CardNumber=" + HttpUtility.UrlEncode(searchData.CardNumber);
+
+            if (!string.IsNullOrWhiteSpace(searchData.Cardholder))
+                queryString = "Cardholder=" + HttpUtility.UrlEncode(searchData.Cardholder);
+
             if (searchData.AddedAfter.HasValue)
                 queryString = "AddedAfter=" +
                               HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
@@ -206,7 +224,7 @@ namespace payfurl.sdk
 
             if (!string.IsNullOrEmpty(queryString))
                 queryString = "?" + queryString;
-
+            
             return queryString;
         }
     }
