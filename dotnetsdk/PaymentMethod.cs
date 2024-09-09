@@ -149,6 +149,9 @@ namespace payfurl.sdk
 
             if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
                 queryString = "PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType);
+            
+            if (!string.IsNullOrWhiteSpace(searchData.CardType))
+                queryString = "CardType=" + HttpUtility.UrlEncode(searchData.CardType);
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString = "SortBy=" + HttpUtility.UrlEncode(searchData.SortBy);
