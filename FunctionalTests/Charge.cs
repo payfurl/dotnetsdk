@@ -322,5 +322,24 @@ namespace FunctionalTests
 
             Assert.Equal("AUTHORISE_CANCELLED", voidResult.Status);
         }
+        
+        [Fact]
+        public void SearchByCard()
+        {
+            var svc = new payfurl.sdk.Charge();
+
+            var chargeData = GetChargeData();
+            svc.CreateWithCard(chargeData);
+
+            var result = svc.Search(new ChargeSearch
+            {
+                Cardholder = CardRequestInformation.Cardholder,
+                CardNumber = CardRequestInformation.CardNumber.Substring(0, 4),
+                CardType = "VISA"
+            });
+
+            Assert.Equal(1, result.Count);
+        }
+
     }
 }
