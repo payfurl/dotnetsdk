@@ -330,8 +330,7 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Charge();
 
             var chargeData = GetChargeData();
-            //chargeData.PaymentInformation.Cardholder = Guid.NewGuid().ToString("N");
-            chargeData.PaymentInformation.Cardholder = "randomstring123";
+            chargeData.PaymentInformation.Cardholder = Guid.NewGuid().ToString("N");
             svc.CreateWithCard(chargeData);
 
             var result = svc.Search(new ChargeSearch

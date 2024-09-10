@@ -193,41 +193,42 @@ namespace payfurl.sdk
         private static string BuildSearchQueryString(CustomerSearch searchData)
         {
             // TODO: move into a shared class
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (searchData.Skip.HasValue)
-                queryString = "Skip=" + searchData.Skip.Value;
+                queryString.Add("Skip=" + searchData.Skip.Value);
 
             if (searchData.Limit.HasValue)
-                queryString = "Limit=" + searchData.Limit.Value;
+                queryString.Add("Limit=" + searchData.Limit.Value);
             
             if (!string.IsNullOrWhiteSpace(searchData.Reference))
-                queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
+                queryString.Add("Reference=" + HttpUtility.UrlEncode(searchData.Reference));
 
             if (!string.IsNullOrWhiteSpace(searchData.Email))
-                queryString = "Email=" + HttpUtility.UrlEncode(searchData.Email);
+                queryString.Add("Email=" + HttpUtility.UrlEncode(searchData.Email));
 
             if (!string.IsNullOrWhiteSpace(searchData.Search))
-                queryString = "Search=" + HttpUtility.UrlEncode(searchData.Search);
+                queryString.Add("Search=" + HttpUtility.UrlEncode(searchData.Search));
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" +
-                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedAfter=" +
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" +
-                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedBefore=" +
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
             
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
-                queryString = "SortBy=" + HttpUtility.UrlEncode(searchData.SortBy);
+                queryString.Add("SortBy=" + HttpUtility.UrlEncode(searchData.SortBy));
             
             if (searchData.IncludeRemoved != null)
-                queryString = "IncludeRemoved=" + searchData.IncludeRemoved;
+                queryString.Add("IncludeRemoved=" + searchData.IncludeRemoved);
 
-            if (!string.IsNullOrEmpty(queryString))
-                queryString = "?" + queryString;
-
-            return queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
+            
+            return result;
         }
     }
 }

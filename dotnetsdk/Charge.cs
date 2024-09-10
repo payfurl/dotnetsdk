@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System.Web;
@@ -166,66 +168,67 @@ namespace payfurl.sdk
         private static string BuildSearchQueryString(ChargeSearch searchData)
         {
             // TODO: move into a shared class to handle formatting
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (searchData.Skip.HasValue)
-                queryString = "Skip=" + searchData.Skip.Value;
+                queryString.Add("Skip=" + searchData.Skip.Value);
 
             if (searchData.Limit.HasValue)
-                queryString = "Limit=" + searchData.Limit.Value;
+                queryString.Add("Limit=" + searchData.Limit.Value);
 
             if (!string.IsNullOrWhiteSpace(searchData.Reference))
-                queryString = "Reference=" + HttpUtility.UrlEncode(searchData.Reference);
+                queryString.Add("Reference=" + HttpUtility.UrlEncode(searchData.Reference));
 
             if (!string.IsNullOrWhiteSpace(searchData.PaymentMethodId))
-                queryString = "PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId);
+                queryString.Add("PaymentMethodId=" + HttpUtility.UrlEncode(searchData.PaymentMethodId));
 
             if (searchData.AmountGreaterThan.HasValue)
-                queryString = "AmountGreaterThan=" +
-                              HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString());
+                queryString.Add("AmountGreaterThan=" +
+                                HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString()));
 
             if (searchData.AmountLessThan.HasValue)
-                queryString = "AmountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString());
+                queryString.Add("AmountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString()));
 
             if (!string.IsNullOrWhiteSpace(searchData.CustomerId))
-                queryString = "CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId);
+                queryString.Add("CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId));
 
             if (!string.IsNullOrWhiteSpace(searchData.Status))
-                queryString = "Status=" + HttpUtility.UrlEncode(searchData.Status);
+                queryString.Add("Status=" + HttpUtility.UrlEncode(searchData.Status));
 
             if (!string.IsNullOrWhiteSpace(searchData.ProviderId))
-                queryString = "ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId);
+                queryString.Add("ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId));
 
             if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
-                queryString = "PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType);
+                queryString.Add("PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType));
 
             if (!string.IsNullOrWhiteSpace(searchData.CardType))
-                queryString = "CardType=" + HttpUtility.UrlEncode(searchData.CardType);
+                queryString.Add("CardType=" + HttpUtility.UrlEncode(searchData.CardType));
 
             if (!string.IsNullOrWhiteSpace(searchData.Currency))
-                queryString = "Currency=" + HttpUtility.UrlEncode(searchData.Currency);
+                queryString.Add("Currency=" + HttpUtility.UrlEncode(searchData.Currency));
 
             if (!string.IsNullOrWhiteSpace(searchData.CardNumber))
-                queryString = "CardNumber=" + HttpUtility.UrlEncode(searchData.CardNumber);
+                queryString.Add("CardNumber=" + HttpUtility.UrlEncode(searchData.CardNumber));
 
             if (!string.IsNullOrWhiteSpace(searchData.Cardholder))
-                queryString = "Cardholder=" + HttpUtility.UrlEncode(searchData.Cardholder);
+                queryString.Add("Cardholder=" + HttpUtility.UrlEncode(searchData.Cardholder));
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" +
-                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedAfter=" +
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" +
-                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedBefore=" +
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
-                queryString = "SortBy=" + searchData.SortBy;
+                queryString.Add("SortBy=" + searchData.SortBy);
 
-            if (!string.IsNullOrEmpty(queryString))
-                queryString = "?" + queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
             
-            return queryString;
+            return result;
         }
     }
 }

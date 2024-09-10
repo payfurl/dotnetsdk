@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using payfurl.sdk.Helpers;
 using payfurl.sdk.Models;
@@ -122,41 +123,42 @@ namespace payfurl.sdk
         private static string BuildSearchQueryString(PaymentMethodSearch searchData)
         {
             // TODO: move into a shared class
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (searchData.Skip.HasValue)
-                queryString = "Skip=" + searchData.Skip.Value;
+                queryString.Add("Skip=" + searchData.Skip.Value);
 
             if (searchData.Limit.HasValue)
-                queryString = "Limit=" + searchData.Limit.Value;
+                queryString.Add("Limit=" + searchData.Limit.Value);
 
             if (!string.IsNullOrWhiteSpace(searchData.ProviderId))
-                queryString = "ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId);
+                queryString.Add("ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId));
 
             if (!string.IsNullOrWhiteSpace(searchData.CustomerId))
-                queryString = "CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId);
+                queryString.Add("CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId));
 
             if (!string.IsNullOrWhiteSpace(searchData.Search))
-                queryString = "Search=" + HttpUtility.UrlEncode(searchData.Search);
+                queryString.Add("Search=" + HttpUtility.UrlEncode(searchData.Search));
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" +
-                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedAfter=" +
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" +
-                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedBefore=" +
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
-                queryString = "PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType);
+                queryString.Add("PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
-                queryString = "SortBy=" + HttpUtility.UrlEncode(searchData.SortBy);
+                queryString.Add("SortBy=" + HttpUtility.UrlEncode(searchData.SortBy));
 
-            if (!string.IsNullOrEmpty(queryString))
-                queryString = "?" + queryString;
-
-            return queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
+            
+            return result;
         }
 
         public PaymentMethodData Delete(string paymentMethodId)
