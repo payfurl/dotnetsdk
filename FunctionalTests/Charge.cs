@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
@@ -329,11 +330,12 @@ namespace FunctionalTests
             var svc = new payfurl.sdk.Charge();
 
             var chargeData = GetChargeData();
+            chargeData.PaymentInformation.Cardholder = Guid.NewGuid().ToString("N");
             svc.CreateWithCard(chargeData);
 
             var result = svc.Search(new ChargeSearch
             {
-                Cardholder = CardRequestInformation.Cardholder,
+                Cardholder = chargeData.PaymentInformation.Cardholder,
                 CardNumber = CardRequestInformation.CardNumber.Substring(0, 4),
                 CardType = "VISA"
             });
