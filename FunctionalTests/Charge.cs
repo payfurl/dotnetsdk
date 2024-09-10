@@ -336,7 +336,7 @@ namespace FunctionalTests
             var result = svc.Search(new ChargeSearch
             {
                 Cardholder = chargeData.PaymentInformation.Cardholder,
-                CardNumber = CardRequestInformation.CardNumber.Substring(0, 4),
+                CardNumber = CardRequestInformation.CardNumber.Substring(0, 6),
                 CardType = "VISA"
             });
 
