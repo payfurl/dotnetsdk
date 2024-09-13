@@ -271,6 +271,21 @@ namespace FunctionalTests
             Assert.Equal(newExpiryDate, updateResult.Card.ExpiryDate);
             Assert.Equal(newCardholderName, updateResult.Card.Cardholder);
         }
+        
+        [Fact]
+        public void CreateWithToken()
+        {
+            var tokenData = new NewPaymentMethodToken
+            {
+                Token = GetPaymentToken()
+            };
+
+            var svc = new payfurl.sdk.PaymentMethod();
+            var result = svc.CreateWithToken(tokenData);
+
+            Assert.NotNull(result.PaymentMethodId);
+        }
+
 
         private NewPaymentMethodBankPayment GetPaymentMethodWithBankAccount()
         {
