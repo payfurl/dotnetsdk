@@ -150,6 +150,9 @@ namespace payfurl.sdk
 
             if (!string.IsNullOrWhiteSpace(searchData.PaymentType))
                 queryString.Add("PaymentType=" + HttpUtility.UrlEncode(searchData.PaymentType));
+            
+            if (!string.IsNullOrWhiteSpace(searchData.CardType))
+                queryString.Add("CardType=" + HttpUtility.UrlEncode(searchData.CardType));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString.Add("SortBy=" + HttpUtility.UrlEncode(searchData.SortBy));
@@ -182,6 +185,17 @@ namespace payfurl.sdk
             UpdatePaymentMethod updatePaymentMethod)
         {
             return await HttpWrapper.CallAsync<UpdatePaymentMethod, PaymentMethodData>("/payment_method/" + paymentMethodId, Method.PUT, updatePaymentMethod);
+        }
+
+        public PaymentMethodData CreateWithToken(NewPaymentMethodToken token)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewPaymentMethodToken, PaymentMethodData>("/payment_method/token", Method.POST, token));
+        }
+
+        public async Task<PaymentMethodData> CreateWithTokenAsync(NewPaymentMethodToken token)
+        {
+            return await HttpWrapper.CallAsync<NewPaymentMethodToken, PaymentMethodData>("/payment_method/token", Method.POST, token);
         }
     }
 }
