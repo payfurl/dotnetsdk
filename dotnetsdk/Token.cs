@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using payfurl.sdk.Helpers;
@@ -38,35 +39,36 @@ namespace payfurl.sdk
         private static string BuildSearchQueryString(TokenSearch searchData)
         {
             // TODO: move into a shared class to handle formatting
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (!string.IsNullOrWhiteSpace(searchData.ProviderId))
-                queryString = "ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId);
+                queryString.Add("ProviderId=" + HttpUtility.UrlEncode(searchData.ProviderId));
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "AddedAfter=" +
-                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedAfter=" +
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "AddedBefore=" +
-                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("AddedBefore=" +
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
-                queryString = "SortBy=" + searchData.SortBy;
+                queryString.Add("SortBy=" + searchData.SortBy);
 
             if (!string.IsNullOrWhiteSpace(searchData.Status))
-                queryString = "Status=" + HttpUtility.UrlEncode(searchData.Status);
+                queryString.Add("Status=" + HttpUtility.UrlEncode(searchData.Status));
 
             if (searchData.Skip.HasValue)
-                queryString = "Skip=" + searchData.Skip.Value;
+                queryString.Add("Skip=" + searchData.Skip.Value);
 
             if (searchData.Limit.HasValue)
-                queryString = "Limit=" + searchData.Limit.Value;
+                queryString.Add("Limit=" + searchData.Limit.Value);
 
-            if (!string.IsNullOrEmpty(queryString))
-                queryString = "?" + queryString;
-
-            return queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
+            
+            return result;
         }
     }
 }

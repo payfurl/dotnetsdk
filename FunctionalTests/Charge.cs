@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using Xunit;
@@ -322,5 +323,25 @@ namespace FunctionalTests
 
             Assert.Equal("AUTHORISE_CANCELLED", voidResult.Status);
         }
+        
+        [Fact]
+        public void SearchByCard()
+        {
+            var svc = new payfurl.sdk.Charge();
+
+            var chargeData = GetChargeData();
+            chargeData.PaymentInformation.Cardholder = Guid.NewGuid().ToString("N");
+            svc.CreateWithCard(chargeData);
+
+            var result = svc.Search(new ChargeSearch
+            {
+                Cardholder = chargeData.PaymentInformation.Cardholder,
+                CardNumber = CardRequestInformation.CardNumber.Substring(0, 6),
+                CardType = "VISA"
+            });
+
+            Assert.Equal(1, result.Count);
+        }
+
     }
 }

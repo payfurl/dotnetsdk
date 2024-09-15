@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using payfurl.sdk.Helpers;
@@ -60,29 +61,30 @@ namespace payfurl.sdk
 
         private static string BuildSearchQueryString(BatchSearch searchData)
         {
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (searchData.Skip.HasValue)
-                queryString = "skip=" + searchData.Skip.Value;
+                queryString.Add("skip=" + searchData.Skip.Value);
 
             if (searchData.Limit.HasValue)
-                queryString = "limit=" + searchData.Limit.Value;
+                queryString.Add("limit=" + searchData.Limit.Value);
 
             if (!string.IsNullOrWhiteSpace(searchData.Description))
-                queryString = "description=" + HttpUtility.UrlEncode(searchData.Description);
+                queryString.Add("description=" + HttpUtility.UrlEncode(searchData.Description));
 
             if (searchData.AddedAfter.HasValue)
-                queryString = "addedAfter=" +
-                              HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("addedAfter=" +
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
-                queryString = "addedBefore=" +
-                              HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss"));
+                queryString.Add("addedBefore=" +
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
 
-            if (!string.IsNullOrEmpty(queryString))
-                queryString = "?" + queryString;
-
-            return queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
+            
+            return result;
         }
     }
 }
