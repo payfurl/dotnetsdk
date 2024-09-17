@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,8 +81,12 @@ namespace payfurl.sdk.Tools
             {
                 RequestUri = new Uri(url),
                 Method = method,
-                Content = new StringContent(string.Empty, Encoding.UTF8, MediaType),
             };
+
+            if (httpMethod == Method.POST || httpMethod == Method.PUT)
+            {
+                httpRequest.Content = new StringContent(string.Empty, Encoding.UTF8, MediaType);
+            }
 
             httpRequest.Headers.Add("x-secretkey", Config.SecretKey);
             if (headers != null)
