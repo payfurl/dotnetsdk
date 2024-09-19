@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace payfurl.sdk.Models.Subscriptions
 {
@@ -14,5 +15,6 @@ namespace payfurl.sdk.Models.Subscriptions
         public SubscriptionEnd EndAfter { get; set; }
         public SubscriptionRetryPolicy Retry { get; set; }
         public WebhookConfig Webhook { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }
