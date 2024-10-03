@@ -9,11 +9,17 @@ namespace payfurl.sdk.Models
         public string CustomerId { get; set; }
         public string Reference { get; set; }
         public bool Capture { get; set; } = true;
+        public string Ip { get; set; } = null;
+        public Address Address { get; set; }
+        public Order Order { get; set; }
+        public string CustomerCode { get; set; }
+        public string InvoiceNumber { get; set; }
         public Initiator? Initiator {  get;  set; }
         public WebhookConfig Webhook { get; set; }
-        public Dictionary<string, string> Metadata { get; set; } = null;
+        public Dictionary<string, string> Metadata { get; set; }
         public string Descriptor { get; set; }
         public string ThreeDSNotificationUrl { get; set; }
+        public Geolocation Geolocation { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string FirstName { get; set; }

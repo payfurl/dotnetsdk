@@ -4,8 +4,6 @@ namespace payfurl.sdk.Models
 {
     public class NewChargeBankPayment
     {
-        public string Email { get; set; }
-        public string Phone { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
         public string ProviderId { get; set; }
@@ -19,10 +17,13 @@ namespace payfurl.sdk.Models
         public string InvoiceNumber { get; set; }
         public Initiator? Initiator {  get;  set; }
         public WebhookConfig Webhook { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
         public string Descriptor { get; set; }
         public string ThreeDSNotificationUrl { get; set; }
+        public Geolocation Geolocation { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
