@@ -135,7 +135,10 @@ public class Subscription : BaseTest
         
         var svc = new payfurl.sdk.Subscription();
         var subscription = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
-        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended);
+        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, new UpdateSubscriptionStatus()
+        {
+            Status = payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended
+        });
 
         Assert.NotNull(result);
         Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended, result.Status);
@@ -151,8 +154,14 @@ public class Subscription : BaseTest
         
         var svc = new payfurl.sdk.Subscription();
         var subscription = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
-        svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended);
-        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+        svc.UpdateSubscriptionStatus(subscription.SubscriptionId, new UpdateSubscriptionStatus()
+        {
+            Status = payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended
+        });
+        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, new UpdateSubscriptionStatus()
+        {
+            Status = payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active
+        });
 
         Assert.NotNull(result);
         Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active, result.Status);
