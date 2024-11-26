@@ -61,16 +61,16 @@ namespace payfurl.sdk
                 Method.GET, search));
         }
         
-        public Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionStatusAsync(string subscriptionId, Models.Subscriptions.Subscription.SubscriptionStatus status)
+        public Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionStatusAsync(string subscriptionId, UpdateSubscriptionStatus updateSubscriptionStatus)
         {
-            return HttpWrapper.CallAsync<Models.Subscriptions.Subscription.SubscriptionStatus, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}/status",
-                Method.PUT, status);
+            return HttpWrapper.CallAsync<UpdateSubscriptionStatus, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}/status",
+                Method.PUT, updateSubscriptionStatus);
         }
 
-        public payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscriptionStatus(string subscriptionId, Models.Subscriptions.Subscription.SubscriptionStatus status)
+        public payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscriptionStatus(string subscriptionId, UpdateSubscriptionStatus updateSubscriptionStatus)
         {
-            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<Models.Subscriptions.Subscription.SubscriptionStatus, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}/status",
-                Method.PUT, status));
+            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<UpdateSubscriptionStatus, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}/status",
+                Method.PUT, updateSubscriptionStatus));
         }
 
         private static string BuildSearchQueryString(SubscriptionSearch searchData)
