@@ -124,4 +124,37 @@ public class Subscription : BaseTest
         Assert.Equal(subscriptionList.Count, 1);
         Assert.Equal(subscriptionList.Subscriptions[0].SubscriptionId,subscription.SubscriptionId);
     }
+    
+    [Fact]
+    public void PauseSubscription()
+    {
+        
+        var svcPaymentMethod = new payfurl.sdk.PaymentMethod();
+        var newPaymentMethod = GetNewPaymentMethod(); 
+        var resultPaymentMethod = svcPaymentMethod.CreatePaymentMethodWithCard(newPaymentMethod);
+        
+        var svc = new payfurl.sdk.Subscription();
+        var subscription = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
+        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended);
+
+        Assert.NotNull(result);
+        Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended, result.Status);
+    }
+
+    [Fact]
+    public void ReactivateSubscription()
+    {
+        
+        var svcPaymentMethod = new payfurl.sdk.PaymentMethod();
+        var newPaymentMethod = GetNewPaymentMethod(); 
+        var resultPaymentMethod = svcPaymentMethod.CreatePaymentMethodWithCard(newPaymentMethod);
+        
+        var svc = new payfurl.sdk.Subscription();
+        var subscription = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
+        svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Suspended);
+        var result = svc.UpdateSubscriptionStatus(subscription.SubscriptionId, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+
+        Assert.NotNull(result);
+        Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active, result.Status);
+    }
 }
