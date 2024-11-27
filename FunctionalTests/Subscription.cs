@@ -124,4 +124,30 @@ public class Subscription : BaseTest
         Assert.Equal(subscriptionList.Count, 1);
         Assert.Equal(subscriptionList.Subscriptions[0].SubscriptionId,subscription.SubscriptionId);
     }
+    
+    [Fact]
+    public void UpdateSubscription()
+    {
+        
+        var svcPaymentMethod = new payfurl.sdk.PaymentMethod();
+        var newPaymentMethod = GetNewPaymentMethod(); 
+        newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+        var resultPaymentMethod = svcPaymentMethod.CreatePaymentMethodWithCard(newPaymentMethod);
+        
+        var svc = new payfurl.sdk.Subscription();
+        var result = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
+
+        Assert.Equal(100, result.Amount);
+        Assert.Equal("USD", result.Currency);
+        
+        result = svc.UpdateSubscription(result.SubscriptionId, new SubscriptionUpdate()
+        {
+            Amount = 200,
+            Currency = "AUD",
+        });
+        
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Amount);
+        Assert.Equal("AUD", result.Currency);
+    }
 }

@@ -61,6 +61,18 @@ namespace payfurl.sdk
                 Method.GET, search));
         }
         
+        public payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscription(string subscriptionId, SubscriptionUpdate subscriptionUpdate)
+        {
+            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<SubscriptionUpdate, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}",
+                Method.PUT, subscriptionUpdate));
+        }
+        
+        public Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionAsync(string subscriptionId, SubscriptionUpdate subscriptionUpdate)
+        {
+            return HttpWrapper.CallAsync<SubscriptionUpdate, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}",
+                Method.PUT, subscriptionUpdate);
+        }
+        
         private static string BuildSearchQueryString(SubscriptionSearch searchData)
         {
             var queryString = new List<string>();
