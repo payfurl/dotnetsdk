@@ -31,6 +31,8 @@ namespace payfurl.sdk.Models
         public VisaInstallmentsInfo VisaInstallments { get; set; }
         public string Descriptor { get; set; }
         public string ThreeDsRedirectUrl { get; set; } 
+        public string PaymentTokenId { get; set; }
+        public string SubscriptionId { get; set; }
 
         public class Refund
         {
