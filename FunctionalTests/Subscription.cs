@@ -149,6 +149,7 @@ public class Subscription : BaseTest
         Assert.NotNull(result);
         Assert.Equal(200, result.Amount);
         Assert.Equal("AUD", result.Currency);
+        Assert.Equal(1, result.Frequency);
         Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Day, result.Interval);
         Assert.Null(result.EndAfter);
         Assert.Null(result.Retry);
