@@ -47,7 +47,7 @@ public class Subscription : BaseTest
             PaymentMethodId = paymentMethodId,
             Amount = 100,
             Currency = "USD",
-            Interval = payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Month,
+            Interval = "Month",
             Frequency = 1
         };
     }
@@ -66,7 +66,7 @@ public class Subscription : BaseTest
 
         Assert.NotNull(result);
         Assert.Equal(result.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(result.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+        Assert.Equal("Active", result.Status);
     }
     
     [Fact]
@@ -84,7 +84,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(resultSubscription.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+        Assert.Equal("Active", resultSubscription.Status);
     }
     
     [Fact]
@@ -102,7 +102,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(resultSubscription.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Cancelled);
+        Assert.Equal("Cancelled", resultSubscription.Status);
     }
     
     [Fact]
@@ -150,7 +150,7 @@ public class Subscription : BaseTest
         Assert.Equal(200, result.Amount);
         Assert.Equal("AUD", result.Currency);
         Assert.Equal(1, result.Frequency);
-        Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Day, result.Interval);
+        Assert.Equal("Day", result.Interval);
         Assert.Null(result.EndAfter);
         Assert.Null(result.Retry);
         Assert.Null(result.Webhook);
