@@ -22,7 +22,8 @@ namespace payfurl.sdk.Models.Subscriptions
         {
             Complete,
             Active,
-            Cancelled
+            Cancelled,
+            Suspended
         }
 
         public enum SubscriptionInterval
