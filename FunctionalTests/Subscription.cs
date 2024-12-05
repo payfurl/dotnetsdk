@@ -65,7 +65,7 @@ public class Subscription : BaseTest
 
         Assert.NotNull(result);
         Assert.Equal(result.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal("Active", result.Status);
+        Assert.Equal(SubscriptionStatus.Active.ToString(), result.Status);
     }
     
     [Fact]
@@ -83,7 +83,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal("Active", resultSubscription.Status);
+        Assert.Equal(SubscriptionStatus.Active.ToString(), resultSubscription.Status);
     }
     
     [Fact]
