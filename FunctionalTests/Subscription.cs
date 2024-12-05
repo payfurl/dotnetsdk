@@ -101,7 +101,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal("Cancelled", resultSubscription.Status);
+        Assert.Equal(SubscriptionStatus.Cancelled.ToString(), resultSubscription.Status);
     }
     
     [Fact]
