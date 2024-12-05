@@ -36,7 +36,7 @@ public class Subscription : BaseTest
             {
                 Maximum = 3,
                 Frequency = 1,
-                Interval = SubscriptionRetryPolicy.SubscriptionRetryInterval.Day
+                Interval = SubscriptionRetryInterval.Day
             },
             Webhook = new WebhookConfig()
             {
@@ -46,7 +46,7 @@ public class Subscription : BaseTest
             PaymentMethodId = paymentMethodId,
             Amount = 100,
             Currency = "USD",
-            Interval = "Month",
+            Interval = SubscriptionInterval.Month,
             Frequency = 1
         };
     }
@@ -153,7 +153,7 @@ public class Subscription : BaseTest
         Assert.Equal(200, result.Amount);
         Assert.Equal("AUD", result.Currency);
         Assert.Equal(1, result.Frequency);
-        Assert.Equal("Day", result.Interval);
+        Assert.Equal(SubscriptionInterval.Day.ToString(), result.Interval);
         Assert.Null(result.EndAfter);
         Assert.Null(result.Retry);
         Assert.Null(result.Webhook);

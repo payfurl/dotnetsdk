@@ -9,7 +9,7 @@ namespace payfurl.sdk.Models.Subscriptions
         public string PaymentMethodId { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
-        public string Interval { get; set; }
+        public SubscriptionInterval Interval { get; set; }
         public int? Frequency { get; set; }
         public DateTime? StartDate { get; set; }
         public SubscriptionEnd EndAfter { get; set; }
