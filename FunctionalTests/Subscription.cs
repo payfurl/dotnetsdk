@@ -153,7 +153,7 @@ public class Subscription : BaseTest
         Assert.Equal(200, result.Amount);
         Assert.Equal("AUD", result.Currency);
         Assert.Equal(1, result.Frequency);
-        Assert.Equal(SubscriptionInterval.Day.ToString(), result.Interval);
+        Assert.Equal(SubscriptionInterval.Day, result.Interval);
         Assert.Null(result.EndAfter);
         Assert.Null(result.Retry);
         Assert.Null(result.Webhook);
