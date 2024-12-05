@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using payfurl.sdk.Models;
-using payfurl.sdk.Models.Batch;
 using payfurl.sdk.Models.Subscriptions;
 using Xunit;
 
@@ -116,13 +115,17 @@ public class Subscription : BaseTest
         var svc = new payfurl.sdk.Subscription();
         var newSubscription = GetNewSubscription(resultPaymentMethod.PaymentMethodId);
         newSubscription.Amount = 200;
+        var subscriptionListBefore = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
         var subscription = svc.CreateSubscription(newSubscription);
         
-        var subscriptionList = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
+        var subscriptionListAfter = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
         
-        Assert.NotNull(subscriptionList);
-        Assert.Equal(subscriptionList.Count, 1);
-        Assert.Equal(subscriptionList.Subscriptions[0].SubscriptionId,subscription.SubscriptionId);
+        Assert.NotNull(subscriptionListAfter);
+        // The more we run this test, the bigger count is - we need compare before/after count of subscriptions
+        Assert.Equal(subscriptionListAfter.Count, subscriptionListBefore.Count + 1);
+        Assert.Equal(subscriptionListAfter.Subscriptions.FirstOrDefault(
+            x => x.SubscriptionId == subscription.SubscriptionId)?.SubscriptionId, subscription.SubscriptionId);
+        
     }
     
     [Fact]
