@@ -16,7 +16,7 @@ namespace payfurl.sdk.Models.Subscriptions
         public SubscriptionEnd EndAfter { get; set; }
         public SubscriptionRetryPolicy Retry { get; set; }
         public WebhookConfig Webhook { get; set; }
-        public string Status { get; set; }
+        public SubscriptionStatus Status { get; set; }
 
     }
 }
