@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using payfurl.sdk.Models;
-using payfurl.sdk.Models.Batch;
 using payfurl.sdk.Models.Subscriptions;
 using Xunit;
 
@@ -37,7 +36,7 @@ public class Subscription : BaseTest
             {
                 Maximum = 3,
                 Frequency = 1,
-                Interval = SubscriptionRetryPolicy.SubscriptionRetryInterval.Day
+                Interval = SubscriptionRetryInterval.Day
             },
             Webhook = new WebhookConfig()
             {
@@ -47,7 +46,7 @@ public class Subscription : BaseTest
             PaymentMethodId = paymentMethodId,
             Amount = 100,
             Currency = "USD",
-            Interval = payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Month,
+            Interval = SubscriptionInterval.Month,
             Frequency = 1
         };
     }
@@ -66,7 +65,7 @@ public class Subscription : BaseTest
 
         Assert.NotNull(result);
         Assert.Equal(result.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(result.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+        Assert.Equal(SubscriptionStatus.Active, result.Status);
     }
     
     [Fact]
@@ -84,7 +83,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(resultSubscription.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Active);
+        Assert.Equal(SubscriptionStatus.Active, resultSubscription.Status);
     }
     
     [Fact]
@@ -102,7 +101,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(resultSubscription);
         Assert.Equal(resultSubscription.PaymentMethodId, resultPaymentMethod.PaymentMethodId);
-        Assert.Equal(resultSubscription.Status, payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionStatus.Cancelled);
+        Assert.Equal(SubscriptionStatus.Cancelled, resultSubscription.Status);
     }
     
     [Fact]
@@ -116,12 +115,47 @@ public class Subscription : BaseTest
         var svc = new payfurl.sdk.Subscription();
         var newSubscription = GetNewSubscription(resultPaymentMethod.PaymentMethodId);
         newSubscription.Amount = 200;
+        var subscriptionListBefore = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
         var subscription = svc.CreateSubscription(newSubscription);
         
-        var subscriptionList = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
+        var subscriptionListAfter = svc.SearchSubscription(new SubscriptionSearch(){ AmountGreaterThan = 150});
         
-        Assert.NotNull(subscriptionList);
-        Assert.Equal(subscriptionList.Count, 1);
-        Assert.Equal(subscriptionList.Subscriptions[0].SubscriptionId,subscription.SubscriptionId);
+        Assert.NotNull(subscriptionListAfter);
+        // The more we run this test, the bigger count is - we need compare before/after count of subscriptions
+        Assert.Equal(subscriptionListAfter.Count, subscriptionListBefore.Count + 1);
+        Assert.Equal(subscriptionListAfter.Subscriptions.FirstOrDefault(
+            x => x.SubscriptionId == subscription.SubscriptionId)?.SubscriptionId, subscription.SubscriptionId);
+        
+    }
+    
+    [Fact]
+    public void UpdateSubscription()
+    {
+        
+        var svcPaymentMethod = new payfurl.sdk.PaymentMethod();
+        var newPaymentMethod = GetNewPaymentMethod(); 
+        newPaymentMethod.Metadata = new Dictionary<string, string>{ { "merchant_id", "value1" } };
+        var resultPaymentMethod = svcPaymentMethod.CreatePaymentMethodWithCard(newPaymentMethod);
+        
+        var svc = new payfurl.sdk.Subscription();
+        var result = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
+
+        Assert.Equal(100, result.Amount);
+        Assert.Equal("USD", result.Currency);
+        
+        result = svc.UpdateSubscription(result.SubscriptionId, new SubscriptionUpdate()
+        {
+            Amount = 200,
+            Currency = "AUD",
+        });
+        
+        Assert.NotNull(result);
+        Assert.Equal(200, result.Amount);
+        Assert.Equal("AUD", result.Currency);
+        Assert.Equal(1, result.Frequency);
+        Assert.Equal(SubscriptionInterval.Day, result.Interval);
+        Assert.Null(result.EndAfter);
+        Assert.Null(result.Retry);
+        Assert.Null(result.Webhook);
     }
 }
