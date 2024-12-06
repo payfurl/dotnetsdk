@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using payfurl.sdk.Tools;
 
 namespace payfurl.sdk.Models.Subscriptions
 {
@@ -9,7 +11,8 @@ namespace payfurl.sdk.Models.Subscriptions
         public string PaymentMethodId { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; }
-        public SubscriptionInterval Interval { get; set; }
+        [JsonConverter(typeof(EnumToStringConverter<Subscription.SubscriptionInterval>))]
+        public Subscription.SubscriptionInterval Interval { get; set; }
         public int? Frequency { get; set; }
         public DateTime? StartDate { get; set; }
         public SubscriptionEnd EndAfter { get; set; }
