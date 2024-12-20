@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using payfurl.sdk.Tools;
 
 namespace payfurl.sdk.Models
 {
@@ -6,6 +8,7 @@ namespace payfurl.sdk.Models
     {
         public string Url { get; set; }
         public string Authorization { get; set; }
-        public List<string> Types { get; set; }
+        [JsonConverter(typeof(ListEnumCamelCaseConverter<WebhookType>))]
+        public List<WebhookType> Types { get; set; }
     }
 }
