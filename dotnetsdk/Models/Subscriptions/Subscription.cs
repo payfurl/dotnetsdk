@@ -22,5 +22,20 @@ namespace payfurl.sdk.Models.Subscriptions
         [JsonConverter(typeof(EnumToStringConverter<SubscriptionStatus>))]
         public SubscriptionStatus Status { get; set; }
 
+        public enum SubscriptionStatus
+        {
+            Complete,
+            Active,
+            Cancelled,
+            Suspended
+        }
+
+        public enum SubscriptionInterval
+        {
+            Day,
+            Week,
+            Month,
+            Year
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace payfurl.sdk
         payfurl.sdk.Models.Subscriptions.Subscription DeleteSubscription(string subscriptionId);
         Task<SubscriptionList> SearchSubscriptionAsync(SubscriptionSearch search);
         SubscriptionList SearchSubscription(SubscriptionSearch search);
+        Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionStatusAsync(string subscriptionId, UpdateSubscriptionStatus updateSubscriptionStatus);
+        payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscriptionStatus(string subscriptionId, UpdateSubscriptionStatus updateSubscriptionStatus);
         payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscription(string subscriptionId,
             SubscriptionUpdate subscriptionUpdate);
         Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionAsync(string subscriptionId,
