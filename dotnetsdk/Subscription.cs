@@ -73,6 +73,18 @@ namespace payfurl.sdk
                 Method.PUT, updateSubscriptionStatus));
         }
 
+        public payfurl.sdk.Models.Subscriptions.Subscription UpdateSubscription(string subscriptionId, SubscriptionUpdate subscriptionUpdate)
+        {
+            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<SubscriptionUpdate, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}",
+                Method.PUT, subscriptionUpdate));
+        }
+        
+        public Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionAsync(string subscriptionId, SubscriptionUpdate subscriptionUpdate)
+        {
+            return HttpWrapper.CallAsync<SubscriptionUpdate, payfurl.sdk.Models.Subscriptions.Subscription>($"/subscription/{subscriptionId}",
+                Method.PUT, subscriptionUpdate);
+        }
+        
         private static string BuildSearchQueryString(SubscriptionSearch searchData)
         {
             var queryString = new List<string>();
@@ -101,8 +113,8 @@ namespace payfurl.sdk
             if (!string.IsNullOrWhiteSpace(searchData.Status))
                 queryString.Add("status=" + HttpUtility.UrlEncode(searchData.Status));
             
-            if (!string.IsNullOrWhiteSpace(searchData.Status))
-                queryString.Add("sortBy=" + HttpUtility.UrlEncode(searchData.SortBy));
+            if (searchData.Sort != SubscriptionSearch.SortBy.None)
+                queryString.Add("sortBy=" + HttpUtility.UrlEncode(searchData.Sort.ToString()));
             
             if (!string.IsNullOrWhiteSpace(searchData.Currency))
                 queryString.Add("currency=" + HttpUtility.UrlEncode(searchData.Currency));
