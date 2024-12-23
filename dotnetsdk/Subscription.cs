@@ -101,8 +101,8 @@ namespace payfurl.sdk
             if (!string.IsNullOrWhiteSpace(searchData.Status))
                 queryString.Add("status=" + HttpUtility.UrlEncode(searchData.Status));
             
-            if (!string.IsNullOrWhiteSpace(searchData.Status))
-                queryString.Add("sortBy=" + HttpUtility.UrlEncode(searchData.SortBy));
+            if (searchData.Sort != SubscriptionSearch.SortBy.None)
+                queryString.Add("sortBy=" + HttpUtility.UrlEncode(searchData.Sort.ToString()));
             
             if (!string.IsNullOrWhiteSpace(searchData.Currency))
                 queryString.Add("currency=" + HttpUtility.UrlEncode(searchData.Currency));

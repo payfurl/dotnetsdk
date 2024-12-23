@@ -10,8 +10,16 @@ namespace payfurl.sdk.Models.Subscriptions
         public DateTime? AddedBefore {get;set;}
         public string Currency {get;set;}
         public string Status {get;set;}
-        public string SortBy {get;set;}
+        public SortBy Sort {get;set;}
         public int? Limit {get;set;}
         public int? Skip {get;set;}
+
+        public enum SortBy
+        {
+            None,
+            Date,
+            Status,
+            Currency,
+        }
     }
 }

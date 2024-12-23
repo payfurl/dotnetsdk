@@ -147,6 +147,7 @@ public class Subscription : BaseTest
         {
             Amount = 200,
             Currency = "AUD",
+            Frequency = 1,
         });
         
         Assert.NotNull(result);
