@@ -22,7 +22,6 @@ namespace payfurl.sdk.Models.Subscriptions
         [JsonConverter(typeof(EnumToStringConverter<SubscriptionStatus>))]
         public SubscriptionStatus Status { get; set; }
 
-<<<<<<< HEAD
         public enum SubscriptionStatus
         {
             Complete,
@@ -38,7 +37,5 @@ namespace payfurl.sdk.Models.Subscriptions
             Month,
             Year
         }
-=======
->>>>>>> master
     }
 }
