@@ -17,7 +17,7 @@ public class WebhookSubscription
         return _service.CreateWebhookSubscription(new NewWebhookSubscription
         {
             Url = "https://webhook.site",
-            Types = ["Transaction"],
+            Types = [WebhookType.Transaction],
         });
     }
     
