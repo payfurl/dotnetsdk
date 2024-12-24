@@ -16,5 +16,6 @@ namespace payfurl.sdk.Models
         public string Email { get; set; }
         public string ProviderPaymentMethodId { get; set; }
         public Dictionary<string,string> ProviderPaymentMethodData { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }
