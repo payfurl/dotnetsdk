@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using payfurl.sdk.Tools;
 
@@ -21,6 +22,7 @@ namespace payfurl.sdk.Models.Subscriptions
         public WebhookConfig Webhook { get; set; }
         [JsonConverter(typeof(EnumToStringConverter<SubscriptionStatus>))]
         public SubscriptionStatus Status { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
 
         public enum SubscriptionStatus
         {

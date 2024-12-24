@@ -33,6 +33,7 @@ namespace payfurl.sdk.Models
         public string ThreeDsRedirectUrl { get; set; } 
         public string PaymentTokenId { get; set; }
         public string SubscriptionId { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
 
         public class Refund
         {
