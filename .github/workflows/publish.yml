@@ -1,0 +1,57 @@
+name: Publish NuGet Package
+
+on: [workflow_dispatch]
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Start publishing Payfurl NuGet package
+        run: |
+          copy .\workflow\templates\dotnetsdk.csproj.payfurl .\dotnetsdk\dotnetsdk.csproj
+          copy .\workflow\templates\README.md.payfurl .\README.md
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Payfurl NuGet package
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack Payfurl NuGet package
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
+
+      - name: Publish Payfurl NuGet package
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        
+      - name: Start publishing Xpanse NuGet package
+        run: |
+          del .\nupkg\*.nupkg
+          copy .\workflow\templates\dotnetsdk.csproj.xpanse .\dotnetsdk\dotnetsdk.csproj
+          copy .\workflow\templates\README.md.xpanse .\README.md
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build Xpanse NuGet package
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack Xpanse NuGet package
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
+
+      - name: Publish Xpanse NuGet package
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        
+        

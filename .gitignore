@@ -355,3 +355,4 @@ MigrationBackup/
 .idea/
 
 /FunctionalTests/appsettings.json
+nupkg/
