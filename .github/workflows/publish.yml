@@ -18,13 +18,13 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build Payfurl NuGet package
+      - name: Build NuGet package
         run: dotnet build --configuration Release --no-restore
 
-      - name: Pack Payfurl NuGet package
+      - name: Pack NuGet package
         run: dotnet pack --configuration Release --no-build --output ./nupkg
 
-      - name: Publish Payfurl NuGet package
+      - name: Publish NuGet package
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./nupkg/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
