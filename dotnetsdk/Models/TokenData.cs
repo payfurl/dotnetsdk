@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace payfurl.sdk.Models
 {
@@ -12,5 +13,6 @@ namespace payfurl.sdk.Models
         public DateTime DateAdded { get; set; }
         public DateTime? DateUsed { get; set; }
         public string PayToStatus { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
-    }
+}

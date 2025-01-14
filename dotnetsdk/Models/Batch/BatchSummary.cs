@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace payfurl.sdk.Models.Batch
 {
@@ -10,5 +11,6 @@ namespace payfurl.sdk.Models.Batch
         public string Status { get; set; } 
         public decimal Progress { get; set; } 
         public DateTime DateAdded { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
     }
 }
