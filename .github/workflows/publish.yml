@@ -22,13 +22,13 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ${{ github.workspace }}/nupkg
+        run: dotnet pack --configuration Release --no-build --output ${{ github.workspace }}\nupkg
 
       - name: logging
         run: dotnet nuget push --help
 
       - name: Publish NuGet package
-        run: dotnet nuget push "${{ github.workspace }}/nupkg/*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push "${{ github.workspace }}\nupkg\*.nupkg" --api-key "${{ secrets.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json
 
       - name: Restore dependencies
         run: dotnet restore
