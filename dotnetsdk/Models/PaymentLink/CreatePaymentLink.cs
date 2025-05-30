@@ -12,5 +12,7 @@ namespace payfurl.sdk.Models.PaymentLink
         public string Image { get; set; }
         public string ConfirmationMessage { get; set; }
         public string RedirectUrl { get; set; }
+        public string CallToAction { get; set; }
+        public int? LimitPayments { get; set; }
     }
 }
