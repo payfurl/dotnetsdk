@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using payfurl.sdk.Helpers;
 using payfurl.sdk.Models;
+using payfurl.sdk.Models.Token;
 using payfurl.sdk.Tools;
 
 namespace payfurl.sdk
@@ -34,6 +35,45 @@ namespace payfurl.sdk
             var queryString = BuildSearchQueryString(searchData);
 
             return await HttpWrapper.CallAsync<string, TokenDataList>("/token" + queryString, Method.GET, null);
+        }
+
+        public TokenData TokenisePaymentMethod(NewTokenPaymentMethod newTokenPaymentMethod)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewTokenPaymentMethod, TokenData>("/token/payment_method", Method.POST, newTokenPaymentMethod));
+        }
+        
+        public async Task<TokenData> TokenisePaymentMethodAsync(NewTokenPaymentMethod newTokenPaymentMethod)
+        {
+            return await HttpWrapper.CallAsync<NewTokenPaymentMethod, TokenData>("/token/payment_method", Method.POST, newTokenPaymentMethod);
+        }
+        
+        public TokenData TokeniseCard(NewTokenCard newTokenCard)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewTokenCard, TokenData>("/token/card", Method.POST, newTokenCard, new Dictionary<string, string> 
+                {
+                    { "ProviderId", newTokenCard.ProviderId }
+                }));
+        }
+        
+        public async Task<TokenData> TokeniseCardAsync(NewTokenCard newTokenCard)
+        {
+            return await HttpWrapper.CallAsync<NewTokenCard, TokenData>("/token/card", Method.POST, newTokenCard, new Dictionary<string, string>
+            {
+                { "ProviderId", newTokenCard.ProviderId }
+            });
+        }
+        
+        public TokenData TokeniseCardLeastCost(NewTokenCard newTokenCardLeastCost)
+        {
+            return AsyncHelper.RunSync(() =>
+                HttpWrapper.CallAsync<NewTokenCard, TokenData>("/token/card/least_cost", Method.POST, newTokenCardLeastCost));
+        }
+        
+        public async Task<TokenData> TokeniseCardLeastCostAsync(NewTokenCard newTokenCardLeastCost)
+        {
+            return await HttpWrapper.CallAsync<NewTokenCard, TokenData>("/token/card/least_cost", Method.POST, newTokenCardLeastCost);
         }
 
         private static string BuildSearchQueryString(TokenSearch searchData)

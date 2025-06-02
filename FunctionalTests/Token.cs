@@ -1,9 +1,7 @@
-﻿using payfurl.sdk;
-using payfurl.sdk.Models;
+﻿using payfurl.sdk.Models;
 using System.Threading.Tasks;
+using payfurl.sdk.Models.Token;
 using Xunit;
-using Xunit.Abstractions;
-using Environment = payfurl.sdk.Environment;
 
 namespace FunctionalTests
 {
@@ -57,6 +55,68 @@ namespace FunctionalTests
             var tokenList = await svc.SearchAsync(tokenSearch);
 
             Assert.Equal(tokenSearch.Limit, tokenList.Limit);
+        }
+        
+        [Fact]
+        public void TokenisePaymentMethod()
+        {
+            var paymentMethodService = new payfurl.sdk.PaymentMethod();
+            var newPaymentMethod = new NewPaymentMethodCard
+            {
+                ProviderId = GetProviderId(),
+                PaymentInformation = GetPaymentInformation()
+            }; 
+            var paymentMethod = paymentMethodService.CreatePaymentMethodWithCard(newPaymentMethod);
+            Assert.NotNull(paymentMethod.PaymentMethodId);
+
+            var svc = new payfurl.sdk.Token();
+            var newTokenPaymentMethod = new NewTokenPaymentMethod
+            {
+                PaymentMethodId = paymentMethod.PaymentMethodId,
+            };
+
+            var tokenData = svc.TokenisePaymentMethod(newTokenPaymentMethod);
+
+            Assert.NotNull(tokenData.TokenId);
+        }
+
+        [Fact]
+        public void TokeniseCard()
+        {
+            var svc = new payfurl.sdk.Token();
+            var newTokenCard = new NewTokenCard
+            {
+                ProviderId = GetProviderId(),
+                PaymentInformation = GetPaymentInformation()
+            };
+
+            var tokenData = svc.TokeniseCard(newTokenCard);
+
+            Assert.NotNull(tokenData.TokenId);
+        }
+        
+        [Fact]
+        public void TokeniseCardLeastCost()
+        {
+            var svc = new payfurl.sdk.Token();
+            var newTokenCard = new NewTokenCard
+            {
+                PaymentInformation = GetPaymentInformation(),
+            };
+
+            var tokenData = svc.TokeniseCardLeastCost(newTokenCard);
+
+            Assert.NotNull(tokenData.TokenId);
+        }
+        
+        private static CardRequestInformation GetPaymentInformation()
+        {
+            return new CardRequestInformation
+            {
+                CardNumber = "4111111111111111",
+                ExpiryDate = "12/35",
+                Ccv = "123"
+            };
         }
     }
 }
