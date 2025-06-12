@@ -15,8 +15,12 @@ namespace payfurl.sdk.Models
         public DateTime DateAdded { get; set; }
         public string Email { get; set; }
         public string VaultId { get; set; }
+        public DateTime? DateRemoved { get; set; }
         public string ProviderPaymentMethodId { get; set; }
         public Dictionary<string,string> ProviderPaymentMethodData { get; set; }
-        public Dictionary<string, string> Metadata { get; set; }
+        public string Token { get; set; }
+        public string FallbackPaymentMethodId { get; set; }
+        public Dictionary<string,string> Metadata { get; set; }
+        public string NetworkTokenId { get; set; }
     }
 }
