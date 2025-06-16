@@ -42,4 +42,5 @@ public class PaymentLink : BaseTest
             Amount = 1000,
             Currency = "USD",
         };
+    }
 }
