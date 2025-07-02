@@ -5,6 +5,7 @@ namespace payfurl.sdk.Models.PaymentLink
 {
     public class PaymentLinkData
     {
+        public string Url { get; set; }
         public string PaymentLinkId { get; set; }
         public DateTime DateAdded { get; set; }
         public string AccountId { get; set; }
