@@ -41,6 +41,7 @@ public class PaymentLink : BaseTest
             Title = "Test Payment Link",
             Amount = 1000,
             Currency = "USD",
+            Image = payfurl.sdk.Models.PaymentLink.CreatePaymentLink.EncodeImage("./100x50.png"),
         };
     }
 }
