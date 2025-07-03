@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using payfurl.sdk.Models.PaymentLink;
 using Xunit;
@@ -41,7 +42,7 @@ public class PaymentLink : BaseTest
             Title = "Test Payment Link",
             Amount = 1000,
             Currency = "USD",
-            Image = payfurl.sdk.Models.PaymentLink.CreatePaymentLink.EncodeImage("./100x50.png"),
+            Image = payfurl.sdk.Models.PaymentLink.CreatePaymentLink.EncodeImage(Path.GetFullPath("./100x50.png", Directory.GetCurrentDirectory())),
         };
     }
 }
