@@ -3,11 +3,11 @@
   <PropertyGroup>
     <RootNamespace>payfurl.sdk</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.11</Version>
+    <Version>2.1.12</Version>
     <Authors>Payfurl</Authors>
     <Description>.Net SDK for Payfurl - making it easy to use any payment provider</Description>
-    <PackageReleaseNotes>2.1.11 Added Payment Links Support</PackageReleaseNotes>
-    <Copyright>Copyright 2024</Copyright>
+    <PackageReleaseNotes>2.1.12 Expanded Payment Links support</PackageReleaseNotes>
+    <Copyright>Copyright 2025</Copyright>
     <PackageId>PayfurlSdk</PackageId>
     <Product>PayfurlSdk</Product>
     <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.2;net451;net48</TargetFrameworks>
