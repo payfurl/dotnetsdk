@@ -15,6 +15,7 @@ namespace payfurl.sdk.Models.PaymentLink
         public string RedirectUrl { get; set; }
         public CallToAction? CallToAction { get; set; }
         public int? LimitPayments { get; set; }
+        public Dictionary<string, string> Metadata { get; set; }
         
         public static string EncodeImage(string filePath)
         {
