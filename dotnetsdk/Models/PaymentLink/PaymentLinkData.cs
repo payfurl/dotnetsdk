@@ -9,10 +9,9 @@ namespace payfurl.sdk.Models.PaymentLink
         public string PaymentLinkId { get; set; }
         public DateTime DateAdded { get; set; }
         public string AccountId { get; set; }
-        public string SecretKey { get; set; }
         public string PublicKey { get; set; }
         public string Title { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public string Currency { get; set; }
         public List<string> AllowedPaymentTypes { get; set; }
         public string Description { get; set; }

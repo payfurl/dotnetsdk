@@ -13,7 +13,7 @@ namespace payfurl.sdk.Models.Subscriptions
         public string Currency { get; set; }
         [JsonConverter(typeof(EnumToStringConverter<SubscriptionInterval>))]
         public SubscriptionInterval Interval { get; set; }
-        public int? Frequency { get; set; }
+        public int Frequency { get; set; }
         public DateTime? StartDate { get; set; }
         public SubscriptionEnd EndAfter { get; set; }
         public SubscriptionRetryPolicy Retry { get; set; }

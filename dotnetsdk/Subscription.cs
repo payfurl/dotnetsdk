@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Web;
 using payfurl.sdk.Helpers;
@@ -49,16 +50,16 @@ namespace payfurl.sdk
         {
             var queryString = BuildSearchQueryString(search);
             
-            return HttpWrapper.CallAsync<SubscriptionSearch, SubscriptionList>("/subscription" + queryString,
-                Method.GET, search);
+            return HttpWrapper.CallAsync<string, SubscriptionList>("/subscription" + queryString,
+                Method.GET, null);
         }
 
         public SubscriptionList SearchSubscription(SubscriptionSearch search)
         {
             var queryString = BuildSearchQueryString(search);
             
-            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<SubscriptionSearch, SubscriptionList>("/subscription" + queryString,
-                Method.GET, search));
+            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<string, SubscriptionList>("/subscription" + queryString,
+                Method.GET, null));
         }
         
         public Task<payfurl.sdk.Models.Subscriptions.Subscription> UpdateSubscriptionStatusAsync(string subscriptionId, UpdateSubscriptionStatus updateSubscriptionStatus)
@@ -91,10 +92,10 @@ namespace payfurl.sdk
 
             if (searchData.AmountGreaterThan.HasValue)
                 queryString.Add("amountGreaterThan=" +
-                                HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString()));
+                                HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString(CultureInfo.InvariantCulture)));
 
             if (searchData.AmountLessThan.HasValue)
-                queryString.Add("amountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString()));
+                queryString.Add("amountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString(CultureInfo.InvariantCulture)));
             
             if (searchData.Skip.HasValue)
                 queryString.Add("skip=" + searchData.Skip.Value);
@@ -104,11 +105,11 @@ namespace payfurl.sdk
 
             if (searchData.AddedAfter.HasValue)
                 queryString.Add("addedAfter=" +
-                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
                 queryString.Add("addedBefore=" +
-                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
             if (!string.IsNullOrWhiteSpace(searchData.Status))
                 queryString.Add("status=" + HttpUtility.UrlEncode(searchData.Status));

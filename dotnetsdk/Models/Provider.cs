@@ -9,6 +9,7 @@ namespace payfurl.sdk.Models
         public string Name { get; set; }
         public string Environment { get; set; }
         public Dictionary<string, string> AuthenticationParameters { get; set; }
+        public Dictionary<string, string> AdditionalParameters { get; set; }
         public string ProviderCountry { get;set; }
         public List<ProviderCostData> CostData { get; set; }
         public List<ProviderVisiblityData> HideConfiguration { get; set; }
@@ -18,6 +19,7 @@ namespace payfurl.sdk.Models
         public string MaxCapability { get; set; }
         public bool HasPartialRefund { get; set; }
         public ProviderInfo FallbackProvider { get; set; }
+        public bool HasThreeDsCapability { get; set; }
 
 
         public class ProviderCostData
