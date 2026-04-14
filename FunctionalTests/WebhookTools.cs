@@ -8,9 +8,9 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests
 {
-    public class WebhookTools : BaseTest
+    public class WebhookTools
     {
-        [Fact]
+        [global::Xunit.Fact]
         public async Task DeserializeWebhookTransactionWithValidSignature()
         {
             const string webhookSignatureKey = "dCM6l9ngZMJXVappk73yS607k1K7byfyzTTdToaKMa8=";
@@ -28,7 +28,7 @@ namespace FunctionalTests
             Assert.Equal(typeof(WebhookTransaction), transaction.GetType());
         }
 
-        [Fact]
+        [global::Xunit.Fact]
         public void DeserializeWebhookTransactionWithInvalidSignature()
         {
             const string webhookSignatureKey = "dCM6l9ngZMJXVappk73yS607k1K7byfyzTTdToaKMa8=";

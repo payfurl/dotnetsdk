@@ -3,7 +3,7 @@ using Xunit;
 
 namespace FunctionalTests;
 
-public class WebhookSubscription
+public class WebhookSubscription : BaseTest
 {
     private readonly payfurl.sdk.WebhookSubscription _service;
 
