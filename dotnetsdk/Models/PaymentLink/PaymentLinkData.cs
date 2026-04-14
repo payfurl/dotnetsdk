@@ -21,6 +21,8 @@ namespace payfurl.sdk.Models.PaymentLink
         public string RedirectUrl { get; set; }
         public string CallToAction { get; set; }
         public int? LimitPayments { get; set; }
+        public int CountPayments { get; set; }
+        public string InvoiceId { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
     }
 }

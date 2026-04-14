@@ -19,9 +19,14 @@ namespace payfurl.sdk.Models
         public List<FraudOptions> FraudProviders { get; set; }
         public bool HasThreeDsProviders { get; set; }
         public List<ThreeDsOptions> ThreeDsProviders { get; set; }
+        public List<ThreeDsOptions> AllThreeDsProviders { get; set; }
         public bool HasGooglePayProviders { get; set; }
         public List<GooglePayProviderInfo> GooglePayProviders { get; set; }
+        public bool HasApplePayProviders { get; set; }
+        public List<ApplePayProviderInfo> ApplePayProviders { get; set; }
         public bool ClickToPayEnabled { get; set; }
         public ClickToPayOptions ClickToPayOptions { get; set; }
+        public bool HasNetworkTokenProviders { get; set; }
+        public List<NetworkTokenProviderInfo> NetworkTokenProviders { get; set; }
     }
 }
