@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using payfurl.sdk.Models;
@@ -126,6 +127,34 @@ public class Subscription : BaseTest
         Assert.Equal(subscriptionListAfter.Subscriptions.FirstOrDefault(
             x => x.SubscriptionId == subscription.SubscriptionId)?.SubscriptionId, subscription.SubscriptionId);
         
+    }
+
+    [Fact]
+    public void SearchSubscriptionWithAdditionalFilters()
+    {
+        var svcPaymentMethod = new payfurl.sdk.PaymentMethod();
+        var newPaymentMethod = GetNewPaymentMethod();
+        var resultPaymentMethod = svcPaymentMethod.CreatePaymentMethodWithCard(newPaymentMethod);
+
+        var svc = new payfurl.sdk.Subscription();
+        var newSubscription = GetNewSubscription(resultPaymentMethod.PaymentMethodId);
+        newSubscription.Amount = 200.5m;
+        newSubscription.Currency = "AUD";
+        var subscription = svc.CreateSubscription(newSubscription);
+
+        var result = svc.SearchSubscription(new SubscriptionSearch
+        {
+            AmountGreaterThan = 200.4m,
+            AmountLessThan = 200.6m,
+            AddedAfter = DateTime.UtcNow.AddDays(-1),
+            AddedBefore = DateTime.UtcNow.AddDays(1),
+            Currency = "AUD",
+            Sort = SubscriptionSearch.SortBy.Date,
+            Limit = 20,
+        });
+
+        Assert.NotNull(result);
+        Assert.Contains(result.Subscriptions, x => x.SubscriptionId == subscription.SubscriptionId);
     }
     
     [Fact]
