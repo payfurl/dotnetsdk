@@ -32,5 +32,11 @@ namespace payfurl.sdk
         Task<CustomerData> UpdateAsync(string customerId, UpdateCustomer updateCustomer);
         CustomerData CreateWithSingleUseToken(NewCustomerSingleUseToken newCustomerSingleUseToken);
         Task<CustomerData> CreateWithSingleUseTokenAsync(NewCustomerSingleUseToken newCustomerSingleUseToken);
+        CustomerData CreateWithBankAccount(NewCustomerBankPayment newCustomer);
+        Task<CustomerData> CreateWithBankAccountAsync(NewCustomerBankPayment newCustomer);
+        PaymentMethodData CreatePaymentMethodWithBankAccount(string customerId,
+            NewPaymentMethodBankPayment newPaymentMethod);
+        Task<PaymentMethodData> CreatePaymentMethodWithBankAccountAsync(string customerId,
+            NewPaymentMethodBankPayment newPaymentMethod);
     }
 }

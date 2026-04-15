@@ -7,6 +7,7 @@ namespace payfurl.sdk.Models
         public string ThreeDsProviderId { get; set; }
         public string ThreeDsProviderType { get; set; }
         public Dictionary<string, string> RequiredFields { get; set; }
+        public Dictionary<string, string> ClientParameters { get; set; }
         public GooglePayBaseInfo GooglePay { get; set; }
     }
 }

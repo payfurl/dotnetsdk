@@ -7,6 +7,7 @@ namespace payfurl.sdk.Models
     {
         public string GatewayTokenId { get; set; }
         public string TokenId { get; set; }
+        public string AccountId { get; set; }
         public string UserId { get; set; }
         public CardData Card { get; set; }
         public ProviderSummary Provider { get; set; }
@@ -14,5 +15,6 @@ namespace payfurl.sdk.Models
         public DateTime? DateUsed { get; set; }
         public string PayToStatus { get; set; }
         public Dictionary<string, string> Metadata { get; set; }
+        public ClickToPayData ClickToPay { get; set; }
     }
 }

@@ -7,7 +7,6 @@ using payfurl.sdk.Tools;
 
 namespace payfurl.sdk
 {
-
     public class Token : IToken
     {
         public TokenData Single(string tokenId)

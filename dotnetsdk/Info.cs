@@ -1,13 +1,16 @@
 using System.Collections.Generic;
-using System.Net.Http.Headers;
+using System.Globalization;
 using payfurl.sdk.Tools;
 using System.Threading.Tasks;
 using payfurl.sdk.Helpers;
+using System.Web;
 
 namespace payfurl.sdk
 {
     public class Info : IInfo
     {
+        private const string SdkVersionHeaderValue = "4.5.7";
+
         public Models.Info GetInfo()
         {
             return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<string, Models.Info>("/info", Method.GET, null));
@@ -18,57 +21,44 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<string, Models.Info>("/info", Method.GET, null);
         }
 
-        public Models.InfoProviders GetProvidersInfo(decimal? amount, string currency)
+        public Models.InfoProviders GetProvidersInfo(decimal? amount = null, string currency = null,
+            string cardProviderId = null)
         {
-            return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<string, Models.InfoProviders>("/info/providers?amount=" + amount + "&currency=" + currency,
-                    Method.GET, null));
+            return AsyncHelper.RunSync(() => GetProvidersInfoAsync(amount, currency, cardProviderId));
         }
 
-        public async Task<Models.InfoProviders> GetProvidersInfoAsync(decimal? amount = null, string currency = null)
+        public async Task<Models.InfoProviders> GetProvidersInfoAsync(decimal? amount = null, string currency = null,
+            string cardProviderId = null)
         {
-            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
-            if (amount != null)
-                queryString.Add("amount", amount.ToString());
-            if (currency != null)
-                queryString.Add("currency", currency.ToString());
-            
             return await HttpWrapper.CallAsync<string, Models.InfoProviders>(
-                "/info/providers?" + queryString, Method.GET, null);
+                "/info/providers" + BuildInfoQueryString(amount, currency, cardProviderId), Method.GET, null,
+                BuildProviderHeaders());
         }
 
-        public Models.InfoProvider GetProviderInfo(string providerId)
+        public Models.InfoProvider GetProviderInfo(string providerId, decimal? amount = null, string currency = null)
         {
-            var headers = new Dictionary<string, string>
-            {
-                {"sdk-version", "4.5.7"}
-            };
-            return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<string, Models.InfoProvider>("/info/providers/" + providerId, Method.GET, null, headers));
+            return AsyncHelper.RunSync(() => GetProviderInfoAsync(providerId, amount, currency));
         }
 
-        public async Task<Models.InfoProvider> GetProviderInfoAsync(string providerId)
+        public async Task<Models.InfoProvider> GetProviderInfoAsync(string providerId, decimal? amount = null,
+            string currency = null)
         {
-            return await HttpWrapper.CallAsync<string, Models.InfoProvider>("/info/providers/" + providerId, Method.GET, null);
+            return await HttpWrapper.CallAsync<string, Models.InfoProvider>(
+                "/info/providers/" + providerId + BuildInfoQueryString(amount, currency), Method.GET, null,
+                BuildProviderHeaders());
         }
 
         public Models.InfoProvider GetProviderTokenInfo(string token, decimal? amount = null, string currency = null)
         {
-            var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
-            if (amount != null)
-                queryString.Add("amount", amount.ToString());
-            if (currency != null)
-                queryString.Add("currency", currency.ToString());
-
-            return AsyncHelper.RunSync(() =>
-                HttpWrapper.CallAsync<string, Models.InfoProvider>(
-                    "/info/providers/token/" + token + "?" + queryString, Method.GET, null));
+            return AsyncHelper.RunSync(() => GetProviderTokenInfoAsync(token, amount, currency));
         }
 
-        public async Task<Models.InfoProvider> GetProviderTokenInfoAsync(string token, decimal? amount, string currency)
+        public async Task<Models.InfoProvider> GetProviderTokenInfoAsync(string token, decimal? amount = null,
+            string currency = null)
         {
             return await HttpWrapper.CallAsync<string, Models.InfoProvider>(
-                "/info/providers/token/" + token + "?amount=" + amount + "&currency=" + currency, Method.GET, null);
+                "/info/providers/token/" + token + BuildInfoQueryString(amount, currency), Method.GET, null,
+                BuildProviderHeaders());
         }
 
         public Models.ProviderData GetDefaultFallbackProvider()
@@ -80,6 +70,29 @@ namespace payfurl.sdk
         public async Task<Models.ProviderData> GetDefaultFallbackProviderAsync()
         {
             return await HttpWrapper.CallAsync<string, Models.ProviderData>("/info/default_fallback_provider", Method.GET, null);
+        }
+
+        private static string BuildInfoQueryString(decimal? amount = null, string currency = null,
+            string cardProviderId = null)
+        {
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            if (amount.HasValue)
+                queryString.Add("amount", amount.Value.ToString(CultureInfo.InvariantCulture));
+            if (!string.IsNullOrWhiteSpace(currency))
+                queryString.Add("currency", currency);
+            if (!string.IsNullOrWhiteSpace(cardProviderId))
+                queryString.Add("cardProviderId", cardProviderId);
+
+            var query = queryString.ToString();
+            return string.IsNullOrEmpty(query) ? "" : "?" + query;
+        }
+
+        private static Dictionary<string, string> BuildProviderHeaders()
+        {
+            return new Dictionary<string, string>
+            {
+                { "sdk-version", SdkVersionHeaderValue }
+            };
         }
     }
 }

@@ -9,12 +9,16 @@ namespace payfurl.sdk
         Task<ChargeData> CreateWithCardAsync(NewChargeCard newCharge);
         ChargeData CreateWithCardLeastCost(NewChargeCardLeastCost newCharge);
         Task<ChargeData> CreateWithCardLeastCostAsync(NewChargeCardLeastCost newCharge);
+        ChargeData CreateWithApplePay(NewChargeApplePay newCharge, string providerId);
+        Task<ChargeData> CreateWithApplePayAsync(NewChargeApplePay newCharge, string providerId);
         ChargeData CreateWithCustomer(NewChargeCustomer newCharge);
         Task<ChargeData> CreateWithCustomerAsync(NewChargeCustomer newCharge);
         ChargeData CreateWithPaymentMethod(NewChargePaymentMethod newCharge);
         Task<ChargeData> CreateWithPaymentMethodAsync(NewChargePaymentMethod newCharge);
         ChargeData CreateWithToken(NewChargeToken newCharge);
         Task<ChargeData> CreateWithTokenAsync(NewChargeToken newCharge);
+        ChargeData CreateWithNetworkToken(NewChargeNetworkToken newCharge);
+        Task<ChargeData> CreateWithNetworkTokenAsync(NewChargeNetworkToken newCharge);
         ChargeData Refund(NewRefund newCharge);
         Task<ChargeData> RefundAsync(NewRefund newCharge);
         ChargeData Capture(string chargeId, NewChargeCapture chargeCaptureData);
@@ -25,5 +29,7 @@ namespace payfurl.sdk
         Task<ChargeData> SingleAsync(string chargeId);
         ChargeList Search(ChargeSearch searchData);
         Task<ChargeList> SearchAsync(ChargeSearch searchData);
+        ChargeData CreateWithBankAccount(NewChargeBankPayment newCharge);
+        Task<ChargeData> CreateWithBankAccountAsync(NewChargeBankPayment newCharge);
     }
 }

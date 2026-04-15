@@ -49,16 +49,16 @@ namespace payfurl.sdk
         {
             var queryString = BuildSearchQueryString(search);
             
-            return HttpWrapper.CallAsync<WebhookSubscriptionSearch, WebhookSubscriptionSearchResults>("/webhook/subscription" + queryString,
-                Method.GET, search);
+            return HttpWrapper.CallAsync<string, WebhookSubscriptionSearchResults>("/webhook/subscription" + queryString,
+                Method.GET, null);
         }
 
         public WebhookSubscriptionSearchResults SearchWebhookSubscription(WebhookSubscriptionSearch search)
         {
             var queryString = BuildSearchQueryString(search);
             
-            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<WebhookSubscriptionSearch, WebhookSubscriptionSearchResults>("/webhook/subscription" + queryString,
-                Method.GET, search));
+            return AsyncHelper.RunSync(() => HttpWrapper.CallAsync<string, WebhookSubscriptionSearchResults>("/webhook/subscription" + queryString,
+                Method.GET, null));
         }
         
         private static string BuildSearchQueryString(WebhookSubscriptionSearch searchData)
@@ -73,11 +73,11 @@ namespace payfurl.sdk
 
             if (searchData.AddedAfter.HasValue)
                 queryString.Add("addedAfter=" +
-                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
             if (searchData.AddedBefore.HasValue)
                 queryString.Add("addedBefore=" +
-                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
             if (!string.IsNullOrWhiteSpace(searchData.Type))
                 queryString.Add("type=" + HttpUtility.UrlEncode(searchData.Type));
@@ -86,7 +86,7 @@ namespace payfurl.sdk
                 queryString.Add("id=" + HttpUtility.UrlEncode(searchData.Id));
 
             if (searchData.Sort != WebhookSubscriptionSearch.SortBy.None)
-                queryString.Add("sort=" + HttpUtility.UrlEncode(searchData.Sort.ToString()));
+                queryString.Add("sortBy=" + HttpUtility.UrlEncode(searchData.Sort.ToString()));
 
             var result = "";
             if (queryString.Count > 0)

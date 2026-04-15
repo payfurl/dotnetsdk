@@ -14,7 +14,7 @@ namespace payfurl.sdk.Models.Subscriptions
         public string Currency { get; set; }
         [JsonConverter(typeof(EnumToStringConverter<SubscriptionInterval>))]
         public SubscriptionInterval Interval { get; set; }
-        public int? Frequency { get; set; }
+        public int Frequency { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
         public SubscriptionEnd EndAfter { get; set; }
@@ -39,5 +39,26 @@ namespace payfurl.sdk.Models.Subscriptions
             Month,
             Year
         }
+    }
+
+    public class SubscriptionHistory
+    {
+        public DateTime PaymentDate { get; set; }
+        public string TransactionId { get; set; }
+        public string Status { get; set; }
+        public decimal? Amount { get; set; }
+        public string ProviderId { get; set; }
+        public string ProviderType { get; set; }
+        public List<SubscriptionHistoryRetry> Retries { get; set; }
+    }
+
+    public class SubscriptionHistoryRetry
+    {
+        public DateTime RetryDate { get; set; }
+        public string TransactionId { get; set; }
+        public string Status { get; set; }
+        public decimal? Amount { get; set; }
+        public string ProviderId { get; set; }
+        public string ProviderType { get; set; }
     }
 }

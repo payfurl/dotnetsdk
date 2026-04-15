@@ -20,6 +20,21 @@ namespace payfurl.sdk
             return await HttpWrapper.CallAsync<NewChargeCard, ChargeData>("/charge/card", Method.POST, newCharge);
         }
 
+        public ChargeData CreateWithApplePay(NewChargeApplePay newCharge, string providerId)
+        {
+            return AsyncHelper.RunSync(() => CreateWithApplePayAsync(newCharge, providerId));
+        }
+
+        public async Task<ChargeData> CreateWithApplePayAsync(NewChargeApplePay newCharge, string providerId)
+        {
+            var headers = new Dictionary<string, string>
+            {
+                { "providerId", providerId }
+            };
+            return await HttpWrapper.CallAsync<NewChargeApplePay, ChargeData>(
+                "/charge/token/apple", Method.POST, newCharge, headers);
+        }
+
         public ChargeData CreateWithCardLeastCost(NewChargeCardLeastCost newCharge)
         {
             return AsyncHelper.RunSync(() =>
@@ -67,6 +82,17 @@ namespace payfurl.sdk
         public async Task<ChargeData> CreateWithTokenAsync(NewChargeToken newCharge)
         {
             return await HttpWrapper.CallAsync<NewChargeToken, ChargeData>("/charge/token", Method.POST, newCharge);
+        }
+
+        public ChargeData CreateWithNetworkToken(NewChargeNetworkToken newCharge)
+        {
+            return AsyncHelper.RunSync(() => CreateWithNetworkTokenAsync(newCharge));
+        }
+
+        public async Task<ChargeData> CreateWithNetworkTokenAsync(NewChargeNetworkToken newCharge)
+        {
+            return await HttpWrapper.CallAsync<NewChargeNetworkToken, ChargeData>(
+                "/charge/network_token", Method.POST, newCharge);
         }
 
         public ChargeData Refund(NewRefund newCharge)
