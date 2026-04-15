@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System.Web;
@@ -19,32 +18,6 @@ namespace payfurl.sdk
         public async Task<ChargeData> CreateWithCardAsync(NewChargeCard newCharge)
         {
             return await HttpWrapper.CallAsync<NewChargeCard, ChargeData>("/charge/card", Method.POST, newCharge);
-        }
-
-        public ChargeData CreateWithGooglePay(NewChargeGooglePay newCharge, string providerId)
-        {
-            return AsyncHelper.RunSync(() => CreateWithGooglePayAsync(newCharge, providerId));
-        }
-
-        public async Task<ChargeData> CreateWithGooglePayAsync(NewChargeGooglePay newCharge, string providerId)
-        {
-            var headers = new Dictionary<string, string>
-            {
-                { "providerId", providerId }
-            };
-            return await HttpWrapper.CallAsync<NewChargeGooglePay, ChargeData>(
-                "/charge/token/google", Method.POST, newCharge, headers);
-        }
-
-        public JObject ValidateMerchantApplePay(ValidateMerchantRequest validateMerchantRequest)
-        {
-            return AsyncHelper.RunSync(() => ValidateMerchantApplePayAsync(validateMerchantRequest));
-        }
-
-        public async Task<JObject> ValidateMerchantApplePayAsync(ValidateMerchantRequest validateMerchantRequest)
-        {
-            return await HttpWrapper.CallAsync<ValidateMerchantRequest, JObject>(
-                "/charge/token/apple/validate", Method.POST, validateMerchantRequest);
         }
 
         public ChargeData CreateWithApplePay(NewChargeApplePay newCharge, string providerId)
@@ -109,17 +82,6 @@ namespace payfurl.sdk
         public async Task<ChargeData> CreateWithTokenAsync(NewChargeToken newCharge)
         {
             return await HttpWrapper.CallAsync<NewChargeToken, ChargeData>("/charge/token", Method.POST, newCharge);
-        }
-
-        public ChargeData CreateWithCheckout(NewChargeCheckout newCharge)
-        {
-            return AsyncHelper.RunSync(() => CreateWithCheckoutAsync(newCharge));
-        }
-
-        public async Task<ChargeData> CreateWithCheckoutAsync(NewChargeCheckout newCharge)
-        {
-            return await HttpWrapper.CallAsync<NewChargeCheckout, ChargeData>(
-                "/charge/checkout", Method.POST, newCharge);
         }
 
         public ChargeData CreateWithNetworkToken(NewChargeNetworkToken newCharge)

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace payfurl.sdk.Models
+﻿namespace payfurl.sdk.Models
 {
     public enum ErrorCodeType
     {
@@ -85,7 +83,6 @@ namespace payfurl.sdk.Models
         FeaturePartialCaptureIsNotSupportedCaptureAmount = 78,
         AmountOutsideRangeForMerchant = 79,
         GatewayTimeout = 80,
-        GatewayTimout = 80,
         InvalidPaymentInformation = 81,
         CannotProvideBothExpireDateAndExpireSeconds = 82,
         InvalidExpireDateOrExpireSeconds = 83,

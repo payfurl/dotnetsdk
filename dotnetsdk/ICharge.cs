@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using payfurl.sdk.Models;
 
 namespace payfurl.sdk
@@ -10,10 +9,6 @@ namespace payfurl.sdk
         Task<ChargeData> CreateWithCardAsync(NewChargeCard newCharge);
         ChargeData CreateWithCardLeastCost(NewChargeCardLeastCost newCharge);
         Task<ChargeData> CreateWithCardLeastCostAsync(NewChargeCardLeastCost newCharge);
-        ChargeData CreateWithGooglePay(NewChargeGooglePay newCharge, string providerId);
-        Task<ChargeData> CreateWithGooglePayAsync(NewChargeGooglePay newCharge, string providerId);
-        JObject ValidateMerchantApplePay(ValidateMerchantRequest validateMerchantRequest);
-        Task<JObject> ValidateMerchantApplePayAsync(ValidateMerchantRequest validateMerchantRequest);
         ChargeData CreateWithApplePay(NewChargeApplePay newCharge, string providerId);
         Task<ChargeData> CreateWithApplePayAsync(NewChargeApplePay newCharge, string providerId);
         ChargeData CreateWithCustomer(NewChargeCustomer newCharge);
@@ -22,8 +17,6 @@ namespace payfurl.sdk
         Task<ChargeData> CreateWithPaymentMethodAsync(NewChargePaymentMethod newCharge);
         ChargeData CreateWithToken(NewChargeToken newCharge);
         Task<ChargeData> CreateWithTokenAsync(NewChargeToken newCharge);
-        ChargeData CreateWithCheckout(NewChargeCheckout newCharge);
-        Task<ChargeData> CreateWithCheckoutAsync(NewChargeCheckout newCharge);
         ChargeData CreateWithNetworkToken(NewChargeNetworkToken newCharge);
         Task<ChargeData> CreateWithNetworkTokenAsync(NewChargeNetworkToken newCharge);
         ChargeData Refund(NewRefund newCharge);
