@@ -2,6 +2,10 @@ name: Publish NuGet Package
 
 on: [workflow_dispatch]
 
+permissions:
+  id-token: write   # Required for requesting the OIDC JWT
+  contents: read    # Required for actions/checkout
+
 jobs:
   publish:
     runs-on: windows-latest
