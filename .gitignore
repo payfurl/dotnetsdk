@@ -356,3 +356,6 @@ MigrationBackup/
 
 /FunctionalTests/appsettings.json
 nupkg/
+
+# macOS
+.DS_Store
