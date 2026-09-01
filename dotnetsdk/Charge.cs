@@ -175,19 +175,23 @@ namespace payfurl.sdk
 
         private static string BuildRefundQueryString(NewRefund newCharge)
         {
-            var queryString = "";
+            var queryString = new List<string>();
 
             if (newCharge.RefundAmount.HasValue)
             {
-                queryString = "?amount=" + newCharge.RefundAmount.Value;
+                queryString.Add("amount=" + newCharge.RefundAmount.Value);
             }
 
             if (!string.IsNullOrEmpty(newCharge.Comment))
             {
-                queryString = "?comment=" + newCharge.Comment;
+                queryString.Add("comment=" + newCharge.Comment);
             }
 
-            return queryString;
+            var result = "";
+            if (queryString.Count > 0)
+                result = "?" + string.Join("&", queryString);
+
+            return result;
         }
 
         private static string BuildSearchQueryString(ChargeSearch searchData)
