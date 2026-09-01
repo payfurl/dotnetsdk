@@ -120,6 +120,7 @@
         UnableToCreatePaymentLink = 115,
         InvalidPaymentLinkId = 116,
         InvalidFallbackProviderId = 117,
+        InvalidDisputeId = 118,
         ReferToCardIssuer = 901,
         ReferToCardIssuerSpecialConditions = 902,
         InvalidMerchant = 903,
