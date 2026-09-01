@@ -170,7 +170,7 @@ public class Subscription : BaseTest
         var result = svc.CreateSubscription(GetNewSubscription(resultPaymentMethod.PaymentMethodId));
 
         Assert.Equal(100, result.Amount);
-        Assert.Equal("USD", result.Currency);
+        Assert.Equal("Usd", result.Currency);
         
         result = svc.UpdateSubscription(result.SubscriptionId, new SubscriptionUpdate()
         {
@@ -181,7 +181,7 @@ public class Subscription : BaseTest
         
         Assert.NotNull(result);
         Assert.Equal(200, result.Amount);
-        Assert.Equal("AUD", result.Currency);
+        Assert.Equal("Aud", result.Currency);
         Assert.Equal(1, result.Frequency);
         Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Day, result.Interval);
         Assert.Null(result.EndAfter);
