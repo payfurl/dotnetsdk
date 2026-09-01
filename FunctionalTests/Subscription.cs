@@ -186,7 +186,9 @@ public class Subscription : BaseTest
         Assert.Equal(payfurl.sdk.Models.Subscriptions.Subscription.SubscriptionInterval.Day, result.Interval);
         Assert.Null(result.EndAfter);
         Assert.Null(result.Retry);
-        Assert.Null(result.Webhook);
+        Assert.NotNull(result.Webhook);
+        Assert.Equal("https://example.com/webhoo", result.Webhook.Url);
+        Assert.Equal("secret", result.Webhook.Authorization);
     }
     
     [Fact]
