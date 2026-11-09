@@ -1,52 +1,230 @@
-# PayFURL .NET SDK
+# payFURL .NET SDK
 
-Library for integrating with PayFURL payments in your app. It includes the following APIs:
+The [payFURL](https://payfurl.com) API for .NET: charges, customers, payment methods, subscriptions, payment links,
+batches, transfers, vaults, providers, tokens, disputes, settlements and webhook subscriptions. It covers the
+endpoints a secret key can call, plus `GET /info/providers`.
 
-1. Charge API
-2. Customer API
-3. PaymentMethod API
-4. Transfer API
-5. Vault API
-6. Token API
-7. Provider API
-8. Info API
-9. Batch API
+Coming from 2.x? [UPGRADE.md](UPGRADE.md) maps every 2.x call to 3.0. What changed in each release:
+[CHANGELOG.md](CHANGELOG.md).
 
-## 📄 Requirements
+## Install
 
-Use of the PayFURL .NET SDK requires:
-
-* .NET Standard 2.0/2.1 or .NET Core 2.1 or .NET 4.5/4.8
-
-## 🧰 Installation
-
-To use the PayFURL .NET SDK in your project please do the following step:
-
-```shell
-dotnet add package PayfurlSdk --version <version>
+```bash
+dotnet add package PayfurlSdk
 ```
 
-or 
+It targets `netstandard2.0` and `net10.0`, so it runs on .NET 10, .NET 8 and the other .NET versions, and on .NET
+Framework 4.6.2 or later. Its one dependency is `System.Text.Json`, on `netstandard2.0` only.
 
-```shell
-NuGet\Install-Package PayfurlSdk -Version <version>
-```
+## Quick start
 
-## 👷 Usage
+```csharp
+using Payfurl.Sdk;
+using Payfurl.Sdk.Models;
 
-An example of creating a PayFURL client with **development** environment.
-FunctionalTests folder must contain **appsettings.json** file with following contents:
-
-```json
+var payfurl = new PayfurlClient(new PayfurlClientOptions
 {
-  "Environment": "Development",
-  "SecretKey": "PAYFURL_SECRET_KEY",
-  "ProviderId": "DUMMY_PROVIDER_ID",
-  "Tokens": ["PAYMENT_TOKEN1","PAYMENT_TOKEN2"]
+    SecretKey = "sectest...-au",
+    Environment = PayfurlEnvironment.Sandbox,
+});
+
+// A token from the browser SDK or a hosted payment page.
+var charge = await payfurl.Charges.CreateWithTokenAsync(new NewChargeToken
+{
+    Amount = 20.00m,
+    Currency = "AUD",
+    Token = token,
+    Reference = "order-1001",
+});
+
+Console.WriteLine($"{charge.ChargeId}: {charge.Status}"); // ...: Success
+```
+
+Every call is async, takes an optional `CancellationToken`, and returns the API's response as a model
+(`ChargeData`, `CustomerData`, ...). Request models mark the fields the API requires as `required`, so leaving one
+out is a compile error.
+
+A client holds one account's key and no other state: make one per account or region, and keep it for the life of
+the app.
+
+## Dependency injection
+
+`PayfurlClient` works as a typed client of `IHttpClientFactory`:
+
+```csharp
+builder.Services.AddSingleton(new PayfurlClientOptions
+{
+    SecretKey = builder.Configuration["Payfurl:SecretKey"]!,
+    Environment = PayfurlEnvironment.Production,
+});
+builder.Services.AddHttpClient<PayfurlClient>();
+```
+
+Then take a `PayfurlClient` in a constructor. Without an `HttpClient`, a client uses one shared by the process.
+
+## Environments and regions
+
+| `PayfurlEnvironment` | URL | with an `-au` key |
+| --- | --- | --- |
+| `Production` | https://api.payfurl.com | https://api-au.payfurl.com |
+| `Sandbox` | https://sandbox-api.payfurl.com | https://sandbox-api-au.payfurl.com |
+| `Development` | https://develop-api.payfurl.com | https://develop-api-au.payfurl.com |
+| `Local` | https://localhost:5001, accepting its development certificate | the same |
+
+The key's last part (`sectest...-au`) is its account's region. `BaseUrl` overrides both, such as
+`http://api:5000` on a Docker network.
+
+## Examples
+
+```csharp
+// Charges
+var charge = await payfurl.Charges.CreateWithCardLeastCostAsync(new NewChargeCardLeastCost
+{
+    Amount = 15m,
+    Currency = "AUD",
+    PaymentInformation = new CardRequestInformation { CardNumber = "4111111111111111", ExpiryDate = "12/30", Ccv = "123" },
+});
+await payfurl.Charges.RefundAsync(charge.ChargeId!, amount: 5m, comment: "Returned one item");
+var authorised = await payfurl.Charges.CreateWithPaymentMethodAsync(new NewChargePaymentMethod { Amount = 50m, PaymentMethodId = paymentMethodId, Capture = false });
+await payfurl.Charges.CaptureAsync(authorised.ChargeId!, amount: 45m);
+var page = await payfurl.Charges.SearchAsync(new ChargeSearch { Status = TransactionStatus.Success, Limit = 20 });
+
+// Customers and their payment methods
+var customer = await payfurl.Customers.CreateWithTokenAsync(new NewCustomerToken { Token = token, Email = "jo@example.com" });
+var paymentMethods = await payfurl.Customers.GetPaymentMethodsAsync(customer.CustomerId!);
+await payfurl.Charges.CreateWithCustomerAsync(new NewChargeCustomer { Amount = 10m, CustomerId = customer.CustomerId! });
+
+// Payment methods without a customer
+var paymentMethod = await payfurl.PaymentMethods.CreateWithTokenAsync(new NewPaymentMethodToken { Token = token });
+
+// Subscriptions
+var subscription = await payfurl.Subscriptions.CreateAsync(new SubscriptionCreate
+{
+    PaymentMethodId = paymentMethod.PaymentMethodId!,
+    Amount = 9.99m,
+    Currency = "AUD",
+    Interval = SubscriptionInterval.Month,
+    Frequency = 1,
+});
+await payfurl.Subscriptions.UpdateStatusAsync(subscription.SubscriptionId!, SubscriptionStatus.Suspended);
+
+// Payment links
+var link = await payfurl.PaymentLinks.CreateAsync(new CreatePaymentLink { Title = "Invoice 1001", Amount = 120m, Currency = "AUD" });
+
+// The rest
+await payfurl.Batches.CreateWithPaymentMethodsAsync(new NewTransactionPaymentMethod { Count = 1, Description = "November", Batch = "PaymentMethodId,Amount,Currency\npm_1,10,AUD" });
+await payfurl.Transfers.CreateAsync(new NewTransferGroup { ProviderId = providerId, GroupReference = "g-1", Transfers = new() { new NewTransfer { Account = "acct_1", Amount = 5m } } });
+await payfurl.Vaults.CreateAsync(new NewVault { CardNumber = "4111111111111111" });
+await payfurl.Providers.UpdateAsync(providerId, new UpdateProvider { Name = "Main gateway" });
+await payfurl.Tokens.GetAsync(tokenId);
+await payfurl.Disputes.SearchAsync(new DisputeSearch { Status = DisputeStatus.NeedsResponse });
+await payfurl.Settlements.SearchAsync(DateTime.Today.AddDays(-7));
+await payfurl.WebhookSubscriptions.CreateAsync(new NewWebhookSubscription { Url = "https://example.com/payfurl", Types = new() { WebhookType.Transaction } });
+var checkout = await payfurl.Info.GetProvidersAsync(amount: 20m, currency: "AUD");
+```
+
+A status the SDK does not know yet (a new charge status, say) reads as `Unknown` instead of failing the call.
+
+## Errors and retries
+
+Every failed call throws a `PayfurlException`:
+
+| Exception | When |
+| --- | --- |
+| `ApiException` | the API answered with an error: a decline, a server error. It has `ErrorCode`, `HttpStatus`, `IsRetryable`, `Details`, `GatewayCode`, `GatewayMessage`, `ChargeId` and `TraceId` |
+| `AuthenticationException` | 401 or 403: a wrong key, or a public key on a secret-key endpoint |
+| `NotFoundException` | 404 |
+| `InvalidRequestException` | a validation error; `Details` names the fields |
+| `PayfurlConnectionException` | no answer: the connection failed |
+| `PayfurlTimeoutException` | no answer within `Timeout` (60 seconds by default) |
+
+The middle three are `ApiException`s, and `PayfurlTimeoutException` is a `PayfurlConnectionException`. An empty ID
+throws `ArgumentException` before anything is sent.
+
+```csharp
+try
+{
+    await payfurl.Charges.CreateWithTokenAsync(request);
+}
+catch (ApiException e) when (e.ErrorCode == ErrorCode.InsufficientFunds)
+{
+    // declined: e.ChargeId is the failed charge
+}
+catch (PayfurlConnectionException)
+{
+    // the outcome is unknown: search by reference before charging again
 }
 ```
-We recommend to have 8 payment tokens to make all tests passed.
 
-## 🔨 Tests
+GETs are retried `MaxRetries` times (2 by default), with a doubling `RetryDelay`, after a connection error, a timeout
+or an error the API marks retryable. Nothing else is retried: the API has no idempotency keys, so a retried charge
+could charge twice.
 
-Clone the repo locally, `cd` into the directory and run `dotnet test`
+## Webhooks
+
+```csharp
+var body = await new StreamReader(Request.Body).ReadToEndAsync();
+if (!Webhook.Verify(body, Request.Headers["x-payfurl-signature"], signingKey))
+{
+    return Unauthorized();
+}
+
+// Or verify and parse in one step; it throws ArgumentException for a bad signature.
+JsonElement webhook = Webhook.Parse(body, Request.Headers["x-payfurl-signature"], signingKey);
+var chargeId = webhook.GetProperty("data").GetProperty("chargeId").GetString();
+```
+
+The signature is compared in constant time.
+
+## Testing your code
+
+Give the client an `HttpClient` over your own handler, and nothing goes over the network:
+
+```csharp
+class FakeHandler : HttpMessageHandler
+{
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+        Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("""{"chargeId":"ch_1","status":"SUCCESS"}""", Encoding.UTF8, "application/json"),
+        });
+}
+
+var payfurl = new PayfurlClient(
+    new PayfurlClientOptions { SecretKey = "sectest", Environment = PayfurlEnvironment.Sandbox },
+    new HttpClient(new FakeHandler()));
+```
+
+The SDK's own tests do the same: [tests/PayfurlSdk.Tests/FakeHandler.cs](tests/PayfurlSdk.Tests/FakeHandler.cs).
+
+## Development
+
+You need [just](https://github.com/casey/just), the .NET 10 SDK, and the .NET 8 runtime, on which the tests run the
+`netstandard2.0` build:
+
+```bash
+just test   # format check, build, unit tests: what CI runs
+just format # apply the style
+just pack   # the package, into nupkg/
+just e2e    # the integration tests (below)
+```
+
+The unit tests never call an API. The integration tests live in payfurl/platform, under `e2e/api-tests/dotnetsdk`:
+they build the API from source in Docker and run against this checkout. `just e2e` runs them when the platform is
+checked out at `../platform` or `../../platform` (or `PLATFORM_DIR`).
+
+The models follow the API's own (`services/api/src/api/Models` in the platform). A field added there is added here by
+hand, with a unit test.
+
+## Releasing
+
+1. Add the version's section to `CHANGELOG.md` and merge to master.
+2. Tag the merge `vX.Y.Z` and push the tag.
+
+The **Release** workflow runs CI, packs once with the tag's version (nobody edits the csproj), pushes the package and
+its symbols to NuGet with trusted publishing (`NuGet/login`, the `NUGET_USER` secret), and creates the GitHub release
+from the changelog section. It refuses a tag that is not on master or has no changelog section.
+
+## License
+
+MIT

@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Payfurl.Sdk</RootNamespace>
+    <AssemblyName>PayfurlSdk</AssemblyName>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- The release workflow sets the version from the tag: dotnet pack -p:Version=3.0.1. -->
+    <Version>3.0.0</Version>
+
+    <PackageId>PayfurlSdk</PackageId>
+    <Product>PayfurlSdk</Product>
+    <Authors>payFURL</Authors>
+    <Description>The payFURL API for .NET: charges, customers, payment methods, subscriptions, payment links and the rest of the public API, with one client per account.</Description>
+    <Copyright>Copyright payFURL</Copyright>
+    <PackageTags>payfurl;payments;payment-orchestration</PackageTags>
+    <PackageProjectUrl>https://github.com/payfurl/dotnetsdk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/payfurl/dotnetsdk</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>https://github.com/payfurl/dotnetsdk/blob/master/CHANGELOG.md</PackageReleaseNotes>
+
+    <!-- SourceLink (built into the .NET SDK for GitHub), deterministic CI builds, a symbol package. -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Catches API differences between the targets now; set PackageValidationBaselineVersion to 3.0.0 once it is
+         on NuGet, so a 3.x release that breaks 3.0 fails the build. -->
+    <EnablePackageValidation>true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PayfurlSdk.Tests" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

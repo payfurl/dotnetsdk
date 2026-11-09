@@ -7,6 +7,65 @@ version history and the merged pull requests; only `v1.5` was tagged before 2.2.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-09
+
+A new SDK in the same package: a client object instead of static configuration, async only, typed and nullable.
+[UPGRADE.md](UPGRADE.md) maps every 2.x method to its replacement; 2.x stays on NuGet for code that has not moved.
+
+### Added
+
+- `PayfurlClient`: one client per key and environment, with a property per part of the API (`Charges`,
+  `Customers`, `PaymentMethods`, ...). `PayfurlClientOptions` sets the key, environment, base URL, timeout, retries
+  and retry delay. It takes an `HttpClient`, so it works as an `IHttpClientFactory` typed client and in tests.
+- `CancellationToken` on every method, and `ConfigureAwait(false)` throughout.
+- Nullable reference types, `required` on the request fields the API requires, and XML docs.
+- Exceptions under `PayfurlException`: `ApiException` (HTTP status, `ErrorCode`, the API's `IsRetryable`, type,
+  resource, details, gateway code and message, charge ID, trace ID), `AuthenticationException`,
+  `NotFoundException`, `InvalidRequestException`, `PayfurlConnectionException` and `PayfurlTimeoutException`.
+- Retries: a GET is retried, with backoff, after a connection error, a timeout or a retryable API error. Nothing
+  else is retried, since the API has no idempotency keys.
+- Enums that read a value the SDK does not know as `Unknown`: `TransactionStatus` (`ChargeData.Status`),
+  `SubscriptionStatus` (with the API's `Unknown`), `DisputeStatus`, `DisputeStage` and `PaymentType`.
+- `Customers.CreateWithPayToAsync` (`POST /customer/payto`) and `PayfurlClient.GetStatusAsync` (`GET /`).
+- `gatewayDelete` on `Customers.DeleteAsync` and `PaymentMethods.DeleteAsync`.
+- `BatchId`, `SubscriptionId` and `SortOrder` on `ChargeSearch`.
+- Fields the API has and 2.x lacked: `CreateNetworkToken`, `Verify` and `Webhook` on `NewCustomerCard`; `Webhook` on
+  `NewCustomerToken`; `CreateNetworkToken`, `FallbackPaymentMethodId`, `Ip`, `Verify` and `Webhook` on
+  `NewPaymentMethodCard`; `ExternalThreeDsData` and `ThreeDSServerTransID` on `CardRequestInformation`; `Ip` and
+  `IpInfo` on `ChargeData`; `Comment` and `GatewayRefundId` on refunds; the rest of the models brought in line with
+  the API's.
+- `Webhook.Verify` and `Webhook.Parse`.
+- Every request sends `User-Agent: payfurl-dotnet/<version>`.
+- SourceLink, a deterministic build, a symbol package (`.snupkg`), the README in the package, and package validation.
+
+### Changed
+
+- Targets `netstandard2.0` and `net10.0` (.NET Framework 4.6.2 or later through `netstandard2.0`).
+- `System.Text.Json` instead of Newtonsoft.Json.
+- Namespaces `Payfurl.Sdk`, `Payfurl.Sdk.Models` and `Payfurl.Sdk.Resources`; the assembly is `PayfurlSdk.dll`.
+- Methods are named for what they do on their part of the API: `Charges.GetAsync` (was `Charge.Single`),
+  `Customers.AddPaymentMethodWithCardAsync` (was `CreatePaymentMethodWithCard`), and so on.
+- Refunds, captures and subscription status changes take their values as arguments, not request models.
+- Response properties are nullable: a field the response leaves out is `null`.
+- Requests send camelCase JSON without the fields left unset.
+- A webhook with a bad signature still throws `ArgumentException`; `Webhook.Parse` returns a `JsonElement`.
+
+### Removed
+
+- `Config` and its static state, including the process-wide `ServicePointManager` settings (TLS 1.2 only,
+  `DefaultConnectionLimit = 9999`).
+- The sync methods, which blocked on the async ones (`AsyncHelper.RunSync`).
+- `Charge.CreateWithApplePay`: `POST /charge/token/apple` takes only a public key, so it always failed.
+- `Info.GetInfo`, `Info.GetProviderInfo`, `Info.GetProviderTokenInfo` and `Info.GetDefaultFallbackProvider`: their
+  endpoints are not public.
+- The fixed `sdk-version: 4.5.7` header: `Info.GetProvidersAsync` takes the browser SDK version.
+- `TokenData.GatewayTokenId`, `TokenData.UserId` and `ChargeData.ThreeDSServerTransID`, which the API never sends.
+- `WebhookTools` and the `WebhookTransaction` models.
+- The `netstandard2.1`, `netcoreapp2.2`, `net451` and `net48` targets, and the `Microsoft.AspNet.WebApi`,
+  `Microsoft.NETCore.App`, `System.ValueTuple` and `NETStandard.Library` dependencies.
+- The functional tests that ran against the development environment with `config-build` keys: unit tests replace
+  them here, and the integration tests run in payfurl/platform (`just e2e dotnetsdk`).
+
 ## [2.2.1] - 2026-11-09
 
 ### Fixed
@@ -110,5 +169,6 @@ version history and the merged pull requests; only `v1.5` was tagged before 2.2.
   `UpdateProvider` (#13).
 - 2.0.0 to 2.0.8: the first 2.x releases, before the pull requests above.
 
-[Unreleased]: https://github.com/payfurl/dotnetsdk/compare/v2.2.1...HEAD
+[Unreleased]: https://github.com/payfurl/dotnetsdk/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/payfurl/dotnetsdk/compare/v2.2.1...v3.0.0
 [2.2.1]: https://github.com/payfurl/dotnetsdk/releases/tag/v2.2.1

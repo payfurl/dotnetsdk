@@ -359,3 +359,8 @@ nupkg/
 
 # macOS
 .DS_Store
+
+# Local packs, IDEs, macOS
+nupkg/
+.idea/
+.DS_Store

@@ -1,0 +1,39 @@
+# Build, unit tests, the format check and the pack on every push to master and every pull request. The release
+# workflow runs it before it publishes.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  # `test`: the check master's branch protection requires (the name 2.x's auto-tests job had).
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # 10.0 builds; the tests also run on 8.0, which loads the package's netstandard2.0 build.
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            10.0.x
+            8.0.x
+
+      - name: Format
+        run: dotnet format PayfurlSdk.sln --verify-no-changes
+
+      - name: Build
+        run: dotnet build PayfurlSdk.sln -c Release
+
+      - name: Unit tests
+        run: dotnet test PayfurlSdk.sln -c Release --no-build
+
+      # Package validation runs in the pack.
+      - name: Pack
+        run: dotnet pack src/PayfurlSdk -c Release --no-build -o nupkg
