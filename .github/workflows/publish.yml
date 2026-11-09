@@ -1,41 +1,64 @@
-name: Publish NuGet Package
+# Push a tag vX.Y.Z on master to release: CI runs, the package is packed once with the tag's version, pushed to
+# NuGet with trusted publishing, and the GitHub release gets that version's CHANGELOG.md section. The file keeps 2.x's
+# name, publish.yml: nuget.org's trusted-publishing policy names the workflow file.
+name: Release
 
-on: [workflow_dispatch]
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
 
 permissions:
-  id-token: write   # Required for requesting the OIDC JWT
-  contents: read    # Required for actions/checkout
+  contents: read
 
 jobs:
-  publish:
-    runs-on: windows-latest
+  ci:
+    uses: ./.github/workflows/ci.yml
 
+  release:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # the GitHub release
+      id-token: write # NuGet trusted publishing
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
         with:
-          dotnet-version: '6.0.x'
+          fetch-depth: 0
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: The tag is on master
+        run: |
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/master; then
+            echo "::error::$GITHUB_REF_NAME is not on master"
+            exit 1
+          fi
 
-      - name: Build NuGet package
-        run: dotnet build --configuration Release --no-restore
+      - name: Release notes from CHANGELOG.md
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          awk -v heading="## [$version]" 'index($0, heading) == 1 {found = 1; next} /^## \[/ {found = 0} found' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "::error::CHANGELOG.md has no '## [$version]' section"
+            exit 1
+          fi
 
-      - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ${{ github.workspace }}\nupkg
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
 
-      - name: NuGet login (OIDC → temp API key)
+      - name: Pack
+        run: dotnet pack src/PayfurlSdk -c Release -p:Version=${GITHUB_REF_NAME#v} -o nupkg
+
+      - name: NuGet login (OIDC, a short-lived API key)
         uses: NuGet/login@v1
         id: login
         with:
           user: ${{ secrets.NUGET_USER }}
-      
-      - name: Publish NuGet package
-        run: dotnet nuget push "${{ github.workspace }}\nupkg\*.nupkg" --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
 
-      - name: Restore dependencies
-        run: dotnet restore
+      # The .snupkg beside the .nupkg goes to the symbol server with it.
+      - name: Push to NuGet
+        run: dotnet nuget push "nupkg/*.nupkg" --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md nupkg/*

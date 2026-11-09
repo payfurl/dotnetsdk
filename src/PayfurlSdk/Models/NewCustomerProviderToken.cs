@@ -1,0 +1,38 @@
+#pragma warning disable CS1591 // The properties are the API's fields, with the API's names.
+using System.Collections.Generic;
+
+namespace Payfurl.Sdk.Models;
+
+/// <summary>
+/// The API's <c>NewCustomerProviderToken</c> (api/src/api/Models/NewCustomerProviderToken.cs), in a request.
+/// </summary>
+public sealed class NewCustomerProviderToken
+{
+    public required string ProviderId { get; set; }
+
+    public required string ProviderToken { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Reference { get; set; }
+
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
+    public string? Ip { get; set; }
+
+    public Address? Address { get; set; }
+
+    public Dictionary<string, string>? ProviderTokenData { get; set; }
+
+    public bool? Verify { get; set; }
+
+    public PaymentType? Type { get; set; }
+
+    public Dictionary<string, string>? Metadata { get; set; }
+
+    public WebhookConfig? Webhook { get; set; }
+}
