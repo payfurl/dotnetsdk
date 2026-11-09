@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
@@ -53,11 +54,11 @@ namespace payfurl.sdk
 
             if (searchData.AddedAfter.HasValue)
                 queryString.Add("AddedAfter=" +
-                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
 
             if (searchData.AddedBefore.HasValue)
                 queryString.Add("AddedBefore=" +
-                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
 
             if (searchData.Sort.HasValue && searchData.Sort != SearchPaymentLink.SortBy.None)
                 queryString.Add("SortBy=" + searchData.Sort);

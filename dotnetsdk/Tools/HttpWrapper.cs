@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using payfurl.sdk.Helpers;
@@ -28,13 +29,14 @@ namespace payfurl.sdk.Tools
             DateTimeZoneHandling = DateTimeZoneHandling.Utc
         };
 
-        // PooledConnectionLifetime prevents DNS caching but is not supported with current .NET versions
+        // PooledConnectionLifetime prevents DNS caching but is not supported with current .NET versions.
+        // No client-wide timeout: each call takes Config.TimeoutMilliseconds as it is when the call starts.
         private static readonly HttpClient HttpClient = new HttpClient(/*new SocketsHttpHandler
         {
             PooledConnectionLifetime = TimeSpan.FromMinutes(1)
         }*/)
         {
-            Timeout = TimeSpan.FromMilliseconds(Config.TimeoutMilliseconds)
+            Timeout = Timeout.InfiniteTimeSpan
         };
 
         private const string MediaType = "application/json";
@@ -56,8 +58,11 @@ namespace payfurl.sdk.Tools
 
             try
             {
-                response = await HttpClient.SendAsync(httpRequest);
-                responseString = await response.Content.ReadAsStringAsync();
+                using (var timeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(Config.TimeoutMilliseconds)))
+                {
+                    response = await HttpClient.SendAsync(httpRequest, timeout.Token);
+                    responseString = await response.Content.ReadAsStringAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -69,7 +74,15 @@ namespace payfurl.sdk.Tools
                 TranslateException(null, response.StatusCode, responseString);
             }
 
-            return JsonConvert.DeserializeObject<TResult>(responseString, JsonSettings);
+            try
+            {
+                return JsonConvert.DeserializeObject<TResult>(responseString, JsonSettings);
+            }
+            catch (JsonException ex)
+            {
+                var error = BuildDefaultError((int)response.StatusCode, "The API's response is not valid JSON");
+                throw new ApiException(error, error.Message, error.Code, false, ex);
+            }
         }
 
         private static HttpRequestMessage PrepareHttpRequestMessage<T>(string endpoint, Method httpMethod, T body, Dictionary<string, string> headers)
@@ -108,7 +121,6 @@ namespace payfurl.sdk.Tools
 
         private static void TranslateException(Exception exception, HttpStatusCode? statusCode = null, string responseString = null)
         {
-            var error = BuildDefaultError();
 
             if (exception != null && IsTimeoutException(exception) || (statusCode.HasValue && (statusCode == HttpStatusCode.RequestTimeout || statusCode == HttpStatusCode.GatewayTimeout)))
             {
@@ -117,14 +129,32 @@ namespace payfurl.sdk.Tools
                 throw new ApiException(timeoutError, timeoutError.Message, timeoutError.Code, true);
             }
 
+            var status = statusCode.HasValue ? (int)statusCode.Value : 500;
+            // A server error or a rate limit is worth retrying when the API doesn't say.
+            var retryable = status >= 500 || status == 429;
+            Exception parseError = null;
+
             if (!string.IsNullOrEmpty(responseString))
             {
-                var responseError = JsonConvert.DeserializeObject<Error>(responseString);
+                Error responseError = null;
+                try
+                {
+                    responseError = JsonConvert.DeserializeObject<Error>(responseString, JsonSettings);
+                }
+                catch (JsonException ex)
+                {
+                    // Not the API's JSON error, such as a load balancer's HTML 502.
+                    parseError = ex;
+                }
 
-                throw new ApiException(responseError, responseError?.Message, responseError.Code, true);
+                if (responseError != null)
+                {
+                    throw new ApiException(responseError, responseError.Message, responseError.Code, responseError.IsRetryable);
+                }
             }
 
-            throw new ApiException(error, error.Message, error.Code, true);
+            var error = BuildDefaultError(status, statusCode.HasValue ? "HTTP " + status + " from the payFURL API" : "Unknown error");
+            throw new ApiException(error, error.Message, error.Code, exception == null ? retryable : true, exception ?? parseError);
         }
 
         private static bool IsTimeoutException(Exception exception)
@@ -136,14 +166,14 @@ namespace payfurl.sdk.Tools
                     && socketException.SocketErrorCode == SocketError.ConnectionReset);
         }
 
-        private static Error BuildDefaultError()
+        private static Error BuildDefaultError(int httpStatus = 500, string message = "Unknown error")
         {
             var error = new Error
             {
-                HttpStatus = 500,
+                HttpStatus = httpStatus,
                 Code = ErrorCodeType.UnknownError,
                 Type = ErrorCodeTypeTranslator.GetErrorCodeUrlByCode(ErrorCodeType.UnknownError),
-                Message = "Unknown error",
+                Message = message,
                 Details = new Dictionary<string, string>(),
                 Resource = ""
             };

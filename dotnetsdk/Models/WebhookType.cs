@@ -7,5 +7,6 @@ namespace payfurl.sdk.Models
         Subscription,
         Customer,
         PaymentMethod,
+        Dispute,
     }
 }

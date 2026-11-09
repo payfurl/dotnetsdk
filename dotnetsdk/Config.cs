@@ -22,7 +22,7 @@ namespace payfurl.sdk
     {
         public static string BaseUrl { get; private set; }
         public static string SecretKey { get; private set; }
-        public static int TimeoutMilliseconds { get; private set; }
+        public static int TimeoutMilliseconds { get; private set; } = 60000;
         public static Environment Environment { get; private set; }
 
         private static readonly Dictionary<(Region, Environment), string> EnvConfigToUrlMapping =
@@ -56,6 +56,7 @@ namespace payfurl.sdk
             }
 
             SecretKey = secretKey;
+            Environment = environment;
             TimeoutMilliseconds = timeoutMilliseconds;
         }
 

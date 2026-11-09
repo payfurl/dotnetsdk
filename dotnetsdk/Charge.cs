@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Globalization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
@@ -179,12 +180,12 @@ namespace payfurl.sdk
 
             if (newCharge.RefundAmount.HasValue)
             {
-                queryString.Add("amount=" + newCharge.RefundAmount.Value);
+                queryString.Add("amount=" + newCharge.RefundAmount.Value.ToString(CultureInfo.InvariantCulture));
             }
 
             if (!string.IsNullOrEmpty(newCharge.Comment))
             {
-                queryString.Add("comment=" + newCharge.Comment);
+                queryString.Add("comment=" + HttpUtility.UrlEncode(newCharge.Comment));
             }
 
             var result = "";
@@ -213,10 +214,10 @@ namespace payfurl.sdk
 
             if (searchData.AmountGreaterThan.HasValue)
                 queryString.Add("AmountGreaterThan=" +
-                                HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString()));
+                                HttpUtility.UrlEncode(searchData.AmountGreaterThan.Value.ToString(CultureInfo.InvariantCulture)));
 
             if (searchData.AmountLessThan.HasValue)
-                queryString.Add("AmountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString()));
+                queryString.Add("AmountLessThan=" + HttpUtility.UrlEncode(searchData.AmountLessThan.Value.ToString(CultureInfo.InvariantCulture)));
 
             if (!string.IsNullOrWhiteSpace(searchData.CustomerId))
                 queryString.Add("CustomerId=" + HttpUtility.UrlEncode(searchData.CustomerId));
@@ -244,11 +245,11 @@ namespace payfurl.sdk
 
             if (searchData.AddedAfter.HasValue)
                 queryString.Add("AddedAfter=" +
-                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
 
             if (searchData.AddedBefore.HasValue)
                 queryString.Add("AddedBefore=" +
-                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
 
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString.Add("SortBy=" + searchData.SortBy);

@@ -1,4 +1,5 @@
-﻿using payfurl.sdk.Models;
+﻿using System.Globalization;
+using payfurl.sdk.Models;
 using payfurl.sdk.Tools;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -101,8 +102,6 @@ namespace payfurl.sdk
 
         public List<PaymentMethodData> GetPaymentMethods(string customerId)
         {
-            customerId = HttpUtility.UrlEncode(customerId);
-
             return AsyncHelper.RunSync(() =>
                 HttpWrapper.CallAsync<string, List<PaymentMethodData>>(
                     "/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null));
@@ -110,8 +109,6 @@ namespace payfurl.sdk
 
         public async Task<List<PaymentMethodData>> GetPaymentMethodsAsync(string customerId)
         {
-            customerId = HttpUtility.UrlEncode(customerId);
-
             return await HttpWrapper.CallAsync<string, List<PaymentMethodData>>(
                 "/customer/" + HttpUtility.UrlEncode(customerId) + "/payment_method", Method.GET, null);
         }
@@ -212,11 +209,11 @@ namespace payfurl.sdk
 
             if (searchData.AddedAfter.HasValue)
                 queryString.Add("AddedAfter=" +
-                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedAfter.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
 
             if (searchData.AddedBefore.HasValue)
                 queryString.Add("AddedBefore=" +
-                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH: mm:ss")));
+                                HttpUtility.UrlEncode(searchData.AddedBefore.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)));
             
             if (!string.IsNullOrWhiteSpace(searchData.SortBy))
                 queryString.Add("SortBy=" + HttpUtility.UrlEncode(searchData.SortBy));

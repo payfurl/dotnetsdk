@@ -1,3 +1,4 @@
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -18,10 +19,10 @@ namespace payfurl.sdk
         public async Task<List<payfurl.sdk.Models.Settlement>> GetSettlementsAsync(DateTime startDate, DateTime? endDate = null)
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-            queryString.Add("startDate", startDate.ToString("yyyy-MM-dd"));
+            queryString.Add("startDate", startDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             if (endDate.HasValue)
             {
-                queryString.Add("endDate", endDate.Value.ToString("yyyy-MM-dd"));
+                queryString.Add("endDate", endDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
             return await HttpWrapper.CallAsync<string, List<payfurl.sdk.Models.Settlement>>(

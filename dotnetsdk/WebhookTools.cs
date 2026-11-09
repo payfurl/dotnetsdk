@@ -28,7 +28,7 @@ namespace payfurl.sdk
         /// <param name="signatureHeader">Webhook signature header <code>X-Payfurl-Signature</code></param>
         /// <param name="signatureKey">Webhook signature key (from dashboard)</param>
         /// <returns>Deserialized transaction message</returns>
-        /// <exception cref="ArgumentException">Throw if signature validation is failed</exception>
+        /// <exception cref="ArgumentException">Thrown if signature validation fails or the signature key is empty</exception>
         public static WebhookTransaction DeserializeTransaction(string requestBody, string signatureHeader, string signatureKey)
         {
             if (!IsFormPayfurl(requestBody, signatureHeader, signatureKey))
@@ -43,16 +43,44 @@ namespace payfurl.sdk
 
         private static bool IsFormPayfurl(string requestBody, string signatureHeader, string signatureKey)
         {
+            if (string.IsNullOrEmpty(signatureKey))
+            {
+                throw new ArgumentException("The webhook signature key is empty", nameof(signatureKey));
+            }
+
+            if (requestBody == null || string.IsNullOrEmpty(signatureHeader))
+            {
+                return false;
+            }
+
             var requestBytes = Encoding.UTF8.GetBytes(requestBody);
             var secret = Encoding.UTF8.GetBytes(signatureKey);
 
             using (var hmac = new HMACSHA256(secret))
             {
-                var hash = hmac.ComputeHash(requestBytes);
-                var hashString = Convert.ToBase64String(hash);
+                var expected = Encoding.ASCII.GetBytes(Convert.ToBase64String(hmac.ComputeHash(requestBytes)));
+                var actual = Encoding.ASCII.GetBytes(signatureHeader);
 
-                return hashString.Equals(signatureHeader);
+                return FixedTimeEquals(expected, actual);
             }
+        }
+
+        // CryptographicOperations.FixedTimeEquals, which netstandard2.0 and .NET Framework don't have: the time taken
+        // doesn't depend on where the signatures differ.
+        private static bool FixedTimeEquals(byte[] left, byte[] right)
+        {
+            if (left.Length != right.Length)
+            {
+                return false;
+            }
+
+            var difference = 0;
+            for (var i = 0; i < left.Length; i++)
+            {
+                difference |= left[i] ^ right[i];
+            }
+
+            return difference == 0;
         }
     }
 }
