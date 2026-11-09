@@ -10,7 +10,8 @@ public sealed class NewTransferGroup
 {
     public required string ProviderId { get; set; }
 
-    public required string GroupReference { get; set; }
+    /// <summary>A reference for the group, unique on the account. Optional: the API checks it for duplicates only when it is set.</summary>
+    public string? GroupReference { get; set; }
 
     public required List<NewTransfer> Transfers { get; set; }
 

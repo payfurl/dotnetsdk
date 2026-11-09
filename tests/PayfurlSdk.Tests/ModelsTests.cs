@@ -36,6 +36,21 @@ public class ModelsTests
     }
 
     [Fact]
+    public async Task APaymentLinkKeepsItsPaymentTypesAsSent()
+    {
+        // As the dashboard saves them: the browser SDK's names.
+        var (client, handler) = Fake.Client();
+        handler.Respond(200, """{"paymentLinkId":"l1","allowedPaymentTypes":["card","azupay","PAYPAL"]}""");
+
+        var link = await client.PaymentLinks.GetAsync("l1");
+
+        Assert.Equal(new List<string> { "card", "azupay", "PAYPAL" }, link.AllowedPaymentTypeNames);
+#pragma warning disable CS0618 // The obsolete PaymentType view: a name no case matches is Unknown.
+        Assert.Equal(new List<PaymentType> { PaymentType.Card, PaymentType.Unknown, PaymentType.PayPal }, link.AllowedPaymentTypes);
+#pragma warning restore CS0618
+    }
+
+    [Fact]
     public async Task AStatusTheSdkDoesNotKnowIsUnknown()
     {
         var (client, handler) = Fake.Client();

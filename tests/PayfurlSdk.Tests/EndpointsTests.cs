@@ -92,6 +92,11 @@ public class EndpointsTests
         ("info.providers", c => c.Info.GetProvidersAsync(10.5m, "AUD", cardProviderId: "p1"), "GET", "/info/providers?amount=10.5&currency=AUD&cardProviderId=p1", null),
 
         ("paymentLinks.create", c => c.PaymentLinks.CreateAsync(new CreatePaymentLink { Title = "T", Amount = 1m, Currency = "AUD" }), "POST", "/payment_link", """{"title":"T","amount":1,"currency":"AUD"}"""),
+        // The browser SDK's names, which the payment link passes to its drop-in; azupay is no PaymentType.
+        ("paymentLinks.create with type names", c => c.PaymentLinks.CreateAsync(new CreatePaymentLink { Title = "T", AllowedPaymentTypeNames = new() { "card", "azupay" } }), "POST", "/payment_link", """{"title":"T","allowedPaymentTypes":["card","azupay"]}"""),
+#pragma warning disable CS0618 // The obsolete PaymentType view still writes the names.
+        ("paymentLinks.create with PaymentType", c => c.PaymentLinks.CreateAsync(new CreatePaymentLink { Title = "T", AllowedPaymentTypes = new() { PaymentType.Card, PaymentType.PayPal } }), "POST", "/payment_link", """{"title":"T","allowedPaymentTypes":["CARD","PAYPAL"]}"""),
+#pragma warning restore CS0618
         ("paymentLinks.get", c => c.PaymentLinks.GetAsync("l1"), "GET", "/payment_link/l1", null),
         ("paymentLinks.search", c => c.PaymentLinks.SearchAsync(new PaymentLinkSearch { Limit = 1 }), "GET", "/payment_link?limit=1", null),
 
@@ -116,6 +121,9 @@ public class EndpointsTests
 
         ("transfers.create", c => c.Transfers.CreateAsync(new NewTransferGroup { ProviderId = "p1", GroupReference = "g", Transfers = new() { new NewTransfer { Account = "a", Amount = 1m } } }), "POST", "/transfer",
             """{"providerId":"p1","groupReference":"g","transfers":[{"account":"a","amount":1}]}"""),
+        // The API doesn't require a group reference.
+        ("transfers.create without a group reference", c => c.Transfers.CreateAsync(new NewTransferGroup { ProviderId = "p1", ChargeId = "ch1", Transfers = new() { new NewTransfer { Account = "a", Amount = 1m } } }), "POST", "/transfer",
+            """{"providerId":"p1","transfers":[{"account":"a","amount":1}],"chargeId":"ch1"}"""),
         ("transfers.get", c => c.Transfers.GetAsync("tr1"), "GET", "/transfer/tr1", null),
         ("transfers.search", c => c.Transfers.SearchAsync(new TransferSearch { Reference = "g" }), "GET", "/transfer?reference=g", null),
 
@@ -140,7 +148,7 @@ public class EndpointsTests
         var (client, handler) = Fake.Client();
         // A list for the endpoints that answer one.
         if (expected.Path.EndsWith("/payment_method", StringComparison.Ordinal) && expected.Path.StartsWith("/customer/", StringComparison.Ordinal)
-            || expected.Path.StartsWith("/settlements", StringComparison.Ordinal) || name == "transfers.create")
+            || expected.Path.StartsWith("/settlements", StringComparison.Ordinal) || name.StartsWith("transfers.create", StringComparison.Ordinal))
         {
             handler.Respond(200, "[]");
         }
