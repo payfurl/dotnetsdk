@@ -2,10 +2,11 @@
 
 The [payFURL](https://payfurl.com) API for .NET: charges, customers, payment methods, subscriptions, payment links,
 batches, transfers, vaults, providers, tokens, disputes, settlements and webhook subscriptions. It covers the
-endpoints a secret key can call, plus `GET /info/providers`.
+endpoints a secret key can call, plus `GET /info/providers`. The API itself, its fields and its error codes are
+documented at [docs.payfurl.com](https://docs.payfurl.com).
 
-Coming from 2.x? [UPGRADE.md](UPGRADE.md) maps every 2.x call to 3.0. What changed in each release:
-[CHANGELOG.md](CHANGELOG.md).
+Coming from 2.x? [UPGRADE.md](https://github.com/payfurl/dotnetsdk/blob/master/UPGRADE.md) maps every 2.x call to 3.0. What changed in each release:
+[CHANGELOG.md](https://github.com/payfurl/dotnetsdk/blob/master/CHANGELOG.md).
 
 ## Install
 
@@ -70,16 +71,14 @@ Then take a `PayfurlClient` in a constructor. Without an `HttpClient`, a client 
 | --- | --- | --- |
 | `Production` | https://api.payfurl.com | https://api-au.payfurl.com |
 | `Sandbox` | https://sandbox-api.payfurl.com | https://sandbox-api-au.payfurl.com |
-| `Development` | https://develop-api.payfurl.com | https://develop-api-au.payfurl.com |
-| `Local` | https://localhost:5001, accepting its development certificate | the same |
 
-The key's last part (`sectest...-au`) is its account's region. `BaseUrl` overrides both, such as
-`http://api:5000` on a Docker network.
+The key's last part (`sectest...-au`) is its account's region. `BaseUrl` overrides both, for a proxy say.
+`Development` and `Local` are payFURL's own environments.
 
 ## Examples
 
 ```csharp
-// Charges
+// Charges. A card number on your server puts it in PCI DSS scope; a token from the browser SDK keeps it out.
 var charge = await payfurl.Charges.CreateWithCardLeastCostAsync(new NewChargeCardLeastCost
 {
     Amount = 15m,
@@ -166,13 +165,13 @@ could charge twice.
 
 ```csharp
 var body = await new StreamReader(Request.Body).ReadToEndAsync();
-if (!Webhook.Verify(body, Request.Headers["x-payfurl-signature"], signingKey))
+if (!Webhook.Verify(body, Request.Headers["X-Payfurl-Signature"], signingKey))
 {
     return Unauthorized();
 }
 
 // Or verify and parse in one step; it throws ArgumentException for a bad signature.
-JsonElement webhook = Webhook.Parse(body, Request.Headers["x-payfurl-signature"], signingKey);
+JsonElement webhook = Webhook.Parse(body, Request.Headers["X-Payfurl-Signature"], signingKey);
 var chargeId = webhook.GetProperty("data").GetProperty("chargeId").GetString();
 ```
 
@@ -197,7 +196,7 @@ var payfurl = new PayfurlClient(
     new HttpClient(new FakeHandler()));
 ```
 
-The SDK's own tests do the same: [tests/PayfurlSdk.Tests/FakeHandler.cs](tests/PayfurlSdk.Tests/FakeHandler.cs).
+The SDK's own tests do the same: [tests/PayfurlSdk.Tests/FakeHandler.cs](https://github.com/payfurl/dotnetsdk/blob/master/tests/PayfurlSdk.Tests/FakeHandler.cs).
 
 ## Development
 
@@ -205,27 +204,13 @@ You need [just](https://github.com/casey/just), the .NET 10 SDK, and the .NET 8 
 `netstandard2.0` build:
 
 ```bash
-just test   # format check, build, unit tests: what CI runs
+just test   # format check, build, unit tests: what CI runs on every pull request
 just format # apply the style
 just pack   # the package, into nupkg/
-just e2e    # the integration tests (below)
 ```
 
-The unit tests never call an API. The integration tests live in payfurl/platform, under `e2e/api-tests/dotnetsdk`:
-they build the API from source in Docker and run against this checkout. `just e2e` runs them when the platform is
-checked out at `../platform` or `../../platform` (or `PLATFORM_DIR`).
-
-The models follow the API's own (`services/api/src/api/Models` in the platform). A field added there is added here by
-hand, with a unit test.
-
-## Releasing
-
-1. Add the version's section to `CHANGELOG.md` and merge to master.
-2. Tag the merge `vX.Y.Z` and push the tag.
-
-The **Release** workflow (`.github/workflows/publish.yml`) runs CI, packs once with the tag's version (nobody edits the csproj), pushes the package and
-its symbols to NuGet with trusted publishing (`NuGet/login`, the `NUGET_USER` secret), and creates the GitHub release
-from the changelog section. It refuses a tag that is not on master or has no changelog section.
+The unit tests never call an API. payFURL also runs integration tests against an API built from source before each
+release.
 
 ## License
 

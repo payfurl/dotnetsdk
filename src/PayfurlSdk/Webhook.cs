@@ -6,14 +6,14 @@ using System.Text.Json;
 namespace Payfurl.Sdk;
 
 /// <summary>
-/// Checks that a webhook came from payFURL: its <c>x-payfurl-signature</c> header is the HMAC-SHA256 of the body,
+/// Checks that a webhook came from payFURL: its <c>X-Payfurl-Signature</c> header is the HMAC-SHA256 of the body,
 /// in Base64, with the subscription's signing key (services/webhooks-sender/src/WebhooksSender/Tools/SignatureGenerator.cs).
 /// </summary>
 public static class Webhook
 {
     /// <summary>Whether <paramref name="signature"/> is the body's, compared in constant time.</summary>
     /// <param name="body">The request body, exactly as received.</param>
-    /// <param name="signature">The <c>x-payfurl-signature</c> header.</param>
+    /// <param name="signature">The <c>X-Payfurl-Signature</c> header.</param>
     /// <param name="signingKey">The webhook subscription's signing key.</param>
     public static bool Verify(string body, string? signature, string signingKey)
     {

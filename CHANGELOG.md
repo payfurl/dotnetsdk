@@ -63,8 +63,8 @@ A new SDK in the same package: a client object instead of static configuration, 
 - `WebhookTools` and the `WebhookTransaction` models.
 - The `netstandard2.1`, `netcoreapp2.2`, `net451` and `net48` targets, and the `Microsoft.AspNet.WebApi`,
   `Microsoft.NETCore.App`, `System.ValueTuple` and `NETStandard.Library` dependencies.
-- The functional tests that ran against the development environment with `config-build` keys: unit tests replace
-  them here, and the integration tests run in payfurl/platform (`just e2e dotnetsdk`).
+- The functional tests that called payFURL's development environment: unit tests replace them, and payFURL runs
+  the integration tests against an API built from source.
 
 ## [2.2.1] - 2026-11-09
 
