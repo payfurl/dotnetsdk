@@ -30,9 +30,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
 
-    <!-- Catches API differences between the targets now; set PackageValidationBaselineVersion to 3.0.0 once it is
-         on NuGet, so a 3.x release that breaks 3.0 fails the build. -->
+    <!-- The pack fails when the API differs between the targets, or breaks 3.0.0's public API: a 3.x release must
+         not. Raise the baseline to 4.0.0 only when a breaking 4.0 is released. -->
     <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>3.0.0</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
