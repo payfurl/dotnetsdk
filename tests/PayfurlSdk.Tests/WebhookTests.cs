@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Payfurl.Sdk.Models;
 using Xunit;
 
 namespace Payfurl.Sdk.Tests;
@@ -39,6 +40,27 @@ public class WebhookTests
         Assert.Equal("ch1", webhook.GetProperty("data").GetProperty("chargeId").GetString());
         Assert.Equal("Transaction", webhook.GetProperty("meta").GetProperty("type").GetString());
     }
+
+    [Fact]
+    public void ParsesATransactionWebhookAsAChargeData()
+    {
+        const string body = """
+            {"meta":{"messageId":"m1","timestamp":"2026-11-09T01:02:03Z","type":"Transaction","eventType":"transaction.created"},
+             "data":{"chargeId":"ch1","amount":10.5,"status":"SUCCESS","somethingNew":1}}
+            """;
+
+        var webhook = Webhook.Parse<ChargeData>(body, Sign(body, Key), Key);
+
+        Assert.Equal("m1", webhook.Meta!.MessageId);
+        Assert.Equal(WebhookType.Transaction, webhook.Meta.Type);
+        Assert.Equal("transaction.created", webhook.Meta.EventType);
+        Assert.Equal("ch1", webhook.Data!.ChargeId);
+        Assert.Equal(10.5m, webhook.Data.Amount);
+        Assert.Equal(TransactionStatus.Success, webhook.Data.Status);
+    }
+
+    [Fact]
+    public void RefusesToParseAnUnsignedBodyAsAModel() => Assert.Throws<ArgumentException>(() => Webhook.Parse<ChargeData>(Body, "AAAA", Key));
 
     [Fact]
     public void RefusesToParseAnUnsignedBody() => Assert.Throws<ArgumentException>(() => Webhook.Parse(Body, "AAAA", Key));

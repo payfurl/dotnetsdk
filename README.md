@@ -5,8 +5,20 @@ batches, transfers, vaults, providers, tokens, disputes, settlements and webhook
 endpoints a secret key can call, plus `GET /info/providers`. The API itself, its fields and its error codes are
 documented at [docs.payfurl.com](https://docs.payfurl.com).
 
-Coming from 2.x? [UPGRADE.md](https://github.com/payfurl/dotnetsdk/blob/master/UPGRADE.md) maps every 2.x call to 3.0. What changed in each release:
-[CHANGELOG.md](https://github.com/payfurl/dotnetsdk/blob/master/CHANGELOG.md).
+What changed in each release: [CHANGELOG.md](https://github.com/payfurl/dotnetsdk/blob/master/CHANGELOG.md).
+
+## Upgrading from 2.x
+
+3.0 is a breaking release: code written for 2.x does not compile against it. Nothing upgrades by itself, since NuGet
+keeps a project on the 2.x version it names, but a dependency bot will offer 3.0 as a major update: merge it together
+with the migration. [UPGRADE.md](https://github.com/payfurl/dotnetsdk/blob/master/UPGRADE.md) has a step-by-step recipe with before-and-after code, and maps every
+2.x call to its replacement.
+
+To stay on 2.x for now, take 2.2.1, which has the last 2.x fixes, and cap the version:
+
+```xml
+<PackageReference Include="PayfurlSdk" Version="[2.2.1,3.0)" />
+```
 
 ## Install
 
@@ -170,10 +182,13 @@ if (!Webhook.Verify(body, Request.Headers["X-Payfurl-Signature"], signingKey))
     return Unauthorized();
 }
 
-// Or verify and parse in one step; it throws ArgumentException for a bad signature.
-JsonElement webhook = Webhook.Parse(body, Request.Headers["X-Payfurl-Signature"], signingKey);
-var chargeId = webhook.GetProperty("data").GetProperty("chargeId").GetString();
+// Or verify and parse in one step; it throws ArgumentException for a bad signature. A transaction webhook's data is a
+// ChargeData, a customer's a CustomerData, and so on (webhook.Meta.Type).
+var webhook = Webhook.Parse<ChargeData>(body, Request.Headers["X-Payfurl-Signature"], signingKey);
+var chargeId = webhook.Data?.ChargeId;
 ```
+
+`Webhook.Parse` without a type gives the JSON as a `JsonElement`.
 
 The signature is compared in constant time.
 

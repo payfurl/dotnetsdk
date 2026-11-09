@@ -2,6 +2,8 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Payfurl.Sdk.Internal;
+using Payfurl.Sdk.Models;
 
 namespace Payfurl.Sdk;
 
@@ -41,6 +43,30 @@ public static class Webhook
 
         return difference == 0;
 #endif
+    }
+
+    /// <summary>
+    /// The webhook once its signature checks out, with <c>data</c> read as <typeparamref name="T"/>: <see cref="ChargeData"/>
+    /// for a transaction webhook, <see cref="CustomerData"/> for a customer, and so on (<see cref="WebhookMeta.Type"/>).
+    /// </summary>
+    /// <exception cref="ArgumentException">When the signature does not match the body, or the body is not the expected JSON.</exception>
+    public static WebhookEvent<T> Parse<T>(string body, string? signature, string signingKey)
+        where T : class
+    {
+        if (!Verify(body, signature, signingKey))
+        {
+            throw new ArgumentException("The webhook's signature does not match its body: it is not from payFURL", nameof(signature));
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<WebhookEvent<T>>(body, Json.Options)
+                ?? throw new ArgumentException("The webhook's body is null", nameof(body));
+        }
+        catch (JsonException e)
+        {
+            throw new ArgumentException("The webhook's body is not the expected JSON", nameof(body), e);
+        }
     }
 
     /// <summary>The webhook's JSON (<c>data</c> and <c>meta</c>) once its signature checks out.</summary>

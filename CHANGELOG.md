@@ -9,8 +9,12 @@ version history and the merged pull requests; only `v1.5` was tagged before 2.2.
 
 ## [3.0.0] - 2026-11-09
 
-A new SDK in the same package: a client object instead of static configuration, async only, typed and nullable.
-[UPGRADE.md](UPGRADE.md) maps every 2.x method to its replacement; 2.x stays on NuGet for code that has not moved.
+**Breaking.** A new SDK in the same package: a client object instead of static configuration, async only, typed and
+nullable. Code written for 2.x does not compile against it. [UPGRADE.md](UPGRADE.md) has a migration recipe with
+before-and-after code and maps every 2.x method to its replacement.
+
+Nothing upgrades by itself: a project that names 2.x keeps it. To stay on 2.x for now, take 2.2.1 and cap the version
+at `[2.2.1,3.0)`. 2.x gets no new features.
 
 ### Added
 
@@ -34,7 +38,8 @@ A new SDK in the same package: a client object instead of static configuration, 
   `NewPaymentMethodCard`; `ExternalThreeDsData` and `ThreeDSServerTransID` on `CardRequestInformation`; `Ip` and
   `IpInfo` on `ChargeData`; `Comment` and `GatewayRefundId` on refunds; the rest of the models brought in line with
   the API's.
-- `Webhook.Verify` and `Webhook.Parse`.
+- `Webhook.Verify`, and `Webhook.Parse<T>`, which reads a webhook into a `WebhookEvent<T>` (`Meta`, and `Data` as
+  the API's model, such as `ChargeData`). `Webhook.Parse` without a type gives the JSON.
 - Every request sends `User-Agent: payfurl-dotnet/<version>`.
 - SourceLink, a deterministic build, a symbol package (`.snupkg`), the README in the package, and package validation.
 
@@ -48,7 +53,7 @@ A new SDK in the same package: a client object instead of static configuration, 
 - Refunds, captures and subscription status changes take their values as arguments, not request models.
 - Response properties are nullable: a field the response leaves out is `null`.
 - Requests send camelCase JSON without the fields left unset.
-- A webhook with a bad signature still throws `ArgumentException`; `Webhook.Parse` returns a `JsonElement`.
+- A webhook with a bad signature still throws `ArgumentException`.
 
 ### Removed
 
@@ -60,7 +65,7 @@ A new SDK in the same package: a client object instead of static configuration, 
   endpoints are not public.
 - The fixed `sdk-version: 4.5.7` header: `Info.GetProvidersAsync` takes the browser SDK version.
 - `TokenData.GatewayTokenId`, `TokenData.UserId` and `ChargeData.ThreeDSServerTransID`, which the API never sends.
-- `WebhookTools` and the `WebhookTransaction` models.
+- `WebhookTools` and the `WebhookTransaction` models: `Webhook` and `WebhookEvent<T>` replace them.
 - The `netstandard2.1`, `netcoreapp2.2`, `net451` and `net48` targets, and the `Microsoft.AspNet.WebApi`,
   `Microsoft.NETCore.App`, `System.ValueTuple` and `NETStandard.Library` dependencies.
 - The functional tests that called payFURL's development environment: unit tests replace them, and payFURL runs

@@ -1,11 +1,136 @@
 # Upgrading from 2.x to 3.0
 
-3.0 is a new SDK in the same NuGet package, `PayfurlSdk`. Code that uses the SDK changes, but each 2.x call has a
-direct replacement (below). 2.x stays on NuGet: `PayfurlSdk` 2.2.1 has the 2.x fixes, and pinning `2.*` keeps
-installing it until you move.
+3.0 is a breaking release: a new SDK in the same NuGet package, `PayfurlSdk`. Code written for 2.x does not compile
+against it, but each 2.x call has a direct replacement. The [recipe](#migration-recipe) below takes an integration
+across in one pass; the sections after it list every change.
 
-```bash
-dotnet add package PayfurlSdk --version 3.0.0
+## Staying on 2.x until you move
+
+Nothing upgrades by itself. NuGet restores the lowest version a project's reference allows, so a project that names
+2.x keeps 2.x. Two things do move it: someone choosing 3.0 (the Visual Studio package manager, `dotnet add package`),
+and a dependency bot (Dependabot, Renovate) opening a major-version update. Merge that update together with the
+migration, not on its own: on its own it does not build.
+
+To make sure, cap the version:
+
+```xml
+<PackageReference Include="PayfurlSdk" Version="[2.2.1,3.0)" />
+```
+
+2.2.1 has the last 2.x fixes: refund amounts on comma-decimal cultures, URL-encoded refund comments, the API's
+`IsRetryable`, timeouts, constant-time webhook signatures and dispute webhooks ([CHANGELOG.md](CHANGELOG.md)). Take it
+whatever you decide about 3.0. 2.x gets no new features: new API fields and endpoints go into 3.x.
+
+## Migration recipe
+
+1. **Install 3.0** and build: every 2.x call is now a compile error, which makes the list of places to change.
+
+   ```bash
+   dotnet add package PayfurlSdk --version 3.0.0
+   ```
+
+2. **Replace the namespaces.** `using payfurl.sdk;` and `using payfurl.sdk.Models;` become `using Payfurl.Sdk;` and
+   `using Payfurl.Sdk.Models;`. Drop `using payfurl.sdk.Models.Subscriptions;` and `using payfurl.sdk.Tools;`. 2.x's
+   `Environment` no longer hides `System.Environment`.
+
+3. **Replace `Config.Setup` with one client per account**, made once. In an ASP.NET Core app, register it:
+
+   ```csharp
+   builder.Services.AddSingleton(new PayfurlClientOptions
+   {
+       SecretKey = builder.Configuration["Payfurl:SecretKey"]!,
+       Environment = PayfurlEnvironment.Sandbox, // was Environment.SANDBOX
+       Timeout = TimeSpan.FromSeconds(60),        // was Config.Setup's timeoutMilliseconds
+   });
+   builder.Services.AddHttpClient<PayfurlClient>();
+   ```
+
+   and take `PayfurlClient` in the constructors that did `new Charge()`, `new Customer()` and so on. Elsewhere, keep
+   one `new PayfurlClient(options)` in a static field or your container. Don't make one per request: it is cheap,
+   but it is meant to live as long as the app.
+
+4. **Make the callers async.** `new Charge().CreateWithToken(x)` becomes `await payfurl.Charges.CreateWithTokenAsync(x)`,
+   and each method's name is in [Every method](#every-method). Pass your request's `CancellationToken` where you
+   have one. Code that cannot be async yet can call `.GetAwaiter().GetResult()`, as 2.x did inside every sync method.
+
+5. **Fill in the required fields.** The compiler names each request model field the API requires and the code did
+   not set. Set it: the API would have rejected the request anyway.
+
+6. **Compare statuses as enums.** `charge.Status == "SUCCESS"` becomes `charge.Status == TransactionStatus.Success`;
+   the same for `SubscriptionStatus`, `DisputeStatus`, `DisputeStage` and `PaymentType`. A value the SDK does not
+   know yet is `Unknown`, so a `switch` needs a branch for it.
+
+7. **Handle nulls in responses.** Every response property is nullable: `charge.Amount` is a `decimal?`. Where 2.x
+   gave `0`, `false` or `DateTime.MinValue` for a missing field, use `?? 0m`, `== true`, or `.HasValue`.
+
+8. **Catch the new exceptions.** `catch (ApiException e)` still catches every API error. `e.Code` is `e.ErrorCode`
+   and `e.ErrorData.X` is `e.X`. Add `catch (PayfurlConnectionException)` where a 2.x timeout surfaced as an
+   `ApiException` with HTTP 408, and stop retrying charges yourself on `IsRetryable` alone: it now says what the API
+   says, and a charge whose outcome is unknown should be searched for by reference first.
+
+9. **Move the webhook handler** to `Webhook.Parse<ChargeData>` (or `Webhook.Verify` and your own parsing).
+
+10. **Run your tests.** Tests that mocked the 2.x interfaces (`ICharge`, `ICustomer`, ...) can give the client an
+    `HttpClient` over a fake handler instead (README, *Testing your code*).
+
+### Before and after
+
+A typical 2.x integration: charge a token, refund part of it, save a card, and take the webhook.
+
+```csharp
+// 2.x
+using payfurl.sdk;
+using payfurl.sdk.Models;
+
+Config.Setup(secretKey, Environment.SANDBOX);
+
+var charge = new Charge().CreateWithToken(new NewChargeToken { Amount = 20, Currency = "AUD", Token = token, Reference = orderId });
+if (charge.Status != "SUCCESS") { /* ... */ }
+
+new Charge().Refund(new NewRefund { ChargeId = charge.ChargeId, RefundAmount = 5, Comment = "Damaged" });
+
+var customer = new Customer().CreateWithToken(new NewCustomerToken { Token = token, Email = email });
+var paymentMethodId = customer.DefaultPaymentMethod.PaymentMethodId;
+
+try
+{
+    new Charge().CreateWithPaymentMethod(new NewChargePaymentMethod { Amount = 10, PaymentMethodId = paymentMethodId });
+}
+catch (ApiException e) when (e.Code == ErrorCodeType.InsufficientFunds)
+{
+    // declined
+}
+
+var webhook = WebhookTools.DeserializeTransaction(body, signatureHeader, signingKey);
+var webhookChargeId = webhook.Data.ChargeId;
+```
+
+```csharp
+// 3.0
+using Payfurl.Sdk;
+using Payfurl.Sdk.Models;
+
+var payfurl = new PayfurlClient(new PayfurlClientOptions { SecretKey = secretKey, Environment = PayfurlEnvironment.Sandbox });
+
+var charge = await payfurl.Charges.CreateWithTokenAsync(new NewChargeToken { Amount = 20m, Currency = "AUD", Token = token, Reference = orderId });
+if (charge.Status != TransactionStatus.Success) { /* ... */ }
+
+await payfurl.Charges.RefundAsync(charge.ChargeId!, amount: 5m, comment: "Damaged");
+
+var customer = await payfurl.Customers.CreateWithTokenAsync(new NewCustomerToken { Token = token, Email = email });
+var paymentMethodId = customer.DefaultPaymentMethod!.PaymentMethodId!;
+
+try
+{
+    await payfurl.Charges.CreateWithPaymentMethodAsync(new NewChargePaymentMethod { Amount = 10m, PaymentMethodId = paymentMethodId });
+}
+catch (ApiException e) when (e.ErrorCode == ErrorCode.InsufficientFunds)
+{
+    // declined
+}
+
+var webhook = Webhook.Parse<ChargeData>(body, signatureHeader, signingKey);
+var webhookChargeId = webhook.Data!.ChargeId;
 ```
 
 ## Frameworks
@@ -98,7 +223,9 @@ anything else.
 
 | 2.x | 3.0 |
 | --- | --- |
-| `WebhookTools.DeserializeTransaction(body, signature, key)` returning `WebhookTransaction` | `Webhook.Parse(body, signature, key)` returning the JSON as a `JsonElement`; it still throws `ArgumentException` for a bad signature |
+| `WebhookTools.DeserializeTransaction(body, signature, key)` returning `WebhookTransaction` | `Webhook.Parse<ChargeData>(body, signature, key)` returning a `WebhookEvent<ChargeData>` (`Meta`, `Data`); it still throws `ArgumentException` for a bad signature |
+| `WebhookTransaction.Data`, `WebhookMeta` | `WebhookEvent<T>.Data` (the API's own model: `ChargeData`, `CustomerData`, ...), `WebhookMeta` with `Type` as a `WebhookType` |
+| none | `Webhook.Parse(body, signature, key)`, the JSON as a `JsonElement` |
 | none | `Webhook.Verify(body, signature, key)`, a `bool` |
 
 ## Every method
