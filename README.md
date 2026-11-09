@@ -14,7 +14,9 @@ dotnet add package PayfurlSdk
 ```
 
 It targets `netstandard2.0` and `net10.0`, so it runs on .NET 10, .NET 8 and the other .NET versions, and on .NET
-Framework 4.6.2 or later. Its one dependency is `System.Text.Json`, on `netstandard2.0` only.
+Framework 4.6.2 or later. Its one dependency is `System.Text.Json`, on `netstandard2.0` only. Compiling against it
+needs Visual Studio 2022 17.4 or later, or the .NET 7 SDK or later, with any C# language version (older compilers
+cannot read `required` members); a .NET Framework project also references `System.Net.Http`.
 
 ## Quick start
 
@@ -221,7 +223,7 @@ hand, with a unit test.
 1. Add the version's section to `CHANGELOG.md` and merge to master.
 2. Tag the merge `vX.Y.Z` and push the tag.
 
-The **Release** workflow runs CI, packs once with the tag's version (nobody edits the csproj), pushes the package and
+The **Release** workflow (`.github/workflows/publish.yml`) runs CI, packs once with the tag's version (nobody edits the csproj), pushes the package and
 its symbols to NuGet with trusted publishing (`NuGet/login`, the `NUGET_USER` secret), and creates the GitHub release
 from the changelog section. It refuses a tag that is not on master or has no changelog section.
 

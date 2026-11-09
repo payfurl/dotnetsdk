@@ -1,5 +1,6 @@
 # Push a tag vX.Y.Z on master to release: CI runs, the package is packed once with the tag's version, pushed to
-# NuGet with trusted publishing, and the GitHub release gets that version's CHANGELOG.md section.
+# NuGet with trusted publishing, and the GitHub release gets that version's CHANGELOG.md section. The file keeps 2.x's
+# name, publish.yml: nuget.org's trusted-publishing policy names the workflow file.
 name: Release
 
 on:
@@ -40,7 +41,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/setup-dotnet@v5
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
 
