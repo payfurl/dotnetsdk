@@ -7,6 +7,23 @@ version history and the merged pull requests; only `v1.5` was tagged before 2.2.
 
 ## [Unreleased]
 
+### Added
+
+- `CreatePaymentLink.AllowedPaymentTypeNames` and `PaymentLink.AllowedPaymentTypeNames`: a payment link's payment
+  types as the API takes and sends them, the browser SDK's names (`card`, `paypal`, `azupay`, ...). The dashboard
+  saves these, and the payment link passes them to its drop-in.
+
+### Fixed
+
+- A payment link's payment types are no longer lost: a name that no `PaymentType` case matches (`azupay`) read as
+  `Unknown`, and `CreatePaymentLink` couldn't send it. `AllowedPaymentTypeNames` keeps every name.
+- `NewTransferGroup.GroupReference` is optional, as in the API (it is checked for duplicates only when set).
+
+### Deprecated
+
+- `AllowedPaymentTypes` on `CreatePaymentLink` and `PaymentLink`: a `PaymentType` view of `AllowedPaymentTypeNames`
+  (unknown names read as `Unknown`; setting it replaces the names). Use `AllowedPaymentTypeNames`.
+
 ## [3.0.0] - 2026-11-09
 
 **Breaking.** A new SDK in the same package: a client object instead of static configuration, async only, typed and

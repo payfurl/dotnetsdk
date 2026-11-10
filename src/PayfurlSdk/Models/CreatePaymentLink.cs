@@ -1,5 +1,8 @@
 #pragma warning disable CS1591 // The properties are the API's fields, with the API's names.
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Payfurl.Sdk.Internal;
 
 namespace Payfurl.Sdk.Models;
 
@@ -14,7 +17,26 @@ public sealed class CreatePaymentLink
 
     public string? Currency { get; set; }
 
-    public List<PaymentType>? AllowedPaymentTypes { get; set; }
+    /// <summary>
+    /// The payment methods the link's checkout offers, as the browser SDK names them: <c>card</c>, <c>paypal</c>,
+    /// <c>googlepay</c>, <c>applepay</c>, <c>azupay</c>, ... The payment link passes them to its drop-in, which reads
+    /// them case-insensitively.
+    /// </summary>
+    [JsonPropertyName("allowedPaymentTypes")]
+    public List<string>? AllowedPaymentTypeNames { get; set; }
+
+    /// <summary>
+    /// <see cref="AllowedPaymentTypeNames"/> as <see cref="PaymentType"/>: a name no case matches (<c>azupay</c>)
+    /// reads as <see cref="PaymentType.Unknown"/>, and setting it replaces the names. A copy: adding to it changes
+    /// nothing.
+    /// </summary>
+    [JsonIgnore]
+    [Obsolete("The API takes the browser SDK's names, which PaymentType doesn't cover: use AllowedPaymentTypeNames.")]
+    public List<PaymentType>? AllowedPaymentTypes
+    {
+        get => PaymentTypeNames.ToTypes(AllowedPaymentTypeNames);
+        set => AllowedPaymentTypeNames = PaymentTypeNames.ToNames(value);
+    }
 
     public string? Description { get; set; }
 

@@ -126,7 +126,7 @@ var link = await payfurl.PaymentLinks.CreateAsync(new CreatePaymentLink { Title 
 
 // The rest
 await payfurl.Batches.CreateWithPaymentMethodsAsync(new NewTransactionPaymentMethod { Count = 1, Description = "November", Batch = "PaymentMethodId,Amount,Currency\npm_1,10,AUD" });
-await payfurl.Transfers.CreateAsync(new NewTransferGroup { ProviderId = providerId, GroupReference = "g-1", Transfers = new() { new NewTransfer { Account = "acct_1", Amount = 5m } } });
+await payfurl.Transfers.CreateAsync(new NewTransferGroup { ProviderId = providerId, Transfers = new() { new NewTransfer { Account = "acct_1", Amount = 5m } } });
 await payfurl.Vaults.CreateAsync(new NewVault { CardNumber = "4111111111111111" });
 await payfurl.Providers.UpdateAsync(providerId, new UpdateProvider { Name = "Main gateway" });
 await payfurl.Tokens.GetAsync(tokenId);
